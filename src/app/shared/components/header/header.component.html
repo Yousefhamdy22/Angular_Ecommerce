@@ -1,0 +1,240 @@
+<!-- Main Header - Amazon Egypt Style -->
+<header>
+  <!-- Top Navigation Bar -->
+  <div class="bg-gray-900 text-white">
+    <div class="container mx-auto px-2">
+      <div class="flex items-center h-14">
+        <!-- Logo -->
+        <div class="flex items-center mr-2">
+          <img src="/public/favicon.ico" alt="BuotiQe" class="h-8" />
+        </div>
+        
+        <!-- Deliver To -->
+       
+        <!-- Search Bar -->
+        <div class="flex-1 flex items-center mx-2 space-x-3">
+          <!-- Categories Dropdown -->
+          <div class="hidden md:block">
+            <select class="h-10 rounded-lg bg-gray-100 border border-gray-300 text-sm px-4 text-gray-700 cursor-pointer shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 hover:bg-gray-200 transition">
+              <option>All Categories</option>
+              <option>Skincare</option>
+              <option>Makeup</option>
+              <option>Haircare</option>
+              <option>Fragrance</option>
+              <option>Tools</option>
+            </select>
+          </div>
+         
+          <!-- Search Input Wrapper -->
+          <div class="relative flex-1">
+            <i class="pi pi-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-700 text-lg"></i>
+            <input 
+              type="text" 
+              pInputText 
+              [(ngModel)]="searchQuery" 
+              placeholder="Search for products" 
+              class="w-full h-11 border border-yellow-400 pl-12 rounded-lg bg-yellow-200 text-gray-800 shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 transition"
+            />
+          </div>
+          
+        
+          <!-- Search Button -->
+          <button class="bg-yellow-500 hover:bg-yellow-600 text-white h-11 px-5 rounded-lg flex items-center justify-center shadow-md transform hover:scale-105 transition">
+            <i class="pi pi-search text-lg"></i>
+          </button>
+        </div>
+        
+     
+       
+        
+        <!-- Account & Lists -->
+        <div class="hidden md:flex items-center text-xs mx-2 cursor-pointer hover:outline hover:outline-1 p-2 relative group">
+          <div>
+            <div class="text-yellow-500 text-sm">Hello, Sign in</div>
+            <div class="font-bold flex items-center text-white-800">
+              Account & Lists <i class="pi pi-chevron-down ml-1 text-xs"></i>
+            </div>
+          </div>
+        
+          <!-- Account Dropdown -->
+          <div
+            class="absolute z-20 top-full right-0 mt-2 w-60 bg-white shadow-xl rounded-lg opacity-0 invisible transition-all transform scale-95 group-hover:opacity-100 group-hover:visible group-hover:scale-100"
+          >
+            <div class="p-4 border-b">
+              <button class="w-full bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 rounded-lg transition">
+                Sign In
+              </button>
+              <div class="text-center mt-2 text-sm text-gray-600">
+                New customer? <a href="#" class="text-blue-500 hover:underline">Start here</a>
+              </div>
+            </div>
+            <div class="py-3 px-5">
+              <div class="grid grid-cols-2 gap-3">
+                <div>
+                  <h4 class="font-semibold text-sm text-gray-700 mb-2">Your Account</h4>
+                  <ul class="space-y-1">
+                    <li>
+                      <a href="#" class="text-sm text-gray-600 hover:text-blue-500 hover:underline transition">Account</a>
+                    </li>
+                    <li>
+                      <a href="#" class="text-sm text-gray-600 hover:text-blue-500 hover:underline transition">Orders</a>
+                    </li>
+                    <li>
+                      <a href="#" class="text-sm text-gray-600 hover:text-blue-500 hover:underline transition"
+                        >Recommendations</a
+                      >
+                    </li>
+                    <li>
+                      <a href="#" class="text-sm text-gray-600 hover:text-blue-500 hover:underline transition"
+                        >Browsing History</a
+                      >
+                    </li>
+                  </ul>
+                </div>
+                <div>
+                  <h4 class="font-semibold text-sm text-gray-700 mb-2">Your Lists</h4>
+                  <ul class="space-y-1">
+                    <li>
+                      <a href="#" class="text-sm text-gray-600 hover:text-blue-500 hover:underline transition">Wishlist</a>
+                    </li>
+                    <li>
+                      <a href="#" class="text-sm text-gray-600 hover:text-blue-500 hover:underline transition">Saved Items</a>
+                    </li>
+                    <li>
+                      <a href="#" class="text-sm text-gray-600 hover:text-blue-500 hover:underline transition"
+                        >Create a List</a
+                      >
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        
+        <!-- Returns & Orders -->
+        <div class="hidden md:flex items-center text-xs mx-2 cursor-pointer hover:outline hover:outline-1 p-2">
+          <div>
+            <div class="text-gray-400">Returns</div>
+            <div class="font-bold">& Orders</div>
+          </div>
+        </div>
+        
+        <!-- Cart -->
+       <!-- Cart Button Wrapper -->
+  <div class="flex items-center text-xs mx-2 cursor-pointer hover:outline hover:outline-1 p-2 rounded-lg transition-all hover:shadow-md hover:scale-105">
+  <!-- Cart Icon with Badge -->
+   <div class="relative">
+    <i class="pi pi-shopping-cart text-2xl text-gray-800"></i>
+    <span class="absolute -top-2 -right-2 bg-pink-500 text-white rounded-full h-5 w-5 flex items-center justify-center text-xs shadow-md">
+      {{cartItems.length}}
+    </span>
+  </div>
+  
+  <!-- Cart Label -->
+  <div class="hidden md:block font-bold ml-2 text-gray-900">Cart</div>
+</div>
+
+        <!-- Mobile Menu Toggle -->
+        <button class="md:hidden text-white ml-2" (click)="toggleMobileMenu()">
+          <i class="pi pi-bars text-xl"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Secondary Navigation Bar -->
+  <div class="bg-gray-800 text-white">
+    <div class="container mx-auto px-2">
+      <div class="flex items-center h-10">
+        <!-- All Menu -->
+        <div class="flex items-center cursor-pointer hover:bg-gray-700 px-2 h-full relative group">
+          <i class="pi pi-bars mr-1"></i>
+          <span class="text-sm font-medium">All</span>
+          
+          <!-- All Categories Dropdown -->
+          <div class="absolute z-10 top-full left-0 mt-0 w-64 bg-white shadow-lg hidden group-hover:block text-gray-800">
+            <div class="py-2">
+              <h4 class="font-bold text-sm px-4 py-2 bg-gray-100">Shop By Department</h4>
+              <ul>
+                <li><a href="#" class="block px-4 py-2 text-sm hover:bg-gray-100">Skincare</a></li>
+                <li><a href="#" class="block px-4 py-2 text-sm hover:bg-gray-100">Makeup</a></li>
+                <li><a href="#" class="block px-4 py-2 text-sm hover:bg-gray-100">Haircare</a></li>
+                <li><a href="#" class="block px-4 py-2 text-sm hover:bg-gray-100">Fragrance</a></li>
+                <li><a href="#" class="block px-4 py-2 text-sm hover:bg-gray-100">Bath & Body</a></li>
+                <li><a href="#" class="block px-4 py-2 text-sm hover:bg-gray-100">Tools & Accessories</a></li>
+                <li><a href="#" class="block px-4 py-2 text-sm hover:bg-gray-100">Men's Grooming</a></li>
+                <li><a href="#" class="block px-4 py-2 text-sm hover:bg-gray-100">Gifts & Sets</a></li>
+              </ul>
+              <h4 class="font-bold text-sm px-4 py-2 bg-gray-100 mt-1">Programs & Features</h4>
+              <ul>
+                <li><a href="#" class="block px-4 py-2 text-sm hover:bg-gray-100">Beauty Club Rewards</a></li>
+                <li><a href="#" class="block px-4 py-2 text-sm hover:bg-gray-100">Gift Cards</a></li>
+                <li><a href="#" class="block px-4 py-2 text-sm hover:bg-gray-100">Shop By Brand</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Main Categories -->
+        <nav class="hidden md:flex items-center h-full">
+          <a href="#" class="text-sm px-3 h-full flex items-center hover:bg-gray-700">Today's Deals</a>
+          <a href="#" class="text-sm px-3 h-full flex items-center hover:bg-gray-700">New Arrivals</a>
+          <a href="#" class="text-sm px-3 h-full flex items-center hover:bg-gray-700">Bestsellers</a>
+          <a href="#" class="text-sm px-3 h-full flex items-center hover:bg-gray-700">Skincare</a>
+          <a href="#" class="text-sm px-3 h-full flex items-center hover:bg-gray-700">Makeup</a>
+          <a href="#" class="text-sm px-3 h-full flex items-center hover:bg-gray-700">Haircare</a>
+          <a href="#" class="text-sm px-3 h-full flex items-center hover:bg-gray-700">Fragrance</a>
+        </nav>
+        
+        <!-- Special Offers -->
+        <div class="ml-auto">
+          <a href="#" class="text-sm font-medium px-3 h-full flex items-center hover:bg-gray-700">
+            <span class="text-pink-400">Special Offers</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Mobile Menu (Conditional) -->
+  <div *ngIf="showMobileMenu" class="md:hidden bg-gray-800 text-white border-t border-gray-700">
+    <div class="container mx-auto px-2 py-3">
+      <div class="flex items-center mb-3">
+        <div class="mr-2">
+          <i class="pi pi-user text-xl"></i>
+        </div>
+        <div class="text-lg font-bold">Hello, Sign in</div>
+      </div>
+      
+      <div class="border-t border-gray-700 py-2">
+        <h3 class="font-bold mb-2">Shop By Department</h3>
+        <ul class="space-y-2">
+          <li><a href="#" class="block">Today's Deals</a></li>
+          <li><a href="#" class="block">New Arrivals</a></li>
+          <li><a href="#" class="block">Bestsellers</a></li>
+          <li><a href="#" class="block">Skincare</a></li>
+          <li><a href="#" class="block">Makeup</a></li>
+          <li><a href="#" class="block">Haircare</a></li>
+          <li><a href="#" class="block">Fragrance</a></li>
+        </ul>
+      </div>
+      
+      <div class="border-t border-gray-700 py-2">
+        <h3 class="font-bold mb-2">Help & Settings</h3>
+        <ul class="space-y-2">
+          <li><a href="#" class="block">Your Account</a></li>
+          <li><a href="#" class="block">Customer Service</a></li>
+          <li><a href="#" class="block">Sign Out</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Promo Bar -->
+  <div class="bg-gradient-to-r from-pink-500 to-purple-600 text-white py-2 px-4 text-center text-sm font-medium">
+    <p>20% OFF on first purchase with code: WELCOME20 | Free shipping on orders over $50</p>
+  </div>
+</header>
+

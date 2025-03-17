@@ -1,0 +1,39 @@
+:host ::ng-deep .p-inputtext {
+  padding: 0.5rem 1rem;
+  border-color: #f3f4f6;
+}
+
+:host ::ng-deep .p-inputtext:focus {
+  border-color: #ec4899;
+  box-shadow: none;
+}
+
+/* Dropdown hover effects */
+.group:hover .group-hover\:block {
+  display: block;
+}
+
+/* Gradient promo bar animation */
+.bg-gradient-to-r {
+  background-size: 200% 100%;
+  animation: gradient-shift 8s ease infinite;
+}
+
+@keyframes gradient-shift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Amazon-style hover outline */
+.hover\:outline:hover {
+  outline: 1px solid #ffffff;
+  border-radius: 2px;
+}
+

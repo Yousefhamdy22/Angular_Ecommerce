@@ -1,0 +1,72 @@
+<div class="container mx-auto p-4">
+    <!-- Loading skeleton -->
+    <div *ngIf="loading" class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <p-skeleton styleClass="w-full h-96"></p-skeleton>
+      <div>
+        <p-skeleton height="3rem" styleClass="mb-4"></p-skeleton>
+        <p-skeleton height="2rem" styleClass="mb-2"></p-skeleton>
+        <p-skeleton height="4rem" styleClass="mb-4"></p-skeleton>
+        <p-skeleton height="8rem" styleClass="mb-4"></p-skeleton>
+        <p-skeleton height="4rem" styleClass="mb-2" width="60%"></p-skeleton>
+      </div>
+    </div>
+  
+    <!-- Product details -->
+    <div *ngIf="product && !loading" class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <!-- Product images -->
+      <div>
+        <div class="aspect-w-1 aspect-h-1 mb-4">
+          <img [src]="product.images[selectedImageIndex]" [alt]="product.title" class="rounded-lg object-cover w-full h-96">
+        </div>
+        <div class="grid grid-cols-5 gap-2">
+          <div *ngFor="let image of product.images; let i = index" 
+               (click)="selectImage(i)"
+               class="cursor-pointer border rounded-md overflow-hidden"
+               [ngClass]="{'ring-2 ring-blue-500': selectedImageIndex === i}">
+            <img [src]="image" [alt]="product.title + ' image ' + (i+1)" class="h-20 w-full object-cover">
+          </div>
+        </div>
+      </div>
+      
+      <!-- Product info -->
+      <div>
+        <nav aria-label="Breadcrumb" class="mb-4">
+          <ol class="flex text-sm text-gray-500">
+            <li><a routerLink="/" class="hover:text-gray-900">Home</a></li>
+            <li class="mx-2">/</li>
+            <li><a [routerLink]="['/category', product.category]" class="hover:text-gray-900">{{ product.category }}</a></li>
+            <li class="mx-2">/</li>
+            <li class="text-gray-900">{{ product.title }}</li>
+          </ol>
+        </nav>
+        
+        <h1 class="text-2xl font-bold text-gray-900 mb-2">{{ product.title }}</h1>
+        
+        <div class="flex items-center mb-4">
+          <p-rating [ngModel]="product.rating" [readonly]="true" cancel="false"></p-rating>
+          <a href="#reviews" class="ml-2 text-sm text-blue-600">{{ product.reviewCount }} reviews</a>
+          <span class="mx-2 text-gray-400">|</span>
+          <span class="text-sm text-gray-500">Brand: <a href="#" class="text-blue-600">{{ product.brand }}</a></span>
+        </div>
+        
+        <div class="mb-6">
+          <div class="flex items-baseline">
+            <span class="text-3xl font-bold text-gray-900">EGP {{ product.price.toFixed(2) }}</span>
+            <span *ngIf="product.originalPrice" class="ml-4 text-xl text-gray-500 line-through">
+              EGP {{ product.originalPrice.toFixed(2) }}
+            </span>
+            <span *ngIf="product.discountPercentage" class="ml-2 px-2 py-1 text-sm font-semibold text-white bg-red-500 rounded">
+              -{{ product.discountPercentage }}%
+            </span>
+          </div>
+        </div>
+        
+        <p class="text-gray-700 mb-4">{{ product.description }}</p>
+        
+        <!-- <div class="flex items-center space-x-4 mb-6">
+          <button (click)="addToCart(product)" class="px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700">Add to Cart</button>
+          <button (click)="buyNow(product)" class="px-6 py-3 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700">Buy Now</button>
+        </div> -->
+      </div>
+    </div>
+</div>
