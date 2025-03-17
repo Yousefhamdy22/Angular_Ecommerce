@@ -1,194 +1,51 @@
-/* Amazon Footer Styles */
-:root {
-  --amazon-blue: #232f3e;
-  --amazon-blue-light: #37475a;
-  --amazon-orange: #febd69;
-  --amazon-yellow: #f0c14b;
-  --amazon-text: #333333;
-  --amazon-link: #007185;
-  --amazon-button: #f0c14b;
-  --amazon-button-hover: #ddb347;
-  --amazon-border: #dddddd;
-  --amazon-light-bg: #f3f3f3;
-  --amazon-dark-bg: #131921;
-}
-
-/* Footer Container */
-.amazon-footer {
-  font-family: Arial, sans-serif;
-  width: 100%;
-  color: #fff;
-}
-
-/* Back to Top Button */
-.back-to-top {
-  background-color: var(--amazon-blue-light);
-  color: white;
-  text-align: center;
-  padding: 15px 0;
-  font-size: 13px;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-.back-to-top:hover {
-  background-color: #485769;
-}
-
-/* Main Footer */
-.footer-main {
-  background-color: var(--amazon-blue);
-  padding: 40px 0;
-}
-
-.footer-content {
-  max-width: 1000px;
-  margin: 0 auto;
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  padding: 0 20px;
-}
-
-.footer-column {
-  width: 23%;
-  min-width: 200px;
-  margin-bottom: 20px;
-}
-
-.footer-column h3 {
-  font-size: 16px;
-  font-weight: bold;
-  margin-bottom: 14px;
-}
-
-.footer-column ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.footer-column li {
-  margin-bottom: 10px;
-}
-
-.footer-column a {
-  color: #ddd;
-  font-size: 14px;
-  text-decoration: none;
-}
-
-.footer-column a:hover {
-  text-decoration: underline;
-}
-
-/* Footer Secondary */
-.footer-secondary {
-  background-color: var(--amazon-blue);
-  padding: 20px 0;
-  border-top: 1px solid #3a4553;
-  text-align: center;
-}
-
-.footer-logo {
-  margin-bottom: 15px;
-}
-
-.footer-logo img {
-  height: 30px;
-  width: auto;
-}
-
-.footer-language {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 15px;
-  margin-bottom: 15px;
-}
-
-.language-selector,
-.currency-selector,
-.country-selector {
-  display: inline-flex;
-  align-items: center;
-  border: 1px solid #848688;
-  border-radius: 3px;
-  padding: 6px 10px;
-  font-size: 13px;
-  cursor: pointer;
-}
-
-.language-selector:hover,
-.currency-selector:hover,
-.country-selector:hover {
-  border-color: #e47911;
-}
-
-.language-selector i,
-.country-selector img {
-  margin-right: 5px;
-}
-
-.flag-icon {
-  width: 18px;
-  height: 12px;
-}
-
-/* Footer Bottom */
-.footer-bottom {
-  background-color: var(--amazon-dark-bg);
-  padding: 20px 0 30px;
-  font-size: 12px;
-}
-
-.footer-bottom-content {
-  max-width: 1000px;
-  margin: 0 auto;
-  text-align: center;
-  padding: 0 20px;
-}
-
-.footer-links {
-  margin-bottom: 10px;
-}
-
-.footer-links a {
-  color: #ddd;
-  margin: 0 10px;
-  text-decoration: none;
-}
-
-.footer-links a:hover {
-  text-decoration: underline;
-}
-
-.footer-copyright {
-  color: #ddd;
-}
-
-/* Responsive Styles */
-@media (max-width: 992px) {
-  .footer-column {
-    width: 48%;
-  }
-}
-
-@media (max-width: 768px) {
-  .footer-column {
-    width: 100%;
+:host ::ng-deep .p-dropdown {
+    background-color: #1f2937;
+    border-color: #374151;
+    color: #f3f4f6;
+    min-width: 12rem;
   }
   
-  .footer-language {
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
+  :host ::ng-deep .p-dropdown:hover {
+    border-color: #ec4899;
   }
-}
-
-@media (max-width: 576px) {
-  .footer-links a {
-    display: block;
-    margin: 10px 0;
+  
+  :host ::ng-deep .p-dropdown .p-dropdown-label {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
   }
-}
+  
+  :host ::ng-deep .p-dropdown-panel {
+    background-color: #1f2937;
+    border: 1px solid #374151;
+  }
+  
+  :host ::ng-deep .p-dropdown-panel .p-dropdown-items .p-dropdown-item {
+    color: #f3f4f6;
+  }
+  
+  :host ::ng-deep .p-dropdown-panel .p-dropdown-items .p-dropdown-item:hover {
+    background-color: #374151;
+    color: #ec4899;
+  }
+  
+  :host ::ng-deep .p-button.p-button-light {
+    background-color: #f3f4f6;
+    color: #111827;
+    border: none;
+  }
+  
+  :host ::ng-deep .p-button.p-button-light:hover {
+    background-color: #e5e7eb;
+  }
+  
+  :host ::ng-deep .p-inputtext {
+    padding: 0.5rem 1rem;
+    border-color: #f3f4f6;
+  }
+  
+  :host ::ng-deep .p-inputtext:focus {
+    border-color: #ec4899;
+    box-shadow: none;
+  }
+  
+  
