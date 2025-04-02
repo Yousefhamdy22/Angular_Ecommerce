@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HomeComponent } from './home.component';
 
-import { RouterModule } from '@angular/router';
+import { RouterModule, RouterOutlet } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { CarouselModule } from 'primeng/carousel';
 import { CardModule } from 'primeng/card';
@@ -12,10 +12,12 @@ import { HttpClientModule } from '@angular/common/http';
   declarations: [
     HomeComponent,
 
+
   ],
   imports: [
     CommonModule,
     RouterModule,
+    RouterOutlet,
     ButtonModule,  // PrimeNG Buttons
     CarouselModule, // PrimeNG Carousels
     CardModule, // PrimeNG Cards

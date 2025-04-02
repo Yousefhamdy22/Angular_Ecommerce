@@ -1,0 +1,179 @@
+<div class="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-md">
+    <h2 class="text-2xl font-bold text-gray-800 mb-6">Add New Product</h2>
+    
+    <form [formGroup]="productForm" (ngSubmit)="onSubmit()" class="space-y-6">
+      <!-- Product Name -->
+      <div>
+        <label for="name" class="block text-sm font-medium text-gray-700">Product Name *</label>
+        <input id="name" formControlName="name" type="text" 
+               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border">
+        <div *ngIf="hasError('name', 'required')" class="text-red-500 text-xs mt-1">
+          Name is required.
+        </div>
+        <div *ngIf="hasError('name', 'minlength')" class="text-red-500 text-xs mt-1">
+          Minimum length is 3 characters.
+        </div>
+        <div *ngIf="hasError('name', 'maxlength')" class="text-red-500 text-xs mt-1">
+          Maximum length is 100 characters.
+        </div>
+      </div>
+  
+      <!-- Description -->
+      <div>
+        <label for="description" class="block text-sm font-medium text-gray-700">Description *</label>
+        <textarea id="description" formControlName="description" rows="4"
+                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border"></textarea>
+        <div *ngIf="hasError('description', 'required')" class="text-red-500 text-xs mt-1">
+          Description is required.
+        </div>
+        <div *ngIf="hasError('description', 'minlength')" class="text-red-500 text-xs mt-1">
+          Minimum length is 10 characters.
+        </div>
+        <div *ngIf="hasError('description', 'maxlength')" class="text-red-500 text-xs mt-1">
+          Maximum length is 500 characters.
+        </div>
+      </div>
+  
+      <!-- Price and Stock -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <label for="price" class="block text-sm font-medium text-gray-700">Price *</label>
+          <div class="relative mt-1 rounded-md shadow-sm">
+            <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+              <span class="text-gray-500 sm:text-sm">$</span>
+            </div>
+            <input id="price" formControlName="price" type="number" step="0.01" 
+                   class="block w-full rounded-md border-gray-300 pl-7 pr-12 focus:border-blue-500 focus:ring-blue-500 p-2 border">
+          </div>
+          <div *ngIf="hasError('price', 'required')" class="text-red-500 text-xs mt-1">
+            Price is required.
+          </div>
+          <div *ngIf="hasError('price', 'min')" class="text-red-500 text-xs mt-1">
+            Minimum price is 0.01.
+          </div>
+          <div *ngIf="hasError('price', 'max')" class="text-red-500 text-xs mt-1">
+            Maximum price is 10,000.
+          </div>
+        </div>
+  
+        <div>
+          <label for="stock" class="block text-sm font-medium text-gray-700">Stock *</label>
+          <input id="stock" formControlName="stock" type="number" 
+                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border">
+          <div *ngIf="hasError('stock', 'required')" class="text-red-500 text-xs mt-1">
+            Stock is required.
+          </div>
+          <div *ngIf="hasError('stock', 'min')" class="text-red-500 text-xs mt-1">
+            Minimum stock is 0.
+          </div>
+          <div *ngIf="hasError('stock', 'max')" class="text-red-500 text-xs mt-1">
+            Maximum stock is 10,000.
+          </div>
+        </div>
+      </div>
+  
+      <!-- SKU and Category -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <label for="sku" class="block text-sm font-medium text-gray-700">SKU *</label>
+          <input id="sku" formControlName="sku" type="text" 
+                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border">
+          <div *ngIf="hasError('sku', 'required')" class="text-red-500 text-xs mt-1">
+            SKU is required.
+          </div>
+          <div *ngIf="hasError('sku', 'pattern')" class="text-red-500 text-xs mt-1">
+            Invalid SKU format. Only letters, numbers and hyphens are allowed.
+          </div>
+        </div>
+  
+        <div>
+          <label for="category" class="block text-sm font-medium text-gray-700">Category *</label>
+          <select id="category" formControlName="category" 
+                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border">
+            <option value="">Select a category</option>
+            <option *ngFor="let category of categories" [value]="category.id">{{ category.name }}</option>
+          </select>
+          <div *ngIf="hasError('category', 'required')" class="text-red-500 text-xs mt-1">
+            Category is required.
+          </div>
+        </div>
+      </div>
+  
+      <!-- Checkboxes -->
+      <div class="flex items-center space-x-6">
+        <div class="flex items-center">
+          <input id="isFeatured" formControlName="isFeatured" type="checkbox" 
+                 class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+          <label for="isFeatured" class="ml-2 block text-sm text-gray-700">Featured Product</label>
+        </div>
+  
+        <div class="flex items-center">
+          <input id="isActive" formControlName="isActive" type="checkbox" 
+                 class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+          <label for="isActive" class="ml-2 block text-sm text-gray-700">Active Product</label>
+        </div>
+      </div>
+  
+      <!-- Weight -->
+      <div class="w-1/2">
+        <label for="weight" class="block text-sm font-medium text-gray-700">Weight (kg)</label>
+        <input id="weight" formControlName="weight" type="number" 
+               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border">
+        <div *ngIf="hasError('weight', 'min')" class="text-red-500 text-xs mt-1">
+          Weight must be a positive number.
+        </div>
+      </div>
+  
+      <!-- Dimensions -->
+      <fieldset class="border border-gray-200 rounded-md p-4">
+        <legend class="text-sm font-medium text-gray-700 px-2">Dimensions (cm)</legend>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-2">
+          <div>
+            <label for="length" class="block text-sm text-gray-700">Length</label>
+            <input id="length" formControlName="length" type="number" 
+                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border">
+          </div>
+          <div>
+            <label for="width" class="block text-sm text-gray-700">Width</label>
+            <input id="width" formControlName="width" type="number" 
+                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border">
+          </div>
+          <div>
+            <label for="height" class="block text-sm text-gray-700">Height</label>
+            <input id="height" formControlName="height" type="number" 
+                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border">
+          </div>
+        </div>
+      </fieldset>
+  
+      <!-- Image Upload -->
+      <div>
+        <label for="image" class="block text-sm font-medium text-gray-700">Product Image</label>
+        <input id="image" type="file" (change)="onFileSelected($event)" accept="image/jpeg,image/png,image/gif,image/webp" 
+               class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+        <div *ngIf="imagePreview" class="mt-4">
+          <h3 class="text-sm font-medium text-gray-700 mb-2">Image Preview</h3>
+          <img [src]="imagePreview" alt="Image Preview" class="rounded-md border border-gray-200 max-w-xs">
+        </div>
+      </div>
+  
+      <!-- Submit Button -->
+      <div class="flex justify-end pt-4">
+        <button type="button"  click="router.navigate(['/dashboard/products'])" 
+                class="mr-3 inline-flex justify-center py-2 px-4 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+          Cancel
+        </button>
+        <button type="submit" [disabled]="isLoading || productForm.invalid"
+                class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed">
+          <span *ngIf="isLoading" class="flex items-center">
+            <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            Processing...
+          </span>
+          <span *ngIf="!isLoading">Add Product</span>
+        </button>
+      </div>
+    </form>
+  </div>

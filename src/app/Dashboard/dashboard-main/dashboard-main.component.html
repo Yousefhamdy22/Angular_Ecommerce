@@ -1,0 +1,51 @@
+
+<div class="flex h-screen">
+  <!-- Sidebar -->
+  <aside class="w-64 bg-gray-900 text-white p-4">
+    <h2 class="text-xl font-bold mb-4">Larkon</h2>
+    <nav>
+      <ul>
+        <li class="mb-2"><a routerLink="/dashboard" class="block p-2 hover:bg-gray-700">Dashboard</a></li>
+        <li class="mb-2"><a routerLink="/dashboard/products/create" class="block p-2 hover:bg-gray-700">Products</a></li>
+        <li class="mb-2"><a routerLink="/Orders" class="block p-2 hover:bg-gray-700">Orders</a></li>
+        <li class="mb-2"><a routerLink="/Inventory" class="block p-2 hover:bg-gray-700">Inventory</a></li>
+      
+      
+      </ul>
+    </nav>
+  </aside>
+  
+  <!-- Main Content -->
+  <main class="flex-1 bg-gray-100 p-6">
+    <h1 class="text-2xl font-semibold">Recent Orders</h1>
+    <div class="mt-4 bg-white shadow-md rounded-lg p-4">
+      <table class="w-full border-collapse border border-gray-300">
+        <thead>
+          <tr class="bg-gray-200">
+            <th class="p-2 border">Order ID</th>
+            <th class="p-2 border">Date</th>
+            <th class="p-2 border">Product</th>
+            <th class="p-2 border">Customer Name</th>
+            <th class="p-2 border">Email</th>
+            <th class="p-2 border">Phone</th>
+            <th class="p-2 border">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let order of orders" class="hover:bg-gray-100">
+            <td class="p-2 border">{{ order.id }}</td>
+            <td class="p-2 border">{{ order.date }}</td>
+            <td class="p-2 border"><img [src]="order.productImg" class="w-8 h-8"/></td>
+            <td class="p-2 border">{{ order.customer }}</td>
+            <td class="p-2 border">{{ order.email }}</td>
+            <td class="p-2 border">{{ order.phone }}</td>
+            <td class="p-2 border">
+              <span ngClass="{'text-green-500': order.status === 'Completed', 'text-orange-500': order.status === 'Processing'}">{{ order.date }}</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="mt-4 text-gray-600">Total Orders: </p>
+  </main>
+</div>

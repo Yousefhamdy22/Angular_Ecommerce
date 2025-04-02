@@ -1,0 +1,26 @@
+/* Custom styles for the add product component */
+.animate-spin {
+    animation: spin 1s linear infinite;
+  }
+  
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  
+  /* Custom focus styles */
+  .focus\:ring-blue-500:focus {
+    --tw-ring-opacity: 1;
+    --tw-ring-color: rgba(59, 130, 246, var(--tw-ring-opacity));
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5);
+  }
+  
+  /* Custom border colors for validation */
+  .border-red-300 {
+    --tw-border-opacity: 1;
+    border-color: rgba(252, 165, 165, var(--tw-border-opacity));
+  }

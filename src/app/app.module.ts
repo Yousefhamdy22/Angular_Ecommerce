@@ -12,21 +12,35 @@ import { ProductsModule } from './features/products/products.module';
 
 import { HttpClientModule } from '@angular/common/http';
 import { HomeModule } from "./features/home/home.module";
+import { AuthModule } from './features/auth/auth.module';
+import { RouterOutlet } from '@angular/router';
+import { AppRoutingModule } from '../app-routing.module';
+import { DashboardModule } from './Dashboard/dashboard.module';
+import { FeatureModule } from './features/feature.module';
+import { HomeComponent } from './features/home/home.component';
 
 @NgModule({
-  declarations: [AppComponent
+  declarations: [AppComponent 
+    
    
   ],
   imports: [
+    // Angular Modules
     SharedModule,
     ProductsModule,
+    DashboardModule,
+    AuthModule,
+    FeatureModule,
+   // PrimeNG Modules
     FormsModule,
     BrowserModule,
     BrowserAnimationsModule,
     FormsModule,
     DropdownModule,
     HttpClientModule,
-    HomeModule
+   // Angular Router
+    RouterOutlet,
+    AppRoutingModule
 ],
   providers: [],
   bootstrap: [AppComponent]

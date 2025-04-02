@@ -12,7 +12,7 @@ import { BadgeModule } from "primeng/badge"
 import { OverlayPanelModule } from "primeng/overlaypanel"
 import { MenuItemContent, MenuModule } from "primeng/menu"
 import type { MenuItem } from "primeng/api"
-import { RouterOutlet } from '@angular/router';
+import { RouterModule, RouterOutlet } from '@angular/router';
 import { FooterComponent } from './components/footer/footer.component';
 
 @NgModule({
@@ -32,7 +32,11 @@ FooterComponent
     OverlayPanelModule,
     MenuItemContent,
     DropdownModule,
-    RouterOutlet
+
+
+
+    RouterOutlet,
+    RouterModule
   
 
 
