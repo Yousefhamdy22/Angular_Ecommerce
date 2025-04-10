@@ -5,22 +5,62 @@ import { ProductAddComponent } from './products/product-add/product-add.componen
 
 import { DashboardMainComponent } from './dashboard-main/dashboard-main.component';
 import { ProductEditComponent } from './products/product-edit/product-edit.component';
+import { OrderListComponent } from './orders/order-list/order-list.component';
+import { OrderHistoryComponent } from './orders/order-history/order-history.component';
+import { CategoryComponent } from './catrgory/catrgory.component';
+import { ProductDetailsComponent } from './products/product-details/product-details.component';
+import { OrderdetailsComponent } from './orders/orderdetails/orderdetails.component';
+
+
 
 const routes: Routes = [
-    { 
-      path: 'dashboard', 
-      component: DashboardMainComponent,
-      children: [  
-        { path: 'products', component: ProductListComponent },
-        { path: 'products/create', component: ProductAddComponent },
-        { path: 'products/edit/:id', component: ProductEditComponent },
-        { path: '', redirectTo: '', pathMatch: 'full' }
-      ]
-    }
-  ];
+  //{ path: '', redirectTo: '/dashboard', pathMatch: 'full' },
+  {
+    path: 'dashboard',
+    component: DashboardMainComponent, // this is a standalone component now, not in a layout
+  },
+  {
+    path: 'dashboard/products',
+    component: ProductListComponent, // Open in a new page
+  },
+  {
+    path: 'dashboard/products/create',
+    component: ProductAddComponent, // Open in a new page
+  },
+
+  {
+    path: 'dashboard/products/details/:id',
+    component: ProductDetailsComponent
+  },
+  {
+    path: 'dashboard/orders',
+    component: OrderListComponent,
+ },
+  {
+    path: 'dashboard/orders/history',
+    component: OrderHistoryComponent, 
+  },
+  {
+    path: 'dashboard/orders/details',
+    component: OrderdetailsComponent, 
+  },
+  {
+    path: 'dashboard/categories',
+    component: CategoryComponent, 
+  }
+  ,
+ // { path: '**', redirectTo: '/dashboard' },
+];
+
+
+
+
+  
+        
+  
 
 @NgModule({
-    imports: [RouterModule.forChild(routes)],
+    imports: [RouterModule.forChild(routes)], 
     exports: [RouterModule]
 })
 export class DashboardRoutingModule { }

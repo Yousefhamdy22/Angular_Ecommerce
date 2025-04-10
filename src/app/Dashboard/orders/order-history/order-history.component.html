@@ -1,1 +1,344 @@
-<p>order-history works!</p>
+<div class="flex min-h-screen w-full flex-col bg-slate-50">
+    <main class="flex-1 p-6 md:p-8">
+      <div class="flex flex-col gap-8 max-w-6xl mx-auto">
+        <!-- Header -->
+        <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+          <div>
+            <h1 class="text-3xl font-bold tracking-tight text-slate-900">
+              <span class="inline-block mr-2">📋</span> Order History
+            </h1>
+            <p class="text-slate-500 mt-1">
+              View and track all your previous orders
+            </p>
+          </div>
+          <div class="flex items-center gap-2">
+            <button class="inline-flex items-center justify-center rounded-md text-sm font-medium h-9 px-3 py-2 border border-slate-200 bg-white text-slate-900 shadow-sm hover:bg-slate-100">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2 h-4 w-4"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+              Download History
+            </button>
+            <button class="inline-flex items-center justify-center rounded-md text-sm font-medium h-9 px-3 py-2 bg-slate-900 text-white shadow hover:bg-slate-800">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2 h-4 w-4"><path d="m5 12 7-7 7 7"></path><path d="M12 19V5"></path></svg>
+              Continue Shopping
+            </button>
+          </div>
+        </div>
+  
+        <!-- Customer Info Card -->
+        <div class="rounded-lg border bg-white shadow-sm p-6">
+          <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div class="flex items-center gap-4">
+              <div class="h-16 w-16 rounded-full bg-slate-100 flex items-center justify-center text-xl font-semibold text-slate-700">
+                {{ getInitials(customer.name) }}
+              </div>
+              <div>
+                <h2 class="text-xl font-semibold">{{ customer.name }}</h2>
+                <p class="text-slate-500">{{ customer.email }}</p>
+                <p class="text-slate-500">Member since {{ customer.memberSince | date:'mediumDate' }}</p>
+              </div>
+            </div>
+            <div class="flex flex-col items-start md:items-end gap-1">
+              <div class="flex items-center gap-2">
+                <span class="text-sm font-medium">Loyalty Level:</span>
+                <span class="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold bg-amber-100 text-amber-800 border-amber-200">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-1 h-3 w-3 text-amber-500 fill-amber-500"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                  {{ customer.loyaltyLevel }}
+                </span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="text-sm font-medium">Total Orders:</span>
+                <span class="font-semibold">{{ orders.length }}</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="text-sm font-medium">Total Spent:</span>
+                <span class="font-semibold">${{ getTotalSpent().toFixed(2) }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+  
+        <!-- Filters -->
+        <div class="flex flex-col gap-4 md:flex-row md:items-center">
+          <div class="flex items-center gap-2 flex-1">
+            <div class="relative flex-1 max-w-md">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="absolute left-2.5 top-2.5 h-4 w-4 text-slate-500"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
+              <input 
+                type="search" 
+                placeholder="Search orders..." 
+                class="flex h-10 w-full rounded-md border border-input bg-white px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 pl-8"
+                [(ngModel)]="searchQuery"
+              />
+            </div>
+            <div class="relative w-[180px]">
+              <select 
+                class="flex h-10 w-full items-center justify-between rounded-md border border-input bg-white px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                [(ngModel)]="statusFilter"
+              >
+                <option value="">All Statuses</option>
+                <option value="Completed">Completed</option>
+                <option value="Processing">Processing</option>
+                <option value="Shipped">Shipped</option>
+                <option value="Cancelled">Cancelled</option>
+                <option value="Refunded">Refunded</option>
+              </select>
+            </div>
+          </div>
+          <div class="flex items-center gap-2">
+            <div class="relative w-[180px]">
+              <select 
+                class="flex h-10 w-full items-center justify-between rounded-md border border-input bg-white px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                [(ngModel)]="timeFilter"
+              >
+                <option value="">All Time</option>
+                <option value="30">Last 30 Days</option>
+                <option value="90">Last 90 Days</option>
+                <option value="180">Last 6 Months</option>
+                <option value="365">Last Year</option>
+              </select>
+            </div>
+            <div class="relative">
+              <button class="inline-flex items-center justify-center rounded-md text-sm font-medium h-10 px-4 py-2 border border-input bg-white shadow-sm hover:bg-accent hover:text-accent-foreground">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2 h-4 w-4"><path d="m18 15-6-6-6 6"></path></svg>
+                Sort: Newest
+              </button>
+            </div>
+          </div>
+        </div>
+  
+        <!-- Order History Cards -->
+        <div class="grid gap-4">
+          <div *ngFor="let order of getFilteredOrders(); trackBy: trackByOrderId" class="rounded-lg border bg-white shadow-sm overflow-hidden">
+            <div class="p-4 md:p-6 border-b">
+              <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                <div class="flex flex-col gap-1">
+                  <div class="flex items-center gap-2">
+                    <h3 class="text-lg font-semibold">Order {{ order.id }}</h3>
+                    <span 
+                      class="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold"
+                      [ngClass]="{
+                        'bg-green-100 text-green-800 border-green-200': order.status === 'Completed',
+                        'bg-amber-100 text-amber-800 border-amber-200': order.status === 'Processing',
+                        'bg-blue-100 text-blue-800 border-blue-200': order.status === 'Shipped',
+                        'bg-red-100 text-red-800 border-red-200': order.status === 'Cancelled',
+                        'bg-purple-100 text-purple-800 border-purple-200': order.status === 'Refunded'
+                      }"
+                    >
+                      <span 
+                        class="mr-1 h-1.5 w-1.5 rounded-full"
+                        [ngClass]="{
+                          'bg-green-500': order.status === 'Completed',
+                          'bg-amber-500': order.status === 'Processing',
+                          'bg-blue-500': order.status === 'Shipped',
+                          'bg-red-500': order.status === 'Cancelled',
+                          'bg-purple-500': order.status === 'Refunded'
+                        }"
+                      ></span>
+                      {{ order.status }}
+                    </span>
+                  </div>
+                  <div class="flex flex-wrap gap-x-4 gap-y-1 text-sm text-slate-500">
+                    <div class="flex items-center gap-1">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                      <span>{{ order.date | date:'MMM d, yyyy' }}</span>
+                    </div>
+                    <div class="flex items-center gap-1">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                      <span>${{ order.total.toFixed(2) }}</span>
+                    </div>
+                    <div class="flex items-center gap-1">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                      <span>{{ getShippingAddressShort(order.shippingAddress) }}</span>
+                    </div>
+                    <div class="flex items-center gap-1">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path><line x1="4" x2="4" y1="22" y2="15"></line></svg>
+                      <span>{{ order.trackingNumber }}</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="flex items-center gap-2">
+                  <button class="inline-flex items-center justify-center rounded-md text-sm font-medium h-9 px-3 py-2 border border-slate-200 bg-white text-slate-900 shadow-sm hover:bg-slate-100">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2 h-4 w-4"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" x2="8" y1="13" y2="13"></line><line x1="16" x2="8" y1="17" y2="17"></line><line x1="10" x2="8" y1="9" y2="9"></line></svg>
+                    Invoice
+                  </button>
+                  <button class="inline-flex items-center justify-center rounded-md text-sm font-medium h-9 px-3 py-2 border border-slate-200 bg-white text-slate-900 shadow-sm hover:bg-slate-100">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2 h-4 w-4"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path><line x1="4" x2="4" y1="22" y2="15"></line></svg>
+                    Track
+                  </button>
+                  <button *ngIf="canReorder(order)" class="inline-flex items-center justify-center rounded-md text-sm font-medium h-9 px-3 py-2 bg-slate-900 text-white shadow hover:bg-slate-800">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2 h-4 w-4"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"></path><path d="M16 21h5v-5"></path></svg>
+                    Reorder
+                  </button>
+                </div>
+              </div>
+            </div>
+            
+            <div class="p-4 md:p-6">
+              <div class="grid gap-4">
+                <div class="flex items-center justify-between">
+                  <h4 class="font-medium">Order Items ({{ order.items.length }})</h4>
+                  <button class="text-sm text-slate-500 hover:text-slate-900" (click)="toggleOrderDetails(order.id)">
+                    {{ isOrderExpanded(order.id) ? 'Hide Details' : 'Show Details' }}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline-block h-4 w-4 ml-1" [ngClass]="{'rotate-180': isOrderExpanded(order.id)}"><path d="m6 9 6 6 6-6"></path></svg>
+                  </button>
+                </div>
+                
+                <!-- Order Items Preview (always visible) -->
+                <div class="flex flex-wrap gap-2">
+                  <div *ngFor="let item of order.items.slice(0, 4)" class="h-16 w-16 rounded-md border bg-white p-1 flex items-center justify-center relative group">
+                    <img 
+                      [src]="item.imageUrl || 'assets/default-product.png'" 
+                      [alt]="item.name"
+                      class="h-full w-full object-contain rounded"
+                    />
+                    <div class="absolute -top-2 -right-2 h-5 w-5 rounded-full bg-slate-700 text-white flex items-center justify-center text-xs">
+                      {{ item.quantity }}
+                    </div>
+                    <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity rounded-md">
+                      <span class="text-white text-xs font-medium px-1">{{ item.name }}</span>
+                    </div>
+                  </div>
+                  <div *ngIf="order.items.length > 4" class="h-16 w-16 rounded-md bg-slate-100 flex items-center justify-center text-sm font-medium">
+                    +{{ order.items.length - 4 }}
+                  </div>
+                </div>
+                
+                <!-- Expanded Order Details -->
+                <div *ngIf="isOrderExpanded(order.id)" class="mt-2 border-t pt-4">
+                  <div class="grid gap-4">
+                    <!-- Order Items Table -->
+                    <div class="overflow-x-auto">
+                      <table class="w-full text-sm">
+                        <thead class="border-b">
+                          <tr>
+                            <th class="py-2 text-left font-medium text-slate-500">Product</th>
+                            <th class="py-2 text-left font-medium text-slate-500">Price</th>
+                            <th class="py-2 text-left font-medium text-slate-500">Quantity</th>
+                            <th class="py-2 text-right font-medium text-slate-500">Total</th>
+                          </tr>
+                        </thead>
+                        <tbody class="divide-y">
+                          <tr *ngFor="let item of order.items">
+                            <td class="py-3">
+                              <div class="flex items-center gap-3">
+                                <div class="h-10 w-10 rounded-md border bg-white p-1 flex items-center justify-center">
+                                  <img 
+                                    [src]="item.imageUrl || 'assets/default-product.png'" 
+                                    [alt]="item.name"
+                                    class="h-full w-full object-contain rounded"
+                                  />
+                                </div>
+                                <span class="font-medium">{{ item.name }}</span>
+                              </div>
+                            </td>
+                            <td class="py-3">${{ item.price.toFixed(2) }}</td>
+                            <td class="py-3">{{ item.quantity }}</td>
+                            <td class="py-3 text-right">${{ (item.price * item.quantity).toFixed(2) }}</td>
+                          </tr>
+                        </tbody>
+                        <tfoot class="border-t">
+                          <tr>
+                            <td colspan="3" class="py-3 text-right font-medium">Subtotal:</td>
+                            <td class="py-3 text-right">${{ getOrderSubtotal(order).toFixed(2) }}</td>
+                          </tr>
+                          <tr>
+                            <td colspan="3" class="py-3 text-right font-medium">Shipping:</td>
+                            <td class="py-3 text-right">${{ order.shipping?.toFixed(2) || '0.00' }}</td>
+                          </tr>
+                          <tr>
+                            <td colspan="3" class="py-3 text-right font-medium">Tax:</td>
+                            <td class="py-3 text-right">${{ order.tax?.toFixed(2) || '0.00' }}</td>
+                          </tr>
+                          <tr>
+                            <td colspan="3" class="py-3 text-right font-medium">Total:</td>
+                            <td class="py-3 text-right font-semibold">${{ order.total.toFixed(2) }}</td>
+                          </tr>
+                        </tfoot>
+                      </table>
+                    </div>
+                    
+                    <!-- Shipping and Payment Info -->
+                    <div class="grid md:grid-cols-2 gap-6 mt-2">
+                      <div>
+                        <h5 class="font-medium mb-2">Shipping Information</h5>
+                        <div class="text-sm text-slate-600">
+                          <p>{{ order.shippingAddress }}</p>
+                          <p class="mt-2">
+                            <span class="font-medium">Shipping Method:</span> {{ order.shippingMethod || 'Standard Shipping' }}
+                          </p>
+                          <p *ngIf="order.estimatedDelivery" class="mt-1">
+                            <span class="font-medium">Estimated Delivery:</span> {{ order.estimatedDelivery | date:'mediumDate' }}
+                          </p>
+                        </div>
+                      </div>
+                      <div>
+                        <h5 class="font-medium mb-2">Payment Information</h5>
+                        <div class="text-sm text-slate-600">
+                          <div class="flex items-center gap-2 mb-2">
+                            <div *ngIf="order.paymentMethod === 'credit_card'" class="h-8 w-8 rounded bg-white border p-1.5">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-full w-full"><rect width="20" height="14" x="2" y="5" rx="2"></rect><line x1="2" x2="22" y1="10" y2="10"></line></svg>
+                            </div>
+                            <div *ngIf="order.paymentMethod === 'paypal'" class="h-8 w-8 rounded bg-white border p-1.5">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-full w-full"><path d="M7 11a4 4 0 0 0 4 4h1a4 4 0 0 0 4-4v-1a4 4 0 0 0-4-4h-1a4 4 0 0 0-4 4v1Z"></path><path d="M21 11V8a4 4 0 0 0-4-4h-1a4 4 0 0 0-4 4v1a4 4 0 0 0 4 4h1a4 4 0 0 0 4-4Z"></path><path d="M3 15v3a4 4 0 0 0 4 4h1a4 4 0 0 0 4-4v-1a4 4 0 0 0-4-4h-1a4 4 0 0 0-4 4Z"></path></svg>
+                            </div>
+                            <span>{{ getPaymentMethodName(order.paymentMethod) }}</span>
+                          </div>
+                          <p *ngIf="order.paymentMethod === 'credit_card'">
+                            <span class="font-medium">Card:</span> •••• •••• •••• {{ order.lastFourDigits || '1234' }}
+                          </p>
+                          <p class="mt-1">
+                            <span class="font-medium">Billing Address:</span> {{ order.billingAddress || order.shippingAddress }}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <!-- Order Timeline -->
+                    <div class="mt-4">
+                      <h5 class="font-medium mb-3">Order Timeline</h5>
+                      <div class="relative pl-6 border-l border-slate-200">
+                        <div *ngFor="let event of order.timeline" class="mb-4 relative">
+                          <div class="absolute -left-[25px] h-4 w-4 rounded-full bg-slate-200 border-2 border-white"
+                               [ngClass]="{
+                                 'bg-green-500': event.type === 'delivered',
+                                 'bg-blue-500': event.type === 'shipped',
+                                 'bg-amber-500': event.type === 'processing',
+                                 'bg-slate-500': event.type === 'ordered'
+                               }">
+                          </div>
+                          <div class="text-sm">
+                            <p class="font-medium">{{ event.title }}</p>
+                            <p class="text-slate-500">{{ event.date | date:'medium' }}</p>
+                            <p *ngIf="event.description" class="mt-1 text-slate-600">{{ event.description }}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+  
+        <!-- Pagination -->
+        <div class="flex items-center justify-between">
+          <div class="text-sm text-slate-500">
+            Showing <span class="font-medium">1</span> to <span class="font-medium">{{ getFilteredOrders().length }}</span> of {{ '{' }} {{ '}' }}
+            <span class="font-medium">{{ orders.length }}</span> orders
+          </div>
+          <div class="flex items-center space-x-2">
+            <button class="inline-flex items-center justify-center rounded-md text-sm font-medium h-8 px-3 py-2 border border-input bg-white shadow-sm hover:bg-accent hover:text-accent-foreground" disabled>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 mr-1"><path d="m15 18-6-6 6-6"></path></svg>
+              Previous
+            </button>
+            <button class="inline-flex items-center justify-center rounded-md text-sm font-medium h-8 w-8 border border-input bg-slate-900 text-white p-0 shadow-sm">1</button>
+            <button class="inline-flex items-center justify-center rounded-md text-sm font-medium h-8 w-8 border border-input bg-white p-0 shadow-sm hover:bg-accent hover:text-accent-foreground">2</button>
+            <button class="inline-flex items-center justify-center rounded-md text-sm font-medium h-8 px-3 py-2 border border-input bg-white shadow-sm hover:bg-accent hover:text-accent-foreground">
+              Next
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 ml-1"><path d="m9 18 6-6-6-6"></path></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+  

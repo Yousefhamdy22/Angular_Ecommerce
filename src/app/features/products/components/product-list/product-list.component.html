@@ -24,10 +24,10 @@
       <div *ngFor="let product of products" class="border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow bg-white">
         <a [routerLink]="['/product', product.id]" class="block p-2">
           <div class="aspect-w-1 aspect-h-1 overflow-hidden rounded-md mb-2">
-            <img [src]="product.images[0]" [alt]="product.title" class="object-cover w-full h-48">
+            <img [src]="product.images[0]" [alt]="product.item_Name" class="object-cover w-full h-48">
           </div>
           <div class="p-2">
-            <h3 class="text-sm text-gray-700 line-clamp-2">{{ product.title }}</h3>
+            <h3 class="text-sm text-gray-700 line-clamp-2">{{ product.item_Name }}</h3>
             <div class="flex items-center mt-1">
               <p-rating [ngModel]="product.rating" [readonly]="true" cancel="false" [stars]="5"></p-rating>
               <span class="text-xs text-gray-500 ml-2">({{ product.reviewCount }})</span>

@@ -1,0 +1,334 @@
+<div class="contact-page bg-gray-50">
+
+  <app-header/>
+    <!-- Toast for notifications -->
+    <p-toast position="top-right"></p-toast>
+    
+    <!-- Hero Section -->
+    <section class="hero-section relative overflow-hidden bg-gradient-to-r from-pink-700 to-purple-900 text-white">
+      <div class="absolute inset-0 bg-pattern opacity-10"></div>
+      <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+      
+      <div class="container mx-auto px-4 py-16 md:py-24 relative z-10">
+        <div class="max-w-3xl mx-auto text-center">
+          <h1 class="text-4xl md:text-5xl font-bold mb-6">Get In Touch</h1>
+          <p class="text-xl text-white/90 mb-8">
+            We'd love to hear from you. Our friendly team is always here to help.
+          </p>
+        </div>
+      </div>
+      
+      <!-- Bottom Wave -->
+      <div class="absolute bottom-0 left-0 right-0">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 120" class="w-full">
+          <path fill="#f9fafb" fill-opacity="1" d="M0,64L48,80C96,96,192,128,288,128C384,128,480,96,576,85.3C672,75,768,85,864,106.7C960,128,1056,160,1152,160C1248,160,1344,128,1392,112L1440,96L1440,120L1392,120C1344,120,1248,120,1152,120C1056,120,960,120,864,120C768,120,672,120,576,120C480,120,384,120,288,120C192,120,96,120,48,120L0,120Z"></path>
+        </svg>
+      </div>
+    </section>
+    
+    <!-- Contact Information Cards -->
+    <section class="py-12 md:py-16 bg-gray-50">
+      <div class="container mx-auto px-4">
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div *ngFor="let info of contactInfo" class="bg-white rounded-xl shadow-sm p-6 border border-gray-100 hover:shadow-md transition-shadow">
+            <div class="w-12 h-12 bg-pink-100 rounded-full flex items-center justify-center mb-4">
+              <i [class]="info.icon + ' text-pink-600 text-xl'"></i>
+            </div>
+            
+            <h3 class="text-lg font-bold mb-3 text-gray-800">{{info.title}}</h3>
+            
+            <div class="space-y-1 mb-4">
+              <p *ngFor="let detail of info.details" class="text-gray-600">{{detail}}</p>
+            </div>
+            
+            <a [href]="info.action.link" class="text-pink-600 font-medium flex items-center hover:text-pink-700 transition-colors">
+              {{info.action.label}}
+              <i class="pi pi-arrow-right ml-2 text-sm"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Contact Form and Map Section -->
+    <section class="py-12 md:py-16 bg-white">
+      <div class="container mx-auto px-4">
+        <div class="grid lg:grid-cols-2 gap-12">
+          <!-- Contact Form -->
+          <div class="bg-white rounded-xl shadow-sm p-8 border border-gray-100">
+            <h2 class="text-2xl md:text-3xl font-bold mb-6 text-gray-800">Send Us a Message</h2>
+            
+            <form [formGroup]="contactForm" (ngSubmit)="onSubmit()" class="space-y-6">
+              <!-- Name Field -->
+              <div class="form-group">
+                <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Full Name *</label>
+                <input 
+                  id="name" 
+                  type="text" 
+                  pInputText 
+                  formControlName="name" 
+                  [ngClass]="{'ng-invalid ng-dirty': isFieldInvalid('name')}"
+                  class="w-full p-inputtext-sm"
+                  placeholder="Your full name"
+                >
+                <small *ngIf="isFieldInvalid('name')" class="p-error block mt-1">
+                  {{getErrorMessage('name', f['name'].errors ? getObjectKeys(f['name'].errors)[0] : '')}}
+                </small>
+              </div>
+              
+              <!-- Email and Phone Fields -->
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="form-group">
+                  <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email Address *</label>
+                  <input 
+                    id="email" 
+                    type="email" 
+                    pInputText 
+                    formControlName="email" 
+                    [ngClass]="{'ng-invalid ng-dirty': isFieldInvalid('email')}"
+                    class="w-full p-inputtext-sm"
+                    placeholder="your.email@example.com"
+                  >
+                  <small *ngIf="isFieldInvalid('email')" class="p-error block mt-1">
+                    {{getErrorMessage('email', f['email'].errors ?  getObjectKeys(f['name'].errors)[0] : '')}}
+                  </small>
+                </div>
+                
+                <div class="form-group">
+                  <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+                  <input 
+                    id="phone" 
+                    type="tel" 
+                    pInputText 
+                    formControlName="phone" 
+                    [ngClass]="{'ng-invalid ng-dirty': isFieldInvalid('phone')}"
+                    class="w-full p-inputtext-sm"
+                    placeholder="(555) 123-4567"
+                  >
+                  <small *ngIf="isFieldInvalid('phone')" class="p-error block mt-1">
+                    {{getErrorMessage('phone', f['phone'].errors ?  getObjectKeys(f['name'].errors)[0] : '')}}
+                  </small>
+                </div>
+              </div>
+              
+              <!-- Inquiry Type and Order Number -->
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="form-group">
+                  <label for="inquiryType" class="block text-sm font-medium text-gray-700 mb-1">Inquiry Type *</label>
+                  <p-dropdown 
+                    id="inquiryType"
+                    [options]="inquiryTypes" 
+                    formControlName="inquiryType"
+                    [(ngModel)]="selectedInquiryType"
+                    optionLabel="name"
+                    [ngClass]="{'ng-invalid ng-dirty': isFieldInvalid('inquiryType')}"
+                    placeholder="Select an inquiry type"
+                    styleClass="w-full p-inputtext-sm"
+                  ></p-dropdown>
+                  <small *ngIf="isFieldInvalid('inquiryType')" class="p-error block mt-1">
+                    {{getErrorMessage('inquiryType', f['inquiryType'].errors ?  getObjectKeys(f['name'].errors)[0] : '')}}
+                  </small>
+                </div>
+                
+                <div class="form-group">
+                  <label for="orderNumber" class="block text-sm font-medium text-gray-700 mb-1">Order Number (if applicable)</label>
+                  <input 
+                    id="orderNumber" 
+                    type="text" 
+                    pInputText 
+                    formControlName="orderNumber" 
+                    class="w-full p-inputtext-sm"
+                    placeholder="e.g. ORD-12345"
+                  >
+                </div>
+              </div>
+              
+              <!-- Message Field -->
+              <div class="form-group">
+                <label for="message" class="block text-sm font-medium text-gray-700 mb-1">Message *</label>
+                <textarea 
+                  id="message" 
+                  pInputTextarea 
+                  formControlName="message" 
+                  [ngClass]="{'ng-invalid ng-dirty': isFieldInvalid('message')}"
+                  class="w-full p-inputtext-sm"
+                  rows="5"
+                  placeholder="How can we help you?"
+                ></textarea>
+                <small *ngIf="isFieldInvalid('message')" class="p-error block mt-1">
+                  {{getErrorMessage('message', f['message'].errors ? getObjectKeys(f['name'].errors)[0] : '')}}
+                </small>
+              </div>
+              
+              <!-- Submit Button -->
+              <div class="form-group">
+                <button 
+                  pButton 
+                  type="submit" 
+                  label="Send Message" 
+                  icon="pi pi-send"
+                  [loading]="loading"
+                  class="w-full md:w-auto"
+                ></button>
+                
+                <button 
+                  *ngIf="submitted && !loading"
+                  pButton 
+                  type="button" 
+                  label="Reset Form" 
+                  icon="pi pi-refresh"
+                  class="p-button-outlined p-button-secondary ml-2 w-full md:w-auto mt-2 md:mt-0"
+                  (click)="resetForm()"
+                ></button>
+              </div>
+            </form>
+          </div>
+          
+          <!-- Map and Store Information -->
+          <div>
+            <h2 class="text-2xl md:text-3xl font-bold mb-6 text-gray-800">Visit Our Store</h2>
+            
+            <!-- Map -->
+            <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100 mb-6">
+              <div class="h-80 bg-gray-200 relative">
+                <!-- Replace with actual map component or iframe -->
+                <img 
+                  src="assets/images/map.jpg" 
+                  alt="Store location map" 
+                  class="w-full h-full object-cover"
+                  onerror="this.src='https://via.placeholder.com/800x400?text=Store+Location+Map'"
+                >
+                <div class="absolute top-4 right-4">
+                  <a 
+                    href="https://maps.google.com" 
+                    target="_blank" 
+                    class="bg-white rounded-lg shadow-md px-4 py-2 text-sm font-medium text-gray-700 flex items-center hover:bg-gray-50 transition-colors"
+                  >
+                    <i class="pi pi-external-link mr-2"></i>
+                    Open in Google Maps
+                  </a>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Store Details -->
+            <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+              <h3 class="text-xl font-bold mb-4 text-gray-800">Flagship Store</h3>
+              
+              <div class="space-y-4">
+                <div class="flex items-start">
+                  <i class="pi pi-map-marker text-pink-600 mr-3 mt-1"></i>
+                  <div>
+                    <p class="text-gray-600">123 Beauty Boulevard</p>
+                    <p class="text-gray-600">San Francisco, CA 94103</p>
+                    <p class="text-gray-600">United States</p>
+                  </div>
+                </div>
+                
+                <div class="flex items-start">
+                  <i class="pi pi-clock text-pink-600 mr-3 mt-1"></i>
+                  <div>
+                    <p class="text-gray-600"><span class="font-medium">Mon-Fri:</span> 9:00 AM - 6:00 PM</p>
+                    <p class="text-gray-600"><span class="font-medium">Saturday:</span> 10:00 AM - 4:00 PM</p>
+                    <p class="text-gray-600"><span class="font-medium">Sunday:</span> Closed</p>
+                  </div>
+                </div>
+                
+                <div class="flex items-start">
+                  <i class="pi pi-phone text-pink-600 mr-3 mt-1"></i>
+                  <div>
+                    <p class="text-gray-600">+1 (555) 123-4567</p>
+                  </div>
+                </div>
+                
+                <div class="flex items-start">
+                  <i class="pi pi-envelope text-pink-600 mr-3 mt-1"></i>
+                  <div>
+                    <p class="text-gray-600">storeyourbeautyshop.com</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="mt-6 pt-6 border-t border-gray-100">
+                <h4 class="font-medium text-gray-800 mb-3">Follow Us</h4>
+                <div class="flex gap-3">
+                  <a *ngFor="let social of socialLinks" 
+                     [href]="social.url" 
+                     target="_blank"
+                     class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 hover:bg-pink-100 hover:text-pink-600 transition-colors"
+                     [attr.aria-label]="'Follow us on ' + social.name"
+                  >
+                    <i [class]="social.icon"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- FAQ Section -->
+    <section class="py-12 md:py-16 bg-gray-50">
+      <div class="container mx-auto px-4">
+        <div class="text-center max-w-3xl mx-auto mb-12">
+          <h2 class="text-2xl md:text-3xl font-bold mb-4 text-gray-800">Frequently Asked Questions</h2>
+          <p class="text-gray-600">
+            Find quick answers to common questions about our products and services.
+          </p>
+        </div>
+        
+        <div class="max-w-3xl mx-auto">
+          <p-accordion [multiple]="true" styleClass="faq-accordion">
+            <p-accordionTab *ngFor="let faq of faqItems" [header]="faq.question">
+              <p class="text-gray-600">{{faq.answer}}</p>
+            </p-accordionTab>
+          </p-accordion>
+          
+          <div class="text-center mt-8">
+            <p class="text-gray-600 mb-4">Still have questions?</p>
+            <button 
+              pButton 
+              label="Contact Our Support Team" 
+              icon="pi pi-comments"
+              class="p-button-outlined"
+            ></button>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Newsletter Section -->
+    <section class="py-12 md:py-16 bg-gradient-to-r from-pink-700 to-purple-900 text-white relative overflow-hidden">
+      <div class="absolute inset-0 bg-pattern opacity-10"></div>
+      <div class="container mx-auto px-4 relative z-10">
+        <div class="max-w-3xl mx-auto text-center">
+          <h2 class="text-2xl md:text-3xl font-bold mb-4">Stay Connected</h2>
+          <p class="text-xl text-white/90 mb-8">
+            Subscribe to our newsletter for exclusive offers, skincare tips, and updates on new products.
+          </p>
+          
+          <div class="flex flex-col sm:flex-row gap-4 justify-center max-w-lg mx-auto">
+            <input 
+              type="email" 
+              pInputText 
+              placeholder="Your email address" 
+              class="p-3 rounded-full flex-1 text-gray-800"
+            >
+            <button 
+              pButton 
+              label="Subscribe" 
+              icon="pi pi-arrow-right" 
+              class="p-button-rounded"
+            ></button>
+          </div>
+          
+          <p class="text-sm text-white/70 mt-4">
+            By subscribing, you agree to our Privacy Policy and consent to receive updates from our company.
+          </p>
+        </div>
+      </div>
+    </section>
+    <app-footer/>
+  </div>
+  

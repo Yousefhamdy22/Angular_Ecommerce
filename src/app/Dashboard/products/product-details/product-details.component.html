@@ -1,1 +1,684 @@
-<p>product-details works!</p>
+<div class="flex min-h-screen w-full flex-col bg-gray-50">
+  <main class="flex-1 p-6 md:p-8">
+    <p-toast position="top-right"></p-toast>
+    <p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
+    
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="flex flex-col items-center justify-center py-12">
+      <p-progressSpinner 
+        styleClass="w-12 h-12" 
+        strokeWidth="4"
+        animationDuration="1s">
+      </p-progressSpinner>
+      <p class="mt-4 text-gray-600 text-lg">Loading product details...</p>
+    </div>
+    
+    <!-- Error State -->
+    <div *ngIf="isError && !isLoading" class="flex flex-col items-center justify-center py-12">
+      <div class="rounded-full bg-red-100 p-4 text-red-600 mb-4">
+        <i class="pi pi-exclamation-triangle text-4xl"></i>
+      </div>
+      <h3 class="text-2xl font-bold text-gray-900 mb-2">Error Loading Product</h3>
+      <p class="text-gray-600 mb-6 max-w-md text-center">{{ errorMessage || 'An unexpected error occurred while loading the product details' }}</p>
+      <button pButton pRipple 
+        label="Go Back to Products" 
+        icon="pi pi-arrow-left" 
+        class="p-button-outlined p-button-secondary"
+        (click)="navigateToList()">
+      </button>
+    </div>
+    
+
+    
+    <!-- Product Details Content -->
+    <div *ngIf="product && !isLoading && !isError" class="flex flex-col gap-6">
+      <!-- Enhanced Header with Breadcrumbs and Status -->
+      <div class="flex flex-col gap-3">
+        <!-- Breadcrumbs with status indicator -->
+        <div class="flex items-center justify-between">
+          <div class="flex items-center text-sm">
+            <span class="text-gray-500 hover:text-primary-600 cursor-pointer transition-colors" 
+                  (click)="navigateToList()">
+              <i class="pi pi-th-large mr-2"></i>Products
+            </span>
+            <i class="pi pi-chevron-right mx-2 text-xs text-gray-400"></i>
+            <span class="text-gray-900 font-medium truncate max-w-xs">{{ product.item_Name }}</span>
+          </div>
+          
+          <div class="flex items-center gap-2">
+            <span class="text-xs font-medium px-2 py-1 rounded-full" 
+                  [ngClass]="{
+                    'bg-green-100 text-green-800': product.isActive,
+                    'bg-red-100 text-red-800': !product.isActive
+                  }">
+              {{ product.isActive ? 'Active' : 'Inactive' }}
+            </span>
+            <span class="text-xs font-medium px-2 py-1 rounded-full bg-blue-100 text-blue-800">
+              Updated: {{ product.updatedAt | date:'shortDate' }}
+            </span>
+          </div>
+        </div>
+    
+<!-- Main Header with Enhanced Actions -->
+<div class="flex flex-col md:flex-row md:items-start md:justify-between gap-6">
+
+  <!-- Product Info Section -->
+  <div class="flex flex-col gap-3">
+    
+    <!-- Title & Tags -->
+    <div class="flex flex-wrap items-start gap-3">
+      <h1 class="text-3xl font-semibold text-gray-900 leading-tight break-words max-w-2xl">
+        {{ product.item_Name }}
+      </h1>
+
+      <!-- Tags -->
+      <div class="flex items-center gap-2">
+        <p-tag *ngIf="product.isFeatured"
+               value="Featured"
+               icon="pi pi-star"
+               severity="info"
+               styleClass="px-3 py-1 text-sm font-medium shadow-sm border border-blue-200 bg-blue-50 text-blue-700 rounded-md">
+        </p-tag>
+
+        <!-- Stock Status -->
+        <p-tag [value]="getStockStatusText()"
+               [icon]="getStockStatusIcon()"
+             >
+        </p-tag>
+      </div>
+    </div>
+
+    <!-- Meta Info (SKU, Category, Created Date) -->
+    <div class="flex flex-wrap gap-x-8 gap-y-2 text-sm text-gray-700 mt-2 border-t border-gray-200 pt-3">
+      <!-- SKU -->
+      <div class="flex items-center gap-2">
+        <i class="pi pi-tag text-gray-400 text-xs"></i>
+        <span>
+          <span class="font-bold text-gray-800">SKU:</span>
+          <span class="text-gray-600">{{ product.id }}</span>
+        </span>
+      </div>
+
+      <!-- Category -->
+      <div class="flex items-center gap-2">
+        <i class="pi pi-folder text-gray-400 text-xs"></i>
+        <span>
+          <span class="font-bold text-gray-800">Category:</span>
+          <span class="text-gray-600">{{ getCategoryName(product.categoryId) || 'Unknown Category' }}</span>
+        </span>
+      </div>
+
+      <!-- Created Date -->
+      <div class="flex items-center gap-2" *ngIf="product.createdAt">
+        <i class="pi pi-calendar text-gray-400 text-xs"></i>
+        <span>
+          <span class="font-bold text-gray-800">Created:</span>
+          <span class="text-gray-600">{{ product.createdAt | date:'mediumDate' }}</span>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Actions Section -->
+  <div class="flex items-center gap-2 flex-wrap md:flex-nowrap">
+    
+    <!-- Back Button -->
+    <button pButton pRipple
+            rounded="true"
+            icon="pi pi-chevron-left"
+            label="Back"
+            class="p-button-sm p-button-outlined border-gray-300 hover:border-gray-400 text-gray-700 h-10"
+            (click)="navigateToList()">
+    </button>
+
+    <!-- Edit Button -->
+    <button pButton pRipple
+            icon="pi pi-pencil"
+            label="Edit"
+            class="p-button-sm p-button-outlined border-gray-300 hover:border-gray-400 text-gray-700 h-10"
+            (click)="toggleEditMode()">
+    </button>
+
+    <!-- More Actions -->
+    <p-splitButton 
+      icon="pi pi-ellipsis-v" 
+      label="Actions" 
+      class="p-button-sm p-button-outlined border-gray-300 hover:border-gray-400 text-gray-700 h-10"
+      [model]="menuItems">
+    </p-splitButton>
+    
+  </div>
+</div>
+
+    
+      <!-- Status Summary Bar -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="bg-white rounded-lg border border-gray-200 p-4 shadow-xs">
+          <div class="flex items-center gap-3">
+            <div class="p-2 rounded-full bg-blue-50 text-blue-600">
+              <i class="pi pi-dollar"></i>
+            </div>
+            <div>
+              <p class="text-sm font-medium text-gray-500">Price</p>
+              <p class="text-lg font-semibold text-gray-900">{{ product.price | currency:'USD':'symbol':'1.2-2' }}</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-white rounded-lg border border-gray-200 p-4 shadow-xs">
+          <div class="flex items-center gap-3">
+            <div class="p-2 rounded-full bg-green-50 text-green-600">
+              <i class="pi pi-shopping-cart"></i>
+            </div>
+            <div>
+              <p class="text-sm font-medium text-gray-500">Sold</p>
+              <p class="text-lg font-semibold text-gray-900">{{ product.solditems }}</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-white rounded-lg border border-gray-200 p-4 shadow-xs">
+          <div class="flex items-center gap-3">
+            <div class="p-2 rounded-full bg-amber-50 text-amber-600">
+              <i class="pi pi-box"></i>
+            </div>
+            <div>
+              <p class="text-sm font-medium text-gray-500">Stock</p>
+              <p class="text-lg font-semibold text-gray-900" 
+                 [ngClass]="{
+                   'text-red-600': product.quantity === 0,
+                   'text-amber-600': product.quantity > 0 && product.quantity < 10,
+                   'text-green-600': product.quantity >= 10
+                 }">
+                {{ product.quantity }}
+              </p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-white rounded-lg border border-gray-200 p-4 shadow-xs">
+          <div class="flex items-center gap-3">
+            <div class="p-2 rounded-full bg-purple-50 text-purple-600">
+              <i class="pi pi-star"></i>
+            </div>
+            <div>
+              <p class="text-sm font-medium text-gray-500">Rating</p>
+              <div class="flex items-center gap-1">
+                <p-rating [ngModel]="salesMetrics.averageRating" [readonly]="true" class="text-sm"></p-rating>
+                <span class="text-sm font-semibold text-gray-900 ml-1">
+                  {{ salesMetrics.averageRating | number:'1.1-1' }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+      
+      <!-- Main Content -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Left Column - Images & Basic Info -->
+        <div class="lg:col-span-2">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- Image Gallery -->
+            <div class="md:col-span-2">
+              <div class="rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden">
+                <!-- Main Image -->
+                <div class="relative bg-gray-50">
+                  <img 
+                    [src]="product.imageUrls && product.imageUrls.length > 0 ? product.imageUrls[activeImageIndex] : 'assets/images/product-placeholder.svg'" 
+                    [alt]="product.item_Name"
+                    class="w-full h-96 object-contain p-6"
+                  />
+                  <div class="absolute top-4 right-4">
+                    <p-tag 
+                      [value]="getStockStatusText()" 
+                      [severity]="getStockStatusSeverity()"
+                      [icon]="getStockStatusIcon()"
+                      styleClass="px-3 py-1 shadow-sm">
+                    </p-tag>
+                  </div>
+                </div>
+                
+                <!-- Thumbnail Navigation -->
+                <div *ngIf="product.imageUrls && product.imageUrls.length > 1" 
+                  class="flex justify-start gap-3 p-4 bg-gray-50 border-t border-gray-200 overflow-x-auto">
+                  <div 
+                    *ngFor="let image of product.imageUrls; let i = index" 
+                    class="flex-shrink-0 h-20 w-20 rounded-lg border-2 p-1 cursor-pointer transition-all hover:border-primary-500"
+                    [ngClass]="{'border-primary-500': activeImageIndex === i, 'border-gray-200': activeImageIndex !== i}"
+                    (click)="activeImageIndex = i">
+                    <img 
+                      [src]="image" 
+                      [alt]="product.item_Name + ' thumbnail ' + i" 
+                      class="h-full w-full object-contain rounded" />
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Product Details Card -->
+            <div class="md:col-span-2">
+              <div class="rounded-2xl border border-gray-300 bg-white shadow-md p-8">
+                <div class="flex items-center justify-between mb-6">
+                  <h3 class="text-2xl font-semibold text-gray-800">Product Information</h3>
+                  <button pButton pRipple 
+                    icon="pi pi-pencil" 
+                    label="Edit" 
+                    class="p-button-outlined p-button-sm"
+                    (click)="toggleEditMode()"
+                    *ngIf="!editMode">
+                  </button>
+                </div>
+            
+                <!-- Edit Mode -->
+                <div *ngIf="editMode" class="flex flex-col gap-8">
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="field">
+                      <label for="name" class="block text-sm font-semibold text-gray-700 mb-1">Product Name*</label>
+                      <input type="text" 
+                             pInputText 
+                             id="name" 
+                             [(ngModel)]="product.item_Name" 
+                             class="w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-200" />
+                    </div>
+            
+                    <div class="field">
+                      <label for="category" class="block text-sm font-semibold text-gray-700 mb-1">Category*</label>
+                      <p-dropdown [options]="categories" 
+                                  [(ngModel)]="product.categoryId" 
+                                  optionLabel="name" 
+                                  optionValue="id" 
+                                  placeholder="Select Category"
+                                  class="w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-200">
+                      </p-dropdown>
+                    </div>
+                  </div>
+            
+                  <div class="field">
+                    <label for="description" class="block text-sm font-semibold text-gray-700 mb-1">Description</label>
+                    <textarea pInputTextarea 
+                              id="description" 
+                              [(ngModel)]="product.description" 
+                              rows="4" 
+                              class="w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-200">
+                    </textarea>
+                  </div>
+            
+                  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="field">
+                      <label for="price" class="block text-sm font-semibold text-gray-700 mb-1">Price*</label>
+                      <p-inputNumber id="price" 
+                                     [(ngModel)]="product.price" 
+                                     mode="currency" 
+                                     currency="USD" 
+                                     class="w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-200">
+                      </p-inputNumber>
+                    </div>
+            
+                    <div class="field">
+                      <label for="quantity" class="block text-sm font-semibold text-gray-700 mb-1">Quantity*</label>
+                      <p-inputNumber id="quantity" 
+                                     [(ngModel)]="product.quantity" 
+                                     class="w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-200">
+                      </p-inputNumber>
+                    </div>
+            
+                    <!-- <div class="field">
+                      <label for="length" class="block text-sm font-semibold text-gray-700 mb-1">Length (cm)</label>
+                      <p-inputNumber id="length" 
+                                     [(ngModel)]="product.length" 
+                                     class="w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-200">
+                      </p-inputNumber>
+                    </div> -->
+                  </div>
+            
+                  <div class="flex items-center justify-between mt-6">
+                    
+                    <div class="flex flex-col sm:flex-row gap-4">
+                      <div class="flex items-center space-x-2">
+                        <p-checkbox [(ngModel)]="product.isFeatured" [binary]="true" inputId="isFeatured"></p-checkbox>
+                        <label for="isFeatured" class="text-sm font-medium text-gray-700">Featured Product</label>
+                      </div>
+                      <div class="flex items-center space-x-2">
+                        <p-checkbox [(ngModel)]="product.isActive" [binary]="true" inputId="isActive"></p-checkbox>
+                        <label for="isActive" class="text-sm font-medium text-gray-700">Active Product</label>
+                      </div>
+                    </div>
+            
+                    <div class="flex flex-wrap items-center gap-4">
+                      <button pButton pRipple 
+                              label="Cancel" 
+                              icon="pi pi-times" 
+                              class="p-button-outlined p-button-secondary"
+                              (click)="toggleEditMode()">
+                      </button>
+                      <button pButton pRipple 
+                              label="Save Changes" 
+                              icon="pi pi-check" 
+                              class="p-button"
+                              (click)="saveProduct()">
+                      </button>
+                    </div>
+                  </div>
+                  
+                </div>
+              </div>
+            </div>
+            
+
+          </div>
+        </div>
+        
+        <!-- Right Column - Stats & Actions -->
+       <!-- Pricing & Inventory Card -->
+<div class="rounded-2xl border border-gray-200 bg-white shadow-md p-6">
+  <!-- Header -->
+  <h3 class="text-2xl font-semibold text-gray-800 mb-6">Pricing & Inventory</h3>
+
+  <div class="space-y-8">
+    
+    <!-- Current Price -->
+    <div>
+      <h4 class="text-sm font-medium text-gray-500 mb-1">Current Price</h4>
+      <div class="text-4xl font-bold text-gray-900">
+        {{ product.price | currency:'USD':'symbol':'1.2-2' }}
+      </div>
+    </div>
+
+    <!-- Stock Level -->
+    <div>
+      <div class="flex items-center justify-between mb-2">
+        <h4 class="text-sm font-medium text-gray-500">Stock Level</h4>
+        <span class="text-sm font-semibold"
+              [ngClass]="{
+                'text-red-600': product.quantity === 0,
+                'text-yellow-600': product.quantity > 0 && product.quantity < 10,
+                'text-green-600': product.quantity >= 10
+              }">
+          {{ product.quantity }} in stock
+        </span>
+      </div>
+
+      <!-- Progress Bar Wrapper with Better Styling -->
+      <div class="w-full h-3 bg-gray-200 rounded-full overflow-hidden">
+        <div class="h-full rounded-full transition-all duration-500 ease-in-out"
+             [ngStyle]="{
+               width: ((product.quantity / 50) * 100) + '%',
+               backgroundColor: product.quantity === 0 ? '#dc2626' : product.quantity < 10 ? '#facc15' : '#16a34a'
+             }">
+        </div>
+      </div>
+    </div>
+
+    <!-- Cost & Profit -->
+    <div class="grid grid-cols-2 gap-6">
+      <div>
+        <h4 class="text-sm font-medium text-gray-500 mb-1">Cost Price</h4>
+        <p class="text-gray-800 font-medium">
+          {{ product.costPrice ? (product.costPrice | currency:'USD':'symbol':'1.2-2') : 'Not set' }}
+        </p>
+      </div>
+      <div>
+        <h4 class="text-sm font-medium text-gray-500 mb-1">Profit Margin</h4>
+        <p class="text-gray-800 font-medium" *ngIf="product.costPrice">
+          {{ ((product.price - product.costPrice) / product.costPrice * 100) | number:'1.0-2' }}%
+        </p>
+        <p class="text-gray-500 italic" *ngIf="!product.costPrice">N/A</p>
+      </div>
+    </div>
+
+    <!-- Quick Update Button -->
+    <div class="pt-4 border-t border-gray-200">
+      <button pButton pRipple 
+              label="Quick Update Inventory" 
+              icon="pi pi-box" 
+              class="p-button-sm p-button-primary w-full rounded-lg"
+              (click)="showInventoryDialog = true">
+      </button>
+    </div>
+  </div>
+
+
+          <!-- Sales Performance Card -->
+          <div class="rounded-xl border border-gray-200 bg-white shadow-sm p-6">
+            <h3 class="text-xl font-semibold mb-4">Sales Performance</h3>
+            
+            <div class="grid grid-cols-2 gap-4">
+              <div class="bg-blue-50 p-3 rounded-lg">
+                <h4 class="text-xs font-medium text-blue-600 mb-1">Total Sold</h4>
+                <p class="text-2xl font-bold text-blue-900">{{ product.solditems }}</p>
+              </div>
+              
+              <div class="bg-green-50 p-3 rounded-lg">
+                <h4 class="text-xs font-medium text-green-600 mb-1">Revenue</h4>
+                <p class="text-2xl font-bold text-green-900">{{ product.price * product.solditems | currency:'USD':'symbol':'1.2-2' }}</p>
+              </div>
+              
+              <div class="bg-purple-50 p-3 rounded-lg">
+                <h4 class="text-xs font-medium text-purple-600 mb-1">Avg. Rating</h4>
+                <div class="flex items-center">
+                  <p-rating 
+                    [ngModel]="salesMetrics.averageRating" 
+                    [readonly]="true" 
+                    styleClass="text-sm">
+                  </p-rating>
+                  <span class="ml-2 text-sm font-bold text-purple-900">
+                    {{ salesMetrics.averageRating | number:'1.1-1' }}
+                  </span>
+                </div>
+              </div>
+              
+              <div class="bg-amber-50 p-3 rounded-lg">
+                <h4 class="text-xs font-medium text-amber-600 mb-1">Return Rate</h4>
+                <p class="text-2xl font-bold text-amber-900">{{ salesMetrics.returnRate }}%</p>
+              </div>
+            </div>
+            
+            <div class="mt-4 pt-4 border-t border-gray-200">
+              <button pButton pRipple 
+                label="View Sales Analytics" 
+                icon="pi pi-chart-line" 
+                class="p-button-text p-button-sm w-full">
+              </button>
+            </div>
+          </div>
+          
+          <!-- Product History -->
+          <div class="rounded-xl border border-gray-200 bg-white shadow-sm p-6">
+            <h3 class="text-xl font-semibold mb-4">Recent Activity</h3>
+            
+            <p-timeline [value]="inventoryHistory" align="left" styleClass="custom-timeline">
+              <ng-template pTemplate="marker" let-event>
+                <span class="flex w-8 h-8 items-center justify-center rounded-full bg-gray-100 border-2 border-white shadow">
+                  <i [class]="getTimelineIcon(event.action)" class="text-gray-700"></i>
+                </span>
+              </ng-template>
+              <ng-template pTemplate="content" let-event>
+                <div class="ml-4 pb-4">
+                  <div class="text-sm font-medium text-gray-900">{{ event.action }}</div>
+                  <div class="text-xs text-gray-500 mt-1">
+                    {{ event.date | date:'medium' }} by {{ event.user }}
+                  </div>
+                  <div *ngIf="event.previousValue !== undefined && event.newValue !== undefined" 
+                    class="text-xs text-gray-600 mt-1 flex items-center gap-1">
+                    <span class="line-through text-gray-400">{{ event.previousValue }}</span>
+                    <i class="pi pi-arrow-right text-xs"></i>
+                    <span class="font-medium">{{ event.newValue }}</span>
+                  </div>
+                  <div *ngIf="event.notes" class="text-xs text-gray-500 mt-1 italic">
+                    "{{ event.notes }}"
+                  </div>
+                </div>
+              </ng-template>
+            </p-timeline>
+            
+            <div class="pt-2">
+              <button pButton pRipple 
+                label="View Full History" 
+                icon="pi pi-history" 
+                class="p-button-text p-button-sm w-full">
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Related Products & Variants -->
+      <div class="grid grid-cols-1 gap-8">
+        <!-- Product Variants -->
+        <div *ngIf="product.variants && product.variants.length > 0" class="rounded-xl border border-gray-200 bg-white shadow-sm p-6">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-xl font-semibold">Product Variants</h3>
+            <button pButton pRipple 
+              icon="pi pi-plus" 
+              label="Add Variant" 
+              class="p-button-outlined p-button-sm">
+            </button>
+          </div>
+          
+          <p-table [value]="product.variants" [rows]="5" [paginator]="true" styleClass="p-datatable-sm">
+            <ng-template pTemplate="header">
+              <tr>
+                <th>Variant</th>
+                <th>SKU</th>
+                <th>Price</th>
+                <th>Stock</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-variant>
+              <tr>
+                <td class="font-medium">{{ variant.name }}</td>
+                <td>{{ variant.sku }}</td>
+                <td>{{ variant.price | currency:'USD':'symbol':'1.2-2' }}</td>
+                <td>
+                  <span [ngClass]="{
+                    'text-red-600': variant.quantity === 0,
+                    'text-yellow-600': variant.quantity > 0 && variant.quantity < 5,
+                    'text-green-600': variant.quantity >= 5
+                  }">
+                    {{ variant.quantity }}
+                  </span>
+                </td>
+                <td>
+                  <p-tag [value]="variant.isActive ? 'Active' : 'Inactive'" 
+                    [severity]="variant.isActive ? 'success' : 'danger'">
+                  </p-tag>
+                </td>
+                <td>
+                  <button pButton pRipple icon="pi pi-pencil" class="p-button-text p-button-sm"></button>
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+        
+        <!-- Related Products -->
+        <div *ngIf="relatedProducts.length > 0" class="rounded-xl border border-gray-200 bg-white shadow-sm p-6">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-xl font-semibold">Frequently Bought Together</h3>
+            <button pButton pRipple 
+              icon="pi pi-refresh" 
+              label="Refresh" 
+              class="p-button-outlined p-button-sm">
+            </button>
+          </div>
+          
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div *ngFor="let relatedProduct of relatedProducts" 
+              class="border rounded-lg overflow-hidden bg-gray-50 hover:shadow-md transition-shadow">
+              <div class="h-40 overflow-hidden bg-white">
+                <img 
+                  [src]="relatedProduct.imageUrls && relatedProduct.imageUrls.length > 0 ? relatedProduct.imageUrls[0] : 'assets/images/product-placeholder.svg'" 
+                  class="w-full h-full object-contain p-4" />
+              </div>
+              <div class="p-3 border-t border-gray-200">
+                <h4 class="text-sm font-medium text-gray-900 truncate">{{ relatedProduct.item_Name }}</h4>
+                <p class="text-xs text-gray-500 mt-1 line-clamp-2">{{ relatedProduct.description }}</p>
+                <div class="flex items-center justify-between mt-3">
+                  <span class="text-sm font-semibold">{{ relatedProduct.price | currency:'USD':'symbol':'1.2-2' }}</span>
+                  <button pButton pRipple 
+                    icon="pi pi-eye" 
+                    class="p-button-rounded p-button-sm p-button-text">
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+
+<!-- Inventory Update Dialog -->
+<p-dialog header="Update Inventory" [(visible)]="showInventoryDialog" 
+          [style]="{width: '500px', 'border-radius': '8px', 'border': 'none', 'box-shadow': '0 4px 20px rgba(0,0,0,0.1)'}" 
+          [modal]="true" [contentStyle]="{'background': '#ffffff', 'border-radius': '8px', 'padding': '1.5rem'}">
+  
+  <div class="flex flex-col gap-5">
+    <!-- Adjustment Type -->
+    <div class="field">
+      <label for="adjustmentType" class="block text-sm font-medium text-gray-700 mb-2">Adjustment Type</label>
+      <p-dropdown 
+      
+      [options]="adjustmentTypes" 
+      [(ngModel)]="selectedAdjustmentType" 
+      optionLabel="label" 
+      optionValue="value" 
+      placeholder="Select type"
+      [style]="{
+        'width': '100%',
+        'border': '1px solid #d1d5db',
+        'border-radius': '6px',
+        'background': '#ffffff'
+      }"
+      panelStyleClass="custom-dropdown-panel"
+      [appendTo]="'body'">
+    </p-dropdown>
+    </div>
+    
+    <!-- Quantity -->
+    <div class="field">
+      <label for="adjustmentValue" class="block text-sm font-medium text-gray-700 mb-2">Quantity</label>
+      <p-inputNumber id="adjustmentValue" [(ngModel)]="adjustmentValue" [min]="1" 
+                    [inputStyle]="{'width': '100%', 'border': '1px solid #d1d5db', 'border-radius': '6px', 'padding': '0.5rem'}"
+                    class="w-full"></p-inputNumber>
+    </div>
+    
+    <!-- Notes -->
+    <div class="field">
+      <label for="adjustmentNotes" class="block text-sm font-medium text-gray-700 mb-2">Notes</label>
+      <textarea pInputTextarea id="adjustmentNotes" [(ngModel)]="adjustmentNotes" rows="3" 
+               class="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"></textarea>
+    </div>
+
+    <!-- Status Toggle -->
+    <div class="field flex items-center gap-4">
+      <label class="block text-sm font-medium text-gray-700">Status</label>
+      <div class="flex items-center gap-4">
+        <p-radioButton name="status" value="active" [(ngModel)]="itemStatus" inputId="active"></p-radioButton>
+        <label for="active" class="text-sm text-gray-700">Active</label>
+        <p-radioButton name="status" value="inactive" [(ngModel)]="itemStatus" inputId="inactive"></p-radioButton>
+        <label for="inactive" class="text-sm text-gray-700">Inactive</label>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Footer with metadata and actions -->
+  <ng-template pTemplate="footer">
+    <div class="flex justify-between items-center w-full border-t border-gray-100 pt-4">
+      <div class="text-xs text-gray-500">
+        <div>Created: {{ createdDate | date:'mediumDate' }}</div>
+        <div>Last Updated: {{ updatedDate | date:'mediumDate' }}</div>
+      </div>
+      <div class="flex gap-2">
+        <button pButton pRipple label="Cancel" icon="pi pi-times" 
+                class="p-button-text text-gray-600 hover:bg-gray-100 px-4 py-2 rounded-md"></button>
+        <button pButton pRipple label="Update" icon="pi pi-check" 
+                class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md"></button>
+      </div>
+    </div>
+  </ng-template>
+</p-dialog>

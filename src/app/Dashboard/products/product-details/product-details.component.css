@@ -1,0 +1,36 @@
+/* Add any custom styles here if needed */
+.custom-spinner .p-progress-spinner-circle {
+    animation: custom-progress-spinner-dash 1.5s ease-in-out infinite, custom-progress-spinner-color 6s ease-in-out infinite;
+  }
+ 
+  @keyframes custom-progress-spinner-color {
+    100%,
+    0% {
+      stroke: #3B82F6;
+    }
+    40% {
+      stroke: #10B981;
+    }
+    66% {
+      stroke: #F59E0B;
+    }
+    80%,
+    90% {
+      stroke: #EF4444;
+    }
+  }
+  
+  @keyframes custom-progress-spinner-dash {
+    0% {
+      stroke-dasharray: 1, 200;
+      stroke-dashoffset: 0;
+    }
+    50% {
+      stroke-dasharray: 89, 200;
+      stroke-dashoffset: -35px;
+    }
+    100% {
+      stroke-dasharray: 89, 200;
+      stroke-dashoffset: -124px;
+    }
+  }

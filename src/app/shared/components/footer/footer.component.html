@@ -1,120 +1,156 @@
-<footer class="bg-gray-900 text-white mt-8">
-    <!-- Back to top button -->
-    <div class="bg-gray-800 hover:bg-gray-700 transition-colors cursor-pointer" (click)="scrollToTop()">
-      <div class="container mx-auto py-3 text-center text-sm">
-        Back to top
-      </div>
-    </div>
-    
-    <!-- Newsletter Subscription -->
-    <div class="bg-pink-600 py-6">
-      <div class="container mx-auto px-4">
-        <div class="max-w-3xl mx-auto text-center">
-          <h3 class="text-xl font-bold mb-2">Subscribe to our newsletter</h3>
-          <p class="text-sm mb-4">Get beauty tips, exclusive offers, and be the first to know about new arrivals!</p>
-          <div class="flex flex-col sm:flex-row gap-2 max-w-md mx-auto">
-            <input type="email" pInputText ngModel ="email" placeholder="Your email address" class="flex-1 text-gray-800" />
-            <button pButton label="Subscribe" (click)="subscribe()" class="p-button-light"></button>
+<footer class="bg-gray-900 text-white pt-16 pb-8">
+  <!-- Main Footer Content -->
+  <div class="container mx-auto px-4">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
+      <!-- Company Info -->
+      <div class="lg:col-span-2">
+        <div class="mb-6">
+          <a routerLink="/" class="inline-block">
+            <span class="text-3xl font-bold text-white">GLAM<span class="text-pink-400">GLOW</span></span>
+          </a>
+        </div>
+        
+        <p class="text-gray-400 mb-6 max-w-md">
+          Discover the beauty in you with our premium, cruelty-free cosmetics. 
+          Crafted with care for your skin and the planet.
+        </p>
+        
+        <div class="space-y-3">
+          <div class="flex items-start">
+            <i class="pi pi-map-marker text-pink-400 mt-1 mr-3"></i>
+            <div class="text-gray-400">
+              {{companyInfo.address}}<br>
+              {{companyInfo.city}}
+            </div>
+          </div>
+          
+          <div class="flex items-center">
+            <i class="pi pi-phone text-pink-400 mr-3"></i>
+            <a href="tel:+18005551234" class="text-gray-400 hover:text-pink-400 transition-colors">
+              {{companyInfo.phone}}
+            </a>
+          </div>
+          
+          <div class="flex items-center">
+            <i class="pi pi-envelope text-pink-400 mr-3"></i>
+            <a href="mailto:hello@glamglow.com" class="text-gray-400 hover:text-pink-400 transition-colors">
+              {{companyInfo.email}}
+            </a>
+          </div>
+        </div>
+        
+        <!-- Social Media -->
+        <div class="mt-8">
+          <h4 class="text-white font-semibold mb-4">Follow Us</h4>
+          <div class="flex space-x-3">
+            <a *ngFor="let social of socialLinks" 
+               [href]="social.link" 
+               target="_blank" 
+               class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-pink-600 transition-colors"
+               [pTooltip]="social.name"
+               tooltipPosition="top">
+              <i [class]="social.icon"></i>
+            </a>
           </div>
         </div>
       </div>
+      
+      <!-- Shop Links -->
+      <div>
+        <h4 class="text-white font-semibold mb-4 pb-2 border-b border-gray-800">Shop</h4>
+        <ul class="space-y-2">
+          <li *ngFor="let link of shopLinks">
+            <a [routerLink]="link.link" class="text-gray-400 hover:text-pink-400 transition-colors">
+              {{link.name}}
+            </a>
+          </li>
+        </ul>
+      </div>
+      
+      <!-- About Links -->
+      <div>
+        <h4 class="text-white font-semibold mb-4 pb-2 border-b border-gray-800">About</h4>
+        <ul class="space-y-2">
+          <li *ngFor="let link of aboutLinks">
+            <a [routerLink]="link.link" class="text-gray-400 hover:text-pink-400 transition-colors">
+              {{link.name}}
+            </a>
+          </li>
+        </ul>
+      </div>
+      
+      <!-- Help Links -->
+      <div>
+        <h4 class="text-white font-semibold mb-4 pb-2 border-b border-gray-800">Help</h4>
+        <ul class="space-y-2">
+          <li *ngFor="let link of helpLinks">
+            <a [routerLink]="link.link" class="text-gray-400 hover:text-pink-400 transition-colors">
+              {{link.name}}
+            </a>
+          </li>
+        </ul>
+      </div>
     </div>
     
-    <!-- Main Footer Links -->
-    <div class="container mx-auto px-4 py-8">
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-        <!-- Get to Know Us -->
+    <!-- Newsletter -->
+    <div class="mt-12 py-8 border-t border-gray-800">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
         <div>
-          <h4 class="font-bold text-lg mb-4">Get to Know Us</h4>
-          <ul class="space-y-2 text-sm text-gray-300">
-            <li><a href="#" class="hover:text-pink-400 hover:underline">About Glow Beauty</a></li>
-            <li><a href="#" class="hover:text-pink-400 hover:underline">Careers</a></li>
-            <li><a href="#" class="hover:text-pink-400 hover:underline">Beauty Blog</a></li>
-            <li><a href="#" class="hover:text-pink-400 hover:underline">Sustainability</a></li>
-            <li><a href="#" class="hover:text-pink-400 hover:underline">Press Center</a></li>
-            <li><a href="#" class="hover:text-pink-400 hover:underline">Investor Relations</a></li>
-          </ul>
+          <h3 class="text-xl font-bold text-white mb-2">Subscribe to Our Newsletter</h3>
+          <p class="text-gray-400">
+            Get the latest updates on new products, special offers, and beauty tips.
+          </p>
         </div>
         
-        <!-- Shop with Us -->
-        <div>
-          <h4 class="font-bold text-lg mb-4">Shop with Us</h4>
-          <ul class="space-y-2 text-sm text-gray-300">
-            <li><a href="#" class="hover:text-pink-400 hover:underline">Your Account</a></li>
-            <li><a href="#" class="hover:text-pink-400 hover:underline">Your Orders</a></li>
-            <li><a href="#" class="hover:text-pink-400 hover:underline">Shipping Rates & Policies</a></li>
-            <li><a href="#" class="hover:text-pink-400 hover:underline">Returns & Replacements</a></li>
-            <li><a href="#" class="hover:text-pink-400 hover:underline">Beauty Rewards</a></li>
-            <li><a href="#" class="hover:text-pink-400 hover:underline">Gift Cards</a></li>
-            <li><a href="#" class="hover:text-pink-400 hover:underline">Help</a></li>
-          </ul>
-        </div>
-        
-        <!-- Beauty Categories -->
-        <div>
-          <h4 class="font-bold text-lg mb-4">Beauty Categories</h4>
-          <ul class="space-y-2 text-sm text-gray-300">
-            <li><a href="#" class="hover:text-pink-400 hover:underline">Skincare</a></li>
-            <li><a href="#" class="hover:text-pink-400 hover:underline">Makeup</a></li>
-            <li><a href="#" class="hover:text-pink-400 hover:underline">Haircare</a></li>
-            <li><a href="#" class="hover:text-pink-400 hover:underline">Fragrance</a></li>
-            <li><a href="#" class="hover:text-pink-400 hover:underline">Bath & Body</a></li>
-            <li><a href="#" class="hover:text-pink-400 hover:underline">Tools & Accessories</a></li>
-            <li><a href="#" class="hover:text-pink-400 hover:underline">Men's Grooming</a></li>
-            <li><a href="#" class="hover:text-pink-400 hover:underline">Clean Beauty</a></li>
-            <li><a href="#" class="hover:text-pink-400 hover:underline">Luxury Beauty</a></li>
-          </ul>
-        </div>
-        
-        <!-- Let Us Help You -->
-        <div>
-          <h4 class="font-bold text-lg mb-4">Let Us Help You</h4>
-          <ul class="space-y-2 text-sm text-gray-300">
-            <li><a href="#" class="hover:text-pink-400 hover:underline">COVID-19 and Glow Beauty</a></li>
-            <li><a href="#" class="hover:text-pink-400 hover:underline">Your Account</a></li>
-            <li><a href="#" class="hover:text-pink-400 hover:underline">Shipping Rates & Policies</a></li>
-            <li><a href="#" class="hover:text-pink-400 hover:underline">Returns & Replacements</a></li>
-            <li><a href="#" class="hover:text-pink-400 hover:underline">Manage Your Content</a></li>
-            <li><a href="#" class="hover:text-pink-400 hover:underline">Help</a></li>
-          </ul>
+        <div class="flex flex-col sm:flex-row gap-3">
+          <div class="p-inputgroup flex-1">
+            <span class="p-inputgroup-addon bg-gray-800 border-gray-700 text-gray-400">
+              <i class="pi pi-envelope"></i>
+            </span>
+            <input 
+              type="text" 
+              pInputText 
+              [(ngModel)]="email"
+              placeholder="Your email address" 
+              class="bg-gray-800 border-gray-700 text-white"
+            >
+          </div>
+          <button 
+            pButton 
+            pRipple 
+            type="button" 
+            label="Subscribe" 
+            class="p-button-primary bg-pink-600 border-pink-600 hover:bg-pink-700"
+            (click)="subscribeNewsletter()"
+          ></button>
         </div>
       </div>
     </div>
     
-    <!-- Divider -->
-    <div class="border-t border-gray-800"></div>
-    
-    <!-- Language and Currency Selector -->
-    <div class="container mx-auto px-4 py-6">
-      <div class="flex flex-col md:flex-row items-center justify-center gap-4">
-        <!-- Logo -->
+    <!-- Payment Methods -->
+    <div class="mt-8 pt-8 border-t border-gray-800">
+      <div class="flex flex-col md:flex-row justify-between items-center">
         <div class="mb-4 md:mb-0">
-          <img src="/placeholder.svg?height=50&width=120" alt="Glow Beauty" class="h-8" />
+          <h4 class="text-white font-semibold mb-3">We Accept</h4>
+          <div class="flex space-x-3">
+            <img *ngFor="let payment of paymentMethods" 
+                 [src]="payment.image" 
+                 [alt]="payment.name" 
+                 class="h-8 bg-white rounded p-1"
+                 [pTooltip]="payment.name"
+                 tooltipPosition="top">
+          </div>
         </div>
         
-       
-     
-      </div>
-    </div>
-    
-    <!-- Bottom Links -->
-    <div class="bg-gray-950 py-6">
-      <div class="container mx-auto px-4">
-        <div class="text-xs text-gray-400 text-center">
-          <div class="flex flex-wrap justify-center gap-x-4 gap-y-2 mb-4">
-            <a href="#" class="hover:text-pink-400 hover:underline">Conditions of Use</a>
-            <a href="#" class="hover:text-pink-400 hover:underline">Privacy Notice</a>
-            <a href="#" class="hover:text-pink-400 hover:underline">Interest-Based Ads</a>
-            <a href="#" class="hover:text-pink-400 hover:underline">Cookie Preferences</a>
-            <a href="#" class="hover:text-pink-400 hover:underline">Accessibility</a>
-            <a href="#" class="hover:text-pink-400 hover:underline">Shipping & Delivery</a>
-            <a href="#" class="hover:text-pink-400 hover:underline">Returns & Refunds</a>
-            <a href="#" class="hover:text-pink-400 hover:underline">Secure Shopping</a>
-          </div>
-          <p>© {{currentYear}} Glow Beauty. All Rights Reserved.</p>
+        <div class="text-center md:text-right">
+          <p class="text-gray-500 text-sm">
+            &copy; {{currentYear}} {{companyInfo.name}}. All rights reserved.
+          </p>
+          <p class="text-gray-600 text-xs mt-1">
+            Designed with <i class="pi pi-heart text-pink-500"></i> for beauty lovers
+          </p>
         </div>
       </div>
     </div>
-  </footer>
-  
-  
+  </div>
+</footer>

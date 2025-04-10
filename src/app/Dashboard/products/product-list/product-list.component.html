@@ -1,0 +1,278 @@
+<div class="flex min-h-screen w-full flex-col bg-slate-50">
+  <main class="flex-1 p-6 md:p-8">
+    <div class="flex flex-col gap-8">
+      <!-- Header -->
+      <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+        <div>
+          <h1 class="text-3xl font-bold tracking-tight text-slate-900">
+            <span class="inline-block mr-2">🛍️</span> Product Inventory
+          </h1>
+          <p class="text-slate-500 mt-1">
+            Manage your product catalog and inventory
+          </p>
+        </div>
+        <div class="flex items-center gap-2">
+          <button class="inline-flex items-center justify-center rounded-md text-sm font-medium h-9 px-3 py-2 border border-slate-200 bg-white text-slate-900 shadow-sm hover:bg-slate-100">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2 h-4 w-4"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            Export
+          </button>
+          <button routerLink="/dashboard/products/create" class="inline-flex items-center justify-center rounded-md text-sm font-medium h-9 px-3 py-2 bg-slate-900 text-white shadow hover:bg-slate-800">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2 h-4 w-4"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            Add Product
+          </button>
+        </div>
+      </div>
+
+      <!-- Stats Cards -->
+      <div class="grid gap-4 md:grid-cols-4">
+        <div class="rounded-lg border bg-white text-card-foreground shadow-sm">
+          <div class="flex flex-row items-center justify-between p-6 pb-2">
+            <h3 class="text-sm font-medium">Total Products</h3>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 text-slate-500"><rect x="2" y="5" width="20" height="14" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
+          </div>
+          <div class="p-6 pt-0">
+            <div class="text-2xl font-bold">{{ products.length }}</div>
+            <p class="text-xs text-slate-500 mt-1">+5 new this month</p>
+          </div>
+        </div>
+        <div class="rounded-lg border bg-white text-card-foreground shadow-sm">
+          <div class="flex flex-row items-center justify-between p-6 pb-2">
+            <h3 class="text-sm font-medium">Low Stock</h3>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 text-slate-500"><path d="M21 10V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l2-1.14"></path><path d="m7.5 4.27 9 5.15"></path><polyline points="3.29 7 12 12 20.71 7"></polyline><line x1="12" y1="22" x2="12" y2="12"></line><circle cx="18.5" cy="15.5" r="2.5"></circle><path d="M20.27 17.27 22 19"></path></svg>
+          </div>
+          <div class="p-6 pt-0">
+            <div class="text-2xl font-bold">{{ getLowStockCount() }}</div>
+            <p class="text-xs text-slate-500 mt-1">Needs attention</p>
+          </div>
+        </div>
+        <div class="rounded-lg border bg-white text-card-foreground shadow-sm">
+          <div class="flex flex-row items-center justify-between p-6 pb-2">
+            <h3 class="text-sm font-medium">Featured</h3>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 text-slate-500"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+          </div>
+          <div class="p-6 pt-0">
+            <div class="text-2xl font-bold">{{ getFeaturedCount() }}</div>
+            <p class="text-xs text-slate-500 mt-1">Displayed on homepage</p>
+          </div>
+        </div>
+        <div class="rounded-lg border bg-white text-card-foreground shadow-sm">
+          <div class="flex flex-row items-center justify-between p-6 pb-2">
+            <h3 class="text-sm font-medium">Categories</h3>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 text-slate-500"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+          </div>
+          <div class="p-6 pt-0">
+            <div class="text-2xl font-bold">{{ getUniqueCategories().length }}</div>
+            <p class="text-xs text-slate-500 mt-1">Across all products</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filters -->
+      <div class="flex flex-col gap-4 md:flex-row md:items-center">
+        <div class="flex items-center gap-2 flex-1">
+          <div class="relative flex-1 max-w-md">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="absolute left-2.5 top-2.5 h-4 w-4 text-slate-500"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
+            <input 
+              type="search" 
+              placeholder="Search products..." 
+              class="flex h-10 w-full rounded-md border border-input bg-white px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 pl-8"
+              [(ngModel)]="searchQuery"
+              (input)="onSearch()"
+            />
+
+           
+          </div>
+          
+          
+          <div class="relative w-[180px]">
+            <select 
+              class="flex h-10 w-full items-center justify-between rounded-md border border-input bg-white px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+              [(ngModel)]="categories"
+            >
+              <option value="">All Categories</option>
+              <option *ngFor="let category of categories" [value]="category.id">{{ category.name }}</option>
+            </select>
+          </div>
+          <button class="inline-flex items-center justify-center rounded-md text-sm font-medium h-10 w-10 border border-input bg-white shadow-sm hover:bg-accent hover:text-accent-foreground">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon></svg>
+            <span class="sr-only">Filter</span>
+          </button>
+        </div>
+        <div class="flex items-center gap-2">
+          <div class="relative">
+            <button class="inline-flex items-center justify-center rounded-md text-sm font-medium h-10 px-4 py-2 border border-input bg-white shadow-sm hover:bg-accent hover:text-accent-foreground">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2 h-4 w-4"><path d="m18 15-6-6-6 6"></path></svg>
+              Sort by: Price
+            </button>
+          </div>
+          <button class="inline-flex items-center justify-center rounded-md text-sm font-medium h-10 w-10 border border-input bg-white shadow-sm hover:bg-accent hover:text-accent-foreground">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+            <span class="sr-only">Grid view</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Product Table -->
+      <div class="rounded-lg border bg-white shadow-sm">
+        <div  class="relative w-full overflow-auto">
+          <table class="w-full caption-bottom text-sm">
+            <thead class="bg-slate-100 [&_tr]:border-b">
+              <tr class="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
+                <th class="h-12 px-4 text-left align-middle font-medium text-slate-500">
+                  <div class="flex items-center space-x-2">
+                    <span>Product</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4"><path d="m7 15 5 5 5-5"></path><path d="m7 9 5-5 5 5"></path></svg>
+                  </div>
+                </th>
+                <th class="h-12 px-4 text-left align-middle font-medium text-slate-500">Category</th>
+                <th class="h-12 px-4 text-left align-middle font-medium text-slate-500">
+                  <div class="flex items-center space-x-2">
+                    <span>Price</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4"><path d="m7 15 5 5 5-5"></path><path d="m7 9 5-5 5 5"></path></svg>
+                  </div>
+                </th>
+                <th class="h-12 px-4 text-left align-middle font-medium text-slate-500">
+                  <div class="flex items-center space-x-2">
+                    <span>Stock</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4"><path d="m7 15 5 5 5-5"></path><path d="m7 9 5-5 5 5"></path></svg>
+                  </div>
+                </th>
+                <th class="h-12 px-4 text-left align-middle font-medium text-slate-500">Status</th>
+                <th class="h-12 px-4 text-left align-middle font-medium text-slate-500">Sales</th>
+                <th class="h-12 px-4 text-right align-middle font-medium text-slate-500">Actions</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-200">
+              <tr *ngFor="let product of filteredProducts; trackBy: trackByProductId" class="border-b transition-colors hover:bg-slate-50">
+                <td class="p-4 align-middle">
+                  <div class="flex items-center gap-3">
+                    <div class="h-12 w-12 rounded-md border bg-white p-1 flex items-center justify-center">
+                      <img 
+                        [src]="product.imageUrls[0] || 'assets/default-product.png'" 
+                        [alt]="product.item_Name"
+                        class="h-full w-full object-contain rounded"
+                      />
+                    </div>
+                    <div>
+                      <div class="font-medium">{{ product.item_Name }}</div>
+                      <div class="text-sm text-slate-500 line-clamp-2">{{ product.description }}</div>
+                    </div>
+                  </div>
+                </td>
+                <td class="p-4 align-middle">
+                  <span class="text-sm text-slate-600">{{getCategoryName(product.categoryId)}}</span>
+                </td>
+                <td class="p-4 align-middle font-medium">
+                  ${{ product.price.toFixed(2) }}
+                </td>
+                <td class="p-4 align-middle">
+                  <div class="flex items-center">
+                    <div class="w-full max-w-[80px] bg-slate-100 rounded-full h-2 mr-2">
+                      <div 
+                        class="h-2 rounded-full" 
+                        [ngClass]="{
+                          'bg-red-500': product.quantity === 0,
+                          'bg-amber-500': product.quantity > 0 && product.quantity < 10,
+                          'bg-green-500': product.quantity >= 10
+                        }"
+                        [style.width.%]="getStockPercentage(product.quantity)"
+                      ></div>
+                    </div>
+                    <span 
+                      class="text-xs font-medium"
+                      [ngClass]="{
+                        'text-red-600': product.quantity === 0,
+                        'text-amber-600': product.quantity > 0 && product.quantity < 10,
+                        'text-green-600': product.quantity >= 10
+                      }"
+                    >
+                      {{ product.quantity }}
+                    </span>
+                  </div>
+                </td>
+                <td class="p-4 align-middle">
+                  <div class="flex flex-col gap-1.5">
+                    <span 
+                      class="inline-flex items-center rounded-full border px-2 py-0.5 text-xs font-semibold"
+                      [ngClass]="getStockStatusClass(product.quantity)"
+                    >
+                      <span 
+                        class="mr-1 h-1.5 w-1.5 rounded-full"
+                        [ngClass]="{
+                          'bg-red-500': product.quantity === 0,
+                          'bg-amber-500': product.quantity > 0 && product.quantity < 10,
+                          'bg-green-500': product.quantity >= 10
+                        }"
+                      ></span>
+                      {{ getStockStatusText(product.quantity) }}
+                    </span>
+                    <span 
+                      *ngIf="product.isFeatured"
+                      class="inline-flex items-center rounded-full border px-2 py-0.5 text-xs font-semibold bg-amber-100 text-amber-800 border-amber-200"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-1 h-3 w-3 text-amber-500"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                      Featured
+                    </span>
+                  </div>
+                </td>
+                <td class="p-4 align-middle">
+                  <div class="flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 text-slate-400 mr-1"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+                    <span class="text-sm">{{ product.solditems }}</span>
+                  </div>
+                </td>
+                <td class="p-4 align-middle text-right">
+                  <div class="flex items-center justify-end gap-2">
+                    <button [routerLink]="['/dashboard/products/details', product.id]" class="inline-flex items-center justify-center rounded-md text-sm font-medium h-8 w-8 bg-transparent text-slate-500 hover:bg-slate-100">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4"><path d="M12 20h9"></path><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"></path></svg>
+                      <span class="sr-only">Edit</span>
+                    </button>
+                    <button class="inline-flex items-center justify-center rounded-md text-sm font-medium h-8 w-8 bg-transparent text-slate-500 hover:bg-slate-100">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4"><path d="M3 6h18"></path><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path></svg>
+                      <span class="sr-only">Delete</span>
+                    </button>
+                    <div class="relative">
+                      <button class="inline-flex items-center justify-center rounded-md text-sm font-medium h-8 w-8 bg-transparent text-slate-500 hover:bg-slate-100">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg>
+                        <span class="sr-only">More</span>
+                      </button>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      
+      <div *ngIf="isLoading" class="mt-8 flex justify-center">
+        <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary-500"></div>
+      </div>
+      
+      <div *ngIf="!isLoading && products.length === 0" class="mt-8 text-center text-slate-500">
+        No products found. Add some products to get started.
+      </div>
+
+      <!-- Pagination -->
+      <div class="flex items-center justify-between">
+        <div class="text-sm text-slate-500">
+          Showing <span class="font-medium">1</span> to <span class="font-medium">{{ products.length }}</span> of {{ '{' }} " {{ '}' }}
+          <span class="font-medium">{{ products.length }}</span> products
+        </div>
+        <div class="flex items-center space-x-2">
+          <button class="inline-flex items-center justify-center rounded-md text-sm font-medium h-8 px-3 py-2 border border-input bg-white shadow-sm hover:bg-accent hover:text-accent-foreground" disabled>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 mr-1"><path d="m15 18-6-6 6-6"></path></svg>
+            Previous
+          </button>
+          <button class="inline-flex items-center justify-center rounded-md text-sm font-medium h-8 w-8 border border-input bg-slate-900 text-white p-0 shadow-sm">1</button>
+          <button class="inline-flex items-center justify-center rounded-md text-sm font-medium h-8 w-8 border border-input bg-white p-0 shadow-sm hover:bg-accent hover:text-accent-foreground">2</button>
+          <button class="inline-flex items-center justify-center rounded-md text-sm font-medium h-8 px-3 py-2 border border-input bg-white shadow-sm hover:bg-accent hover:text-accent-foreground">
+            Next
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 ml-1"><path d="m9 18 6-6-6-6"></path></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+

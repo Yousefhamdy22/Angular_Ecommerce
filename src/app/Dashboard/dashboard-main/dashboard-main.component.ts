@@ -1,4 +1,19 @@
-import { Component  , OnInit} from '@angular/core';
+import { Component  , OnInit , HostListener} from '@angular/core';
+
+
+
+interface Order {
+  id: string
+  date: string
+  productImg: string
+  productName: string
+  customer: string
+  email: string
+  phone: string
+  status: "Completed" | "Processing" | "Cancelled"
+  total: string
+  section: "Today" | "Yesterday" | "Previous"
+}
 
 @Component({
   selector: 'app-dashboard-main',
@@ -7,51 +22,181 @@ import { Component  , OnInit} from '@angular/core';
   styleUrl: './dashboard-main.component.css'
 })
 export class DashboardMainComponent implements OnInit {
-  // Essential Data
-  metrics = [
-    { icon: 'shopping_cart', label: 'Total Orders', value: '1,245', change: '+12%' },
-    { icon: 'attach_money', label: 'Revenue', value: '$28,450', change: '+8%' },
-    { icon: 'people', label: 'New Customers', value: '86', change: '+5%' },
-    { icon: 'star', label: 'Conversion', value: '3.2%', change: '-0.5%' }
-  ];
 
+  isProductsMenuOpen = false;
+  isOrdersMenuOpen = false;
+  isCategoriesMenuOpen = false;
+  isSettingsMenuOpen = false;
+
+
+
+  toggleProductsMenu() {
+    this.isProductsMenuOpen = !this.isProductsMenuOpen;
+  }
  
-  // Optional Data
-  recentOrders = [
-    { id: 1, customer: 'John Doe', total: '$150.00', status: 'Shipped', date: new Date() },
-    { id: 2, customer: 'Jane Smith', total: '$200.00', status: 'Pending', date: new Date() },
-    { id: 3, customer: 'Bob Johnson', total: '$300.00', status: 'Delivered', date: new Date() }
-  ];
 
-  orders = [
+  toggleOrdersMenu() {
+    this.isOrdersMenuOpen = !this.isOrdersMenuOpen;
+
+  }
+
+  toggleCategoriesMenu() {
+    this.isCategoriesMenuOpen = !this.isCategoriesMenuOpen;
+  }
+  @HostListener('document:click', ['$event'])
+  closeDropdown(event: Event) {
+    const targetElement = event.target as HTMLElement;
+    if (!targetElement.closest('.relative')) {
+      this.isProductsMenuOpen = false;
+    }
+  }
+  orders: Order[] = [
     {
-      id: 1,
-      date: '2024-04-02',
-      productImg: 'https://via.placeholder.com/50', 
-      customer: 'John Doe',
-      email: 'john.doe@example.com',
-      phone: '+1234567890'
+      id: "#ORD-5392",
+      date: "Apr 02, 2023",
+      productImg: "/assets/images/placeholder.svg",
+      productName: "Wireless Earbuds",
+      customer: "Emma Thompson",
+      email: "emma.t@example.com",
+      phone: "(555) 123-4567",
+      status: "Completed",
+      total: "$129.99",
+      section: "Today"
     },
     {
-      id: 2,
-      date: '2024-04-01',
-      productImg: 'https://via.placeholder.com/50',
-      customer: 'Jane Smith',
-      email: 'jane.smith@example.com',
-      phone: '+0987654321'
+      id: "#ORD-5391",
+      date: "Apr 02, 2023",
+      productImg: "/assets/images/placeholder.svg",
+      productName: "Smart Watch",
+      customer: "Michael Chen",
+      email: "m.chen@example.com",
+      phone: "(555) 987-6543",
+      status: "Processing",
+      total: "$249.99",
+      section: "Today"
     },
     {
-      id: 3,
-      date: '2024-03-30',
-      productImg: 'https://via.placeholder.com/50',
-      customer: 'Michael Johnson',
-      email: 'michael.johnson@example.com',
-      phone: '+1122334455'
+      id: "#ORD-5390",
+      date: "Apr 01, 2023",
+      productImg: "/assets/images/placeholder.svg",
+      productName: "Bluetooth Speaker",
+      customer: "Sarah Johnson",
+      email: "sarah.j@example.com",
+      phone: "(555) 234-5678",
+      status: "Completed",
+      total: "$79.99",
+      section: "Yesterday"
+    },
+    {
+      id: "#ORD-5389",
+      date: "Apr 01, 2023",
+      productImg: "/assets/images/placeholder.svg",
+      productName: "Laptop Stand",
+      customer: "David Williams",
+      email: "d.williams@example.com",
+      phone: "(555) 876-5432",
+      status: "Cancelled",
+      total: "$34.99",
+      section: "Yesterday"
+    },
+    {
+      id: "#ORD-5388",
+      date: "Mar 31, 2023",
+      productImg: "/assets/images/placeholder.svg",
+      productName: "Mechanical Keyboard",
+      customer: "Jessica Brown",
+      email: "j.brown@example.com",
+      phone: "(555) 345-6789",
+      status: "Processing",
+      total: "$149.99",
+      section: "Previous"
+    },
+    {
+      id: "#ORD-5387",
+      date: "Mar 30, 2023",
+      productImg: "/assets/images/placeholder.svg",
+      productName: "USB-C Hub",
+      customer: "Robert Garcia",
+      email: "r.garcia@example.com",
+      phone: "(555) 765-4321",
+      status: "Completed",
+      total: "$59.99",
+      section: "Previous"
+    },
+    {
+      id: "#ORD-5386",
+      date: "Mar 30, 2023",
+      productImg: "/assets/images/placeholder.svg",
+      productName: "Wireless Mouse",
+      customer: "Amanda Lee",
+      email: "a.lee@example.com",
+      phone: "(555) 456-7890",
+      status: "Completed",
+      total: "$45.99",
+      section: "Previous"
     }
   ];
-  
-  ngOnInit() {
-    // Initialize real-time updates if needed
+
+  // Group orders by section
+  groupedOrders: { [key: string]: Order[] } = {};
+  sections: string[] = [];
+  expandedSections: { [key: string]: boolean } = {};
+  activeTab: string = 'all';
+  searchQuery: string = '';
+  statusFilter: string = 'all';
+  sortOption: string = 'newest';
+
+  constructor() { }
+
+  ngOnInit(): void {
+    this.groupOrdersBySection();
+    
+    // Initialize all sections as expanded
+    this.sections.forEach(section => {
+      this.expandedSections[section] = true;
+    });
+  }
+
+  groupOrdersBySection(): void {
+    this.groupedOrders = {};
+    
+    this.orders.forEach(order => {
+      if (!this.groupedOrders[order.section]) {
+        this.groupedOrders[order.section] = [];
+        this.sections.push(order.section);
+      }
+      this.groupedOrders[order.section].push(order);
+    });
+  }
+
+  toggleSection(section: string): void {
+    this.expandedSections[section] = !this.expandedSections[section];
+  }
+
+  setActiveTab(tab: string): void {
+    this.activeTab = tab;
+  }
+
+  getFilteredOrders(): Order[] {
+    if (this.activeTab === 'all') {
+      return this.orders;
+    } else {
+      return this.orders.filter(order => 
+        order.status.toLowerCase() === this.activeTab.toLowerCase()
+      );
+    }
+  }
+
+  getCompletedCount(): number {
+    return this.orders.filter(order => order.status === 'Completed').length;
+  }
+
+  getProcessingCount(): number {
+    return this.orders.filter(order => order.status === 'Processing').length;
+  }
+
+  getCancelledCount(): number {
+    return this.orders.filter(order => order.status === 'Cancelled').length;
   }
 }
 

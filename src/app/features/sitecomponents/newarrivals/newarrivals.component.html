@@ -1,0 +1,750 @@
+<div class="new-arrivals-page">
+    <!-- Header Component -->
+   
+    <app-header/>
+    <!-- Notification Toast -->
+    <p-toast position="top-right"></p-toast>
+    
+    <!-- Hero Banner -->
+    <section class="hero-banner relative overflow-hidden">
+      <div class="absolute inset-0 bg-gradient-to-r from-pink-600/80 to-purple-800/80 z-10"></div>
+      <div class="absolute inset-0 bg-[url('/assets/images/new-arrivals-hero.jpg')] bg-cover bg-center z-0"></div>
+      
+      <div class="container mx-auto px-4 py-24 md:py-32 relative z-20">
+        <div class="max-w-2xl">
+          <div class="mb-4 inline-block">
+            <span class="bg-white/20 text-white px-4 py-1 rounded-full text-sm font-medium backdrop-blur-sm">
+              Just Launched
+            </span>
+          </div>
+          
+          <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
+            Discover Our <span class="text-pink-300">New Arrivals</span>
+          </h1>
+          
+          <p class="text-xl text-white/90 mb-8 max-w-xl">
+            Explore our latest beauty innovations crafted with premium ingredients and cutting-edge formulations.
+          </p>
+          
+          <div class="flex flex-col sm:flex-row gap-4">
+            <button 
+              pButton 
+              pRipple 
+              type="button" 
+              label="Shop Now" 
+              icon="pi pi-shopping-bag" 
+              class="p-button-lg bg-white text-pink-600 hover:bg-gray-100 border-white"
+            ></button>
+            <button 
+              pButton 
+              pRipple 
+              type="button" 
+              label="View Collections" 
+              icon="pi pi-th-large" 
+              class="p-button-outlined p-button-lg text-white border-white hover:bg-white/10"
+            ></button>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Featured Products -->
+    <section class="featured-products py-16 bg-white">
+      <div class="container mx-auto px-4">
+        <div class="section-header text-center mb-12">
+          <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-3">
+            Featured <span class="text-pink-600">New Arrivals</span>
+          </h2>
+          <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+            Our most exciting new products that are already customer favorites
+          </p>
+        </div>
+        
+        <!-- Loading Skeleton -->
+        <div *ngIf="isLoading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div *ngFor="let i of [1,2,3,4]" class="bg-white rounded-lg shadow-sm overflow-hidden">
+            <p-skeleton height="300px" styleClass="w-full"></p-skeleton>
+            <div class="p-4">
+              <p-skeleton height="1.5rem" styleClass="mb-2"></p-skeleton>
+              <p-skeleton width="60%" height="1rem" styleClass="mb-2"></p-skeleton>
+              <p-skeleton width="40%" height="1rem" styleClass="mb-2"></p-skeleton>
+              <div class="flex justify-between">
+                <p-skeleton width="30%" height="1.5rem"></p-skeleton>
+                <p-skeleton width="30%" height="1.5rem"></p-skeleton>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Featured Products Grid -->
+        <div *ngIf="!isLoading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" [@staggerIn]="featuredProducts.length">
+          <div *ngFor="let product of featuredProducts" 
+               class="product-card bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300 hover:shadow-xl transform-gpu hover:-translate-y-2">
+            <a [routerLink]="['/product', product.id]" class="block relative">
+              <!-- Product Image -->
+              <div class="product-image relative h-80 overflow-hidden">
+                <img [src]="product.image" [alt]="product.name" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
+                
+                <!-- New Badge -->
+                <div class="absolute top-3 left-3">
+                  <span class="badge bg-pink-600 text-white text-xs px-3 py-1.5 rounded-full font-medium">
+                    NEW
+                  </span>
+                </div>
+                
+                <!-- Sale Badge -->
+                <div *ngIf="product.originalPrice" class="absolute top-3 right-3">
+                  <span class="badge bg-purple-600 text-white text-xs px-2 py-1 rounded-full">
+                    {{getDiscountPercentage(product)}}% Off
+                  </span>
+                </div>
+                
+                <!-- Quick Actions -->
+                <div class="quick-actions absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4 transform translate-y-full opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
+                  <div class="flex justify-center gap-2">
+                    <button 
+                      pButton 
+                      icon="pi pi-eye" 
+                      class="p-button-rounded p-button-sm p-button-outlined p-button-secondary bg-white/20 backdrop-blur-sm text-white border-white/40"
+                      pTooltip="Quick View"
+                      tooltipPosition="top"
+                      (click)="showQuickView(product, $event)"
+                    ></button>
+                    <button 
+                      pButton 
+                      icon="pi pi-heart" 
+                      class="p-button-rounded p-button-sm p-button-outlined p-button-secondary bg-white/20 backdrop-blur-sm text-white border-white/40"
+                      pTooltip="Add to Wishlist"
+                      tooltipPosition="top"
+                      (click)="addToWishlist(product, $event)"
+                    ></button>
+                    <button 
+                      pButton 
+                      icon="pi pi-shopping-cart" 
+                      class="p-button-rounded p-button-sm p-button-outlined p-button-secondary bg-white/20 backdrop-blur-sm text-white border-white/40"
+                      pTooltip="Add to Cart"
+                      tooltipPosition="top"
+                      (click)="addToCart(product, 1)"
+                    ></button>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Product Details -->
+              <div class="product-details p-4">
+                <div class="mb-1">
+                  <span class="text-sm text-gray-500">{{product.brand}}</span>
+                </div>
+                
+                <h3 class="text-lg font-bold text-gray-800 mb-1 line-clamp-1 hover:text-pink-600 transition-colors">
+                  {{product.name}}
+                </h3>
+                
+                <div class="flex items-center mb-2">
+                  <p-rating 
+                    [ngModel]="product.rating" 
+                    [readonly]="true" 
+                    cancel="false" 
+                    styleClass="text-sm"
+                  ></p-rating>
+                  <span class="text-xs text-gray-500 ml-1">({{product.reviewCount}})</span>
+                </div>
+                
+                <div class="flex justify-between items-center">
+                  <div class="flex items-center">
+                    <span class="text-lg font-bold text-pink-600">${{product.price.toFixed(2)}}</span>
+                    <span *ngIf="product.originalPrice" class="ml-2 text-sm text-gray-400 line-through">
+                      ${{product.originalPrice.toFixed(2)}}
+                    </span>
+                  </div>
+                  
+                  <div class="flex flex-wrap gap-1">
+                    <div *ngIf="product.colors && product.colors.length > 0" class="flex">
+                      <div 
+                        *ngFor="let color of product.colors.slice(0, 3); let i = index" 
+                        class="w-4 h-4 rounded-full border border-white"
+                        [style.background-color]="color.code"
+                        [style.margin-left.px]="-5 * i"
+                      ></div>
+                      <div 
+                        *ngIf="product.colors.length > 3" 
+                        class="w-4 h-4 rounded-full bg-gray-200 flex items-center justify-center text-[8px] text-gray-600 font-bold"
+                        [style.margin-left.px]="-5 * 3"
+                      >
+                        +{{product.colors.length - 3}}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- New Collections -->
+    <section class="new-collections py-16 bg-gray-50">
+      <div class="container mx-auto px-4">
+        <div class="section-header text-center mb-12">
+          <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-3">
+            Explore Our <span class="text-pink-600">Collections</span>
+          </h2>
+          <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+            Curated sets of our newest products designed to work perfectly together
+          </p>
+        </div>
+        
+        <!-- Loading Skeleton -->
+        <div *ngIf="isLoading" class="space-y-12">
+          <div *ngFor="let i of [1,2,3]">
+            <p-skeleton height="2rem" width="200px" styleClass="mb-4"></p-skeleton>
+            <p-skeleton height="1rem" width="400px" styleClass="mb-8"></p-skeleton>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <div *ngFor="let j of [1,2,3,4]" class="bg-white rounded-lg shadow-sm overflow-hidden">
+                <p-skeleton height="200px" styleClass="w-full"></p-skeleton>
+                <div class="p-4">
+                  <p-skeleton height="1.5rem" styleClass="mb-2"></p-skeleton>
+                  <p-skeleton width="60%" height="1rem" styleClass="mb-2"></p-skeleton>
+                  <div class="flex justify-between">
+                    <p-skeleton width="30%" height="1.5rem"></p-skeleton>
+                    <p-skeleton width="30%" height="1.5rem"></p-skeleton>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Collections -->
+        <div *ngIf="!isLoading" class="space-y-16">
+          <div *ngFor="let collection of newCollections; let i = index" class="collection-section" [@fadeIn]>
+            <div class="grid grid-cols-1 lg:grid-cols-5 gap-8 items-center">
+              <!-- Collection Info -->
+              <div class="lg:col-span-1">
+                <div class="sticky top-24">
+                  <h3 class="text-2xl font-bold text-gray-800 mb-3">{{collection.name}}</h3>
+                  <p class="text-gray-600 mb-6">{{collection.description}}</p>
+                  <button 
+                    pButton 
+                    label="View Collection" 
+                    icon="pi pi-arrow-right" 
+                    iconPos="right"
+                    class="p-button-outlined"
+                  ></button>
+                </div>
+              </div>
+              
+              <!-- Collection Products -->
+              <div class="lg:col-span-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" [@staggerIn]="collection.products.length">
+                  <div *ngFor="let product of collection.products" 
+                       class="product-card bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300 hover:shadow-xl transform-gpu hover:-translate-y-2">
+                    <a [routerLink]="['/product', product.id]" class="block relative">
+                      <!-- Product Image -->
+                      <div class="product-image relative h-60 overflow-hidden">
+                        <img [src]="product.image" [alt]="product.name" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
+                        
+                        <!-- New Badge -->
+                        <div class="absolute top-3 left-3">
+                          <span class="badge bg-pink-600 text-white text-xs px-3 py-1.5 rounded-full font-medium">
+                            NEW
+                          </span>
+                        </div>
+                        
+                        <!-- Quick Actions -->
+                        <div class="quick-actions absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4 transform translate-y-full opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
+                          <div class="flex justify-center gap-2">
+                            <button 
+                              pButton 
+                              icon="pi pi-eye" 
+                              class="p-button-rounded p-button-sm p-button-outlined p-button-secondary bg-white/20 backdrop-blur-sm text-white border-white/40"
+                              pTooltip="Quick View"
+                              tooltipPosition="top"
+                              (click)="showQuickView(product, $event)"
+                            ></button>
+                            <button 
+                              pButton 
+                              icon="pi pi-shopping-cart" 
+                              class="p-button-rounded p-button-sm p-button-outlined p-button-secondary bg-white/20 backdrop-blur-sm text-white border-white/40"
+                              pTooltip="Add to Cart"
+                              tooltipPosition="top"
+                              (click)="addToCart(product, 1)"
+                            ></button>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <!-- Product Details -->
+                      <div class="product-details p-4">
+                        <h3 class="text-lg font-bold text-gray-800 mb-1 line-clamp-1 hover:text-pink-600 transition-colors">
+                          {{product.name}}
+                        </h3>
+                        
+                        <div class="flex justify-between items-center">
+                          <span class="text-lg font-bold text-pink-600">${{product.price.toFixed(2)}}</span>
+                          <button 
+                            pButton 
+                            icon="pi pi-plus" 
+                            class="p-button-rounded p-button-sm p-button-text"
+                            pTooltip="Add to Cart"
+                            tooltipPosition="top"
+                            (click)="addToCart(product, 1)"
+                          ></button>
+                        </div>
+                      </div>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- All New Arrivals -->
+    <section class="all-new-arrivals py-16 bg-white">
+      <div class="container mx-auto px-4">
+        <div class="section-header text-center mb-12">
+          <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-3">
+            All <span class="text-pink-600">New Arrivals</span>
+          </h2>
+          <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+            Browse our complete collection of newly launched products
+          </p>
+        </div>
+        
+        <!-- Category Tabs -->
+        <div *ngIf="!isLoading" class="mb-8">
+          <p-tabView [(activeIndex)]="activeTab" styleClass="custom-tabs">
+            <p-tabPanel header="All Categories">
+              <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6" [@staggerIn]="newArrivalProducts.length">
+                <div *ngFor="let product of newArrivalProducts" 
+                     class="product-card bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300 hover:shadow-xl transform-gpu hover:-translate-y-2">
+                  <a [routerLink]="['/product', product.id]" class="block relative">
+                    <!-- Product Image -->
+                    <div class="product-image relative h-60 overflow-hidden">
+                      <img [src]="product.image" [alt]="product.name" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
+                      
+                      <!-- New Badge -->
+                      <div class="absolute top-3 left-3">
+                        <span class="badge bg-pink-600 text-white text-xs px-3 py-1.5 rounded-full font-medium">
+                          NEW
+                        </span>
+                      </div>
+                      
+                      <!-- Sale Badge -->
+                      <div *ngIf="product.originalPrice" class="absolute top-3 right-3">
+                        <span class="badge bg-purple-600 text-white text-xs px-2 py-1 rounded-full">
+                          {{getDiscountPercentage(product)}}% Off
+                        </span>
+                      </div>
+                      
+                      <!-- Quick Actions -->
+                      <div class="quick-actions absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4 transform translate-y-full opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
+                        <div class="flex justify-center gap-2">
+                          <button 
+                            pButton 
+                            icon="pi pi-eye" 
+                            class="p-button-rounded p-button-sm p-button-outlined p-button-secondary bg-white/20 backdrop-blur-sm text-white border-white/40"
+                            pTooltip="Quick View"
+                            tooltipPosition="top"
+                            (click)="showQuickView(product, $event)"
+                          ></button>
+                          <button 
+                            pButton 
+                            icon="pi pi-heart" 
+                            class="p-button-rounded p-button-sm p-button-outlined p-button-secondary bg-white/20 backdrop-blur-sm text-white border-white/40"
+                            pTooltip="Add to Wishlist"
+                            tooltipPosition="top"
+                            (click)="addToWishlist(product, $event)"
+                          ></button>
+                          <button 
+                            pButton 
+                            icon="pi pi-shopping-cart" 
+                            class="p-button-rounded p-button-sm p-button-outlined p-button-secondary bg-white/20 backdrop-blur-sm text-white border-white/40"
+                            pTooltip="Add to Cart"
+                            tooltipPosition="top"
+                            (click)="addToCart(product, 1)"
+                          ></button>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <!-- Product Details -->
+                    <div class="product-details p-4">
+                      <div class="mb-1">
+                        <span class="text-sm text-gray-500">{{product.brand}}</span>
+                      </div>
+                      
+                      <h3 class="text-lg font-bold text-gray-800 mb-1 line-clamp-1 hover:text-pink-600 transition-colors">
+                        {{product.name}}
+                      </h3>
+                      
+                      <div class="flex items-center mb-2">
+                        <p-rating 
+                          [ngModel]="product.rating" 
+                          [readonly]="true" 
+                          cancel="false" 
+                          styleClass="text-sm"
+                        ></p-rating>
+                        <span class="text-xs text-gray-500 ml-1">({{product.reviewCount}})</span>
+                      </div>
+                      
+                      <div class="flex justify-between items-center">
+                        <div class="flex items-center">
+                          <span class="text-lg font-bold text-pink-600">${{product.price.toFixed(2)}}</span>
+                          <span *ngIf="product.originalPrice" class="ml-2 text-sm text-gray-400 line-through">
+                            ${{product.originalPrice.toFixed(2)}}
+                          </span>
+                        </div>
+                        
+                        <button 
+                          pButton 
+                          icon="pi pi-shopping-cart" 
+                          class="p-button-rounded p-button-sm"
+                          [disabled]="!product.inStock"
+                          [pTooltip]="product.inStock ? 'Add to cart' : 'Out of stock'"
+                          tooltipPosition="top"
+                          (click)="addToCart(product)"
+                        ></button>
+                      </div>
+                    </div>
+                  </a>
+                </div>
+              </div>
+            </p-tabPanel>
+            <p-tabPanel header="Skincare">
+              <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6" [@staggerIn]="skincareProducts.length">
+                <div *ngFor="let product of skincareProducts" 
+                     class="product-card bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300 hover:shadow-xl transform-gpu hover:-translate-y-2">
+                  <!-- Same product card structure as above -->
+                  <a [routerLink]="['/product', product.id]" class="block relative">
+                    <div class="product-image relative h-60 overflow-hidden">
+                      <img [src]="product.image" [alt]="product.name" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
+                      <div class="absolute top-3 left-3">
+                        <span class="badge bg-pink-600 text-white text-xs px-3 py-1.5 rounded-full font-medium">NEW</span>
+                      </div>
+                      <div *ngIf="product.originalPrice" class="absolute top-3 right-3">
+                        <span class="badge bg-purple-600 text-white text-xs px-2 py-1 rounded-full">
+                          {{getDiscountPercentage(product)}}% Off
+                        </span>
+                      </div>
+                      <div class="quick-actions absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4 transform translate-y-full opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
+                        <div class="flex justify-center gap-2">
+                          <button pButton icon="pi pi-eye" class="p-button-rounded p-button-sm p-button-outlined p-button-secondary bg-white/20 backdrop-blur-sm text-white border-white/40" pTooltip="Quick View" tooltipPosition="top" (click)="showQuickView(product, $event)"></button>
+                          <button pButton icon="pi pi-heart" class="p-button-rounded p-button-sm p-button-outlined p-button-secondary bg-white/20 backdrop-blur-sm text-white border-white/40" pTooltip="Add to Wishlist" tooltipPosition="top" (click)="addToWishlist(product, $event)"></button>
+                          <button pButton icon="pi pi-shopping-cart" class="p-button-rounded p-button-sm p-button-outlined p-button-secondary bg-white/20 backdrop-blur-sm text-white border-white/40" pTooltip="Add to Cart" tooltipPosition="top" (click)="addToCart(product, 1)"></button>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="product-details p-4">
+                      <div class="mb-1">
+                        <span class="text-sm text-gray-500">{{product.brand}}</span>
+                      </div>
+                      <h3 class="text-lg font-bold text-gray-800 mb-1 line-clamp-1 hover:text-pink-600 transition-colors">
+                        {{product.name}}
+                      </h3>
+                      <div class="flex items-center mb-2">
+                        <p-rating [ngModel]="product.rating" [readonly]="true" cancel="false" styleClass="text-sm"></p-rating>
+                        <span class="text-xs text-gray-500 ml-1">({{product.reviewCount}})</span>
+                      </div>
+                      <div class="flex justify-between items-center">
+                        <div class="flex items-center">
+                          <span class="text-lg font-bold text-pink-600">${{product.price.toFixed(2)}}</span>
+                          <span *ngIf="product.originalPrice" class="ml-2 text-sm text-gray-400 line-through">
+                            ${{product.originalPrice.toFixed(2)}}
+                          </span>
+                        </div>
+                        <button pButton icon="pi pi-shopping-cart" class="p-button-rounded p-button-sm" [disabled]="!product.inStock" [pTooltip]="product.inStock ? 'Add to cart' : 'Out of stock'" tooltipPosition="top" (click)="addToCart(product)"></button>
+                      </div>
+                    </div>
+                  </a>
+                </div>
+              </div>
+            </p-tabPanel>
+            <p-tabPanel header="Makeup">
+              <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6" [@staggerIn]="makeupProducts.length">
+                <div *ngFor="let product of makeupProducts" 
+                     class="product-card bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300 hover:shadow-xl transform-gpu hover:-translate-y-2">
+                  <!-- Same product card structure as above -->
+                  <a [routerLink]="['/product', product.id]" class="block relative">
+                    <!-- Same structure as above -->
+                    <div class="product-image relative h-60 overflow-hidden">
+                      <img [src]="product.image" [alt]="product.name" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
+                      <div class="absolute top-3 left-3">
+                        <span class="badge bg-pink-600 text-white text-xs px-3 py-1.5 rounded-full font-medium">NEW</span>
+                      </div>
+                      <div *ngIf="product.originalPrice" class="absolute top-3 right-3">
+                        <span class="badge bg-purple-600 text-white text-xs px-2 py-1 rounded-full">
+                          {{getDiscountPercentage(product)}}% Off
+                        </span>
+                      </div>
+                      <div class="quick-actions absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4 transform translate-y-full opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
+                        <div class="flex justify-center gap-2">
+                          <button pButton icon="pi pi-eye" class="p-button-rounded p-button-sm p-button-outlined p-button-secondary bg-white/20 backdrop-blur-sm text-white border-white/40" pTooltip="Quick View" tooltipPosition="top" (click)="showQuickView(product, $event)"></button>
+                          <button pButton icon="pi pi-heart" class="p-button-rounded p-button-sm p-button-outlined p-button-secondary bg-white/20 backdrop-blur-sm text-white border-white/40" pTooltip="Add to Wishlist" tooltipPosition="top" (click)="addToWishlist(product, $event)"></button>
+                          <button pButton icon="pi pi-shopping-cart" class="p-button-rounded p-button-sm p-button-outlined p-button-secondary bg-white/20 backdrop-blur-sm text-white border-white/40" pTooltip="Add to Cart" tooltipPosition="top" (click)="addToCart(product, 1)"></button>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="product-details p-4">
+                      <div class="mb-1">
+                        <span class="text-sm text-gray-500">{{product.brand}}</span>
+                      </div>
+                      <h3 class="text-lg font-bold text-gray-800 mb-1 line-clamp-1 hover:text-pink-600 transition-colors">
+                        {{product.name}}
+                      </h3>
+                      <div class="flex items-center mb-2">
+                        <p-rating [ngModel]="product.rating" [readonly]="true" cancel="false" styleClass="text-sm"></p-rating>
+                        <span class="text-xs text-gray-500 ml-1">({{product.reviewCount}})</span>
+                      </div>
+                      <div class="flex justify-between items-center">
+                        <div class="flex items-center">
+                          <span class="text-lg font-bold text-pink-600">${{product.price.toFixed(2)}}</span>
+                          <span *ngIf="product.originalPrice" class="ml-2 text-sm text-gray-400 line-through">
+                            ${{product.originalPrice.toFixed(2)}}
+                          </span>
+                        </div>
+                        <button pButton icon="pi pi-shopping-cart" class="p-button-rounded p-button-sm" [disabled]="!product.inStock" [pTooltip]="product.inStock ? 'Add to cart' : 'Out of stock'" tooltipPosition="top" (click)="addToCart(product)"></button>
+                      </div>
+                    </div>
+                  </a>
+                </div>
+              </div>
+            </p-tabPanel>
+            <p-tabPanel header="Haircare">
+              <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6" [@staggerIn]="skincareProducts.length">
+                <div *ngFor="let product of skincareProducts" 
+                     class="product-card bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300 hover:shadow-xl transform-gpu hover:-translate-y-2">
+                  <!-- Same product card structure as above -->
+                  <a [routerLink]="['/product', product.id]" class="block relative">
+                    <!-- Same structure as above -->
+                    <div class="product-image relative h-60 overflow-hidden">
+                      <img [src]="product.image" [alt]="product.name" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
+                      <div class="absolute top-3 left-3">
+                        <span class="badge bg-pink-600 text-white text-xs px-3 py-1.5 rounded-full font-medium">NEW</span>
+                      </div>
+                      <div *ngIf="product.originalPrice" class="absolute top-3 right-3">
+                        <span class="badge bg-purple-600 text-white text-xs px-2 py-1 rounded-full">
+                          {{getDiscountPercentage(product)}}% Off
+                        </span>
+                      </div>
+                      <div class="quick-actions absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4 transform translate-y-full opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
+                        <div class="flex justify-center gap-2">
+                          <button pButton icon="pi pi-eye" class="p-button-rounded p-button-sm p-button-outlined p-button-secondary bg-white/20 backdrop-blur-sm text-white border-white/40" pTooltip="Quick View" tooltipPosition="top" (click)="showQuickView(product, $event)"></button>
+                          <button pButton icon="pi pi-heart" class="p-button-rounded p-button-sm p-button-outlined p-button-secondary bg-white/20 backdrop-blur-sm text-white border-white/40" pTooltip="Add to Wishlist" tooltipPosition="top" (click)="addToWishlist(product, $event)"></button>
+                          <button pButton icon="pi pi-shopping-cart" class="p-button-rounded p-button-sm p-button-outlined p-button-secondary bg-white/20 backdrop-blur-sm text-white border-white/40" pTooltip="Add to Cart" tooltipPosition="top" (click)="addToCart(product, 1)"></button>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="product-details p-4">
+                      <div class="mb-1">
+                        <span class="text-sm text-gray-500">{{product.brand}}</span>
+                      </div>
+                      <h3 class="text-lg font-bold text-gray-800 mb-1 line-clamp-1 hover:text-pink-600 transition-colors">
+                        {{product.name}}
+                      </h3>
+                      <div class="flex items-center mb-2">
+                        <p-rating [ngModel]="product.rating" [readonly]="true" cancel="false" styleClass="text-sm"></p-rating>
+                        <span class="text-xs text-gray-500 ml-1">({{product.reviewCount}})</span>
+                      </div>
+                      <div class="flex justify-between items-center">
+                        <div class="flex items-center">
+                          <span class="text-lg font-bold text-pink-600">${{product.price.toFixed(2)}}</span>
+                          <span *ngIf="product.originalPrice" class="ml-2 text-sm text-gray-400 line-through">
+                            ${{product.originalPrice.toFixed(2)}}
+                          </span>
+                        </div>
+                        <button pButton icon="pi pi-shopping-cart" class="p-button-rounded p-button-sm" [disabled]="!product.inStock" [pTooltip]="product.inStock ? 'Add to cart' : 'Out of stock'" tooltipPosition="top" (click)="addToCart(product)"></button>
+                      </div>
+                    </div>
+                  </a>
+                </div>
+              </div>
+            </p-tabPanel>
+          </p-tabView>
+        </div>
+        
+        <div class="text-center mt-10">
+          <button 
+            pButton 
+            label="View All Products" 
+            icon="pi pi-arrow-right" 
+            iconPos="right"
+            class="p-button-lg"
+            routerLink="/shop"
+          ></button>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Newsletter -->
+    <section class="newsletter py-16 bg-gradient-to-r from-pink-600 to-purple-700 text-white">
+      <div class="container mx-auto px-4">
+        <div class="max-w-2xl mx-auto text-center">
+          <h2 class="text-3xl md:text-4xl font-bold mb-4">Be First to Know</h2>
+          <p class="text-white/90 mb-6">
+            Subscribe to our newsletter to get early access to new products, exclusive offers, and beauty tips.
+          </p>
+          
+          <div class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+            <input 
+              pInputText 
+              placeholder="Your email address" 
+              class="flex-1 bg-white/20 border-white/30 placeholder-white/70 text-white"
+            >
+            <button 
+              pButton 
+              label="Subscribe" 
+              class="p-button-primary bg-white text-pink-600 hover:bg-gray-100"
+            ></button>
+          </div>
+          
+          <p class="text-xs text-white/70 mt-4">
+            We respect your privacy. Unsubscribe at any time.
+          </p>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Footer Component -->
+   <app-footer/>
+  </div>
+  
+  <!-- Quick View Dialog -->
+  <p-dialog 
+    [(visible)]="quickViewVisible" 
+    [modal]="true" 
+    [style]="{ width: '90vw', maxWidth: '1000px' }"
+    [breakpoints]="{ '960px': '75vw', '640px': '90vw' }"
+    [draggable]="false"
+    [resizable]="false"
+    styleClass="product-quick-view"
+  >
+    <ng-template pTemplate="header">
+      <h3 class="text-xl font-bold text-gray-800">{{selectedProduct?.name}}</h3>
+    </ng-template>
+    
+    <div *ngIf="selectedProduct" class="grid">
+      <div class="col-12 md:col-6">
+        <p-galleria 
+          [value]="selectedProduct.images" 
+          [responsiveOptions]="responsiveOptions" 
+          [containerStyle]="{ 'max-width': '100%' }"
+          [numVisible]="5"
+          [showThumbnails]="true"
+          [showItemNavigators]="true"
+          [circular]="true"
+        >
+          <ng-template pTemplate="item" let-item>
+            <img [src]="item" [alt]="selectedProduct.name" style="width: 100%; max-height: 400px; object-fit: contain;">
+          </ng-template>
+          <ng-template pTemplate="thumbnail" let-item>
+            <div class="grid-item">
+              <img [src]="item" [alt]="selectedProduct.name" style="width: 100%; height: 60px; object-fit: cover;">
+            </div>
+          </ng-template>
+        </p-galleria>
+      </div>
+      
+      <div class="col-12 md:col-6 p-4">
+        <div class="mb-1">
+          <span class="text-pink-600 font-medium">{{selectedProduct.brand}}</span>
+        </div>
+        
+        <h2 class="text-2xl font-bold text-gray-800 mt-1 mb-2">{{selectedProduct.name}}</h2>
+        
+        <div class="flex items-center mb-4">
+          <p-rating [ngModel]="selectedProduct.rating" [readonly]="true" cancel="false"></p-rating>
+          <span class="text-sm text-gray-500 ml-1">({{selectedProduct.reviewCount}} reviews)</span>
+        </div>
+        
+        <div class="mb-4">
+          <span class="text-2xl font-bold text-pink-600">${{selectedProduct.price.toFixed(2)}}</span>
+          <span *ngIf="selectedProduct.originalPrice" class="ml-2 text-lg text-gray-500 line-through">
+            ${{selectedProduct.originalPrice.toFixed(2)}}
+          </span>
+          <span *ngIf="selectedProduct.originalPrice" class="ml-2 text-sm bg-pink-100 text-pink-600 px-2 py-1 rounded">
+            {{getDiscountPercentage(selectedProduct)}}% Off
+          </span>
+        </div>
+        
+        <p class="text-gray-700 mb-6">{{selectedProduct.description}}</p>
+        
+        <!-- Colors -->
+        <div *ngIf="selectedProduct.colors && selectedProduct.colors.length > 0" class="mb-6">
+          <h4 class="font-bold text-gray-800 mb-2">Color:</h4>
+          <div class="flex flex-wrap gap-2">
+            <div 
+              *ngFor="let color of selectedProduct.colors" 
+              class="w-8 h-8 rounded-full cursor-pointer border-2 transition-all duration-200"
+              [style.background-color]="color.code"
+              [style.border-color]="selectedColor === color ? '#db2777' : 'transparent'"
+              [pTooltip]="color.name"
+              tooltipPosition="top"
+              (click)="selectColor(color)"
+            ></div>
+          </div>
+        </div>
+        
+        <!-- Sizes -->
+        <div *ngIf="selectedProduct.sizes && selectedProduct.sizes.length > 0" class="mb-6">
+          <h4 class="font-bold text-gray-800 mb-2">Size:</h4>
+          <div class="flex flex-wrap gap-2">
+            <div 
+              *ngFor="let size of selectedProduct.sizes" 
+              class="w-12 h-10 flex items-center justify-center rounded border cursor-pointer transition-all duration-200"
+              [class.bg-pink-100]="selectedSize === size"
+              [class.border-pink-600]="selectedSize === size"
+              [class.text-pink-600]="selectedSize === size"
+              [class.border-gray-300]="selectedSize !== size"
+              (click)="selectSize(size)"
+            >
+              {{size}}
+            </div>
+          </div>
+        </div>
+        
+        <div class="mb-6">
+          <h4 class="font-bold text-gray-800 mb-2">Key Benefits:</h4>
+          <ul class="list-disc pl-5 text-gray-700 space-y-1">
+            <li *ngFor="let benefit of selectedProduct.benefits">{{benefit}}</li>
+          </ul>
+        </div>
+        
+        <div class="flex flex-wrap gap-2 mb-6">
+          <p-chip 
+            *ngFor="let tag of selectedProduct.tags" 
+            [label]="tag"
+            styleClass="bg-gray-100 text-gray-700"
+          ></p-chip>
+        </div>
+        
+        <div class="flex flex-col sm:flex-row gap-3">
+          <div class="flex items-center gap-2">
+            <label for="quantity" class="font-medium text-gray-800">Quantity:</label>
+            <p-inputNumber 
+              [(ngModel)]="quantity" 
+              [showButtons]="true" 
+              inputId="quantity" 
+              [min]="1" 
+              [max]="10"
+            ></p-inputNumber>
+          </div>
+          
+          <button 
+            pButton 
+            label="Add to Cart" 
+            icon="pi pi-shopping-cart" 
+            class="flex-1 p-button-primary"
+            [disabled]="!selectedProduct.inStock"
+            (click)="addToCart(selectedProduct, quantity)"
+          ></button>
+        </div>
+      </div>
+    </div>
+  </p-dialog>
+  

@@ -1,240 +1,398 @@
-<!-- Main Header - Amazon Egypt Style -->
-<header>
-  <!-- Top Navigation Bar -->
-  <div class="bg-gray-900 text-white">
-    <div class="container mx-auto px-2">
-      <div class="flex items-center h-14">
-        <!-- Logo -->
-        <div class="flex items-center mr-2">
-          <img src="/public/favicon.ico" alt="BuotiQe" class="h-8" />
-        </div>
-        
-        <!-- Deliver To -->
-       
-        <!-- Search Bar -->
-        <div class="flex-1 flex items-center mx-2 space-x-3">
-          <!-- Categories Dropdown -->
-          <div class="hidden md:block">
-            <select class="h-10 rounded-lg bg-gray-100 border border-gray-300 text-sm px-4 text-gray-700 cursor-pointer shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 hover:bg-gray-200 transition">
-              <option>All Categories</option>
-              <option>Skincare</option>
-              <option>Makeup</option>
-              <option>Haircare</option>
-              <option>Fragrance</option>
-              <option>Tools</option>
-            </select>
-          </div>
-         
-          <!-- Search Input Wrapper -->
-          <div class="relative flex-1">
-            <i class="pi pi-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-700 text-lg"></i>
-            <input 
-              type="text" 
-              pInputText 
-              [(ngModel)]="searchQuery" 
-              placeholder="Search for products" 
-              class="w-full h-11 border border-yellow-400 pl-12 rounded-lg bg-yellow-200 text-gray-800 shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 transition"
-            />
-          </div>
-          
-        
-          <!-- Search Button -->
-          <button class="bg-yellow-500 hover:bg-yellow-600 text-white h-11 px-5 rounded-lg flex items-center justify-center shadow-md transform hover:scale-105 transition">
-            <i class="pi pi-search text-lg"></i>
+<header [class.fixed-header]="isHeaderFixed" class="w-full bg-white z-50 transition-all duration-300">
+  <!-- Top Bar -->
+  <div class="bg-gradient-to-r from-pink-600 to-purple-600 text-white py-2 px-4">
+    <div class="container mx-auto flex justify-between items-center">
+      <div class="text-sm hidden sm:flex items-center space-x-4">
+        <a href="#" class="hover:text-pink-200 transition-colors flex items-center">
+          <i class="pi pi-map-marker mr-1"></i>
+          <span>Store Locator</span>
+        </a>
+        <a href="#" class="hover:text-pink-200 transition-colors flex items-center">
+          <i class="pi pi-truck mr-1"></i>
+          <span>Track Order</span>
+        </a>
+      </div>
+      <div class="flex items-center space-x-4 text-sm">
+        <!-- Language Selector -->
+        <div class="relative group">
+          <button class="flex items-center hover:text-pink-200 transition-colors">
+            <img [src]="selectedLanguage.flag" alt="Language flag" class="w-4 h-4 mr-1">
+            <span class="hidden sm:inline">{{selectedLanguage.code.toUpperCase()}}</span>
+            <i class="pi pi-chevron-down text-xs ml-1"></i>
           </button>
-        </div>
-        
-     
-       
-        
-        <!-- Account & Lists -->
-        <div class="hidden md:flex items-center text-xs mx-2 cursor-pointer hover:outline hover:outline-1 p-2 relative group">
-          <div>
-            <div class="text-yellow-500 text-sm">Hello, Sign in</div>
-            <div class="font-bold flex items-center text-white-800">
-              Account & Lists <i class="pi pi-chevron-down ml-1 text-xs"></i>
+          <div class="absolute right-0 mt-2 w-40 bg-white rounded-md shadow-lg overflow-hidden z-20 hidden group-hover:block">
+            <div class="py-1">
+              <a *ngFor="let language of languages" 
+                 (click)="changeLanguage(language)"
+                 class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer">
+                <img [src]="language.flag" alt="Language flag" class="w-4 h-4 mr-2">
+                <span>{{language.name}}</span>
+              </a>
             </div>
           </div>
+        </div>
         
-          <!-- Account Dropdown -->
-          <div
-            class="absolute z-20 top-full right-0 mt-2 w-60 bg-white shadow-xl rounded-lg opacity-0 invisible transition-all transform scale-95 group-hover:opacity-100 group-hover:visible group-hover:scale-100"
-          >
-            <div class="p-4 border-b">
-              <button class="w-full bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 rounded-lg transition">
-                Sign In
-              </button>
-              <div class="text-center mt-2 text-sm text-gray-600">
-                New customer? <a href="#" class="text-blue-500 hover:underline">Start here</a>
-              </div>
+        <!-- Currency Selector -->
+        <div class="relative group">
+          <button class="flex items-center hover:text-pink-200 transition-colors">
+            <span>{{selectedCurrency.symbol}}</span>
+            <span class="hidden sm:inline ml-1">{{selectedCurrency.code}}</span>
+            <i class="pi pi-chevron-down text-xs ml-1"></i>
+          </button>
+          <div class="absolute right-0 mt-2 w-40 bg-white rounded-md shadow-lg overflow-hidden z-20 hidden group-hover:block">
+            <div class="py-1">
+              <a *ngFor="let currency of currencies" 
+                 (click)="changeCurrency(currency)"
+                 class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer">
+                <span class="mr-2">{{currency.symbol}}</span>
+                <span>{{currency.name}}</span>
+              </a>
             </div>
-            <div class="py-3 px-5">
-              <div class="grid grid-cols-2 gap-3">
-                <div>
-                  <h4 class="font-semibold text-sm text-gray-700 mb-2">Your Account</h4>
-                  <ul class="space-y-1">
-                    <li>
-                      <a href="#" class="text-sm text-gray-600 hover:text-blue-500 hover:underline transition">Account</a>
-                    </li>
-                    <li>
-                      <a href="#" class="text-sm text-gray-600 hover:text-blue-500 hover:underline transition">Orders</a>
-                    </li>
-                    <li>
-                      <a href="#" class="text-sm text-gray-600 hover:text-blue-500 hover:underline transition"
-                        >Recommendations</a
-                      >
-                    </li>
-                    <li>
-                      <a href="#" class="text-sm text-gray-600 hover:text-blue-500 hover:underline transition"
-                        >Browsing History</a
-                      >
-                    </li>
-                  </ul>
+          </div>
+        </div>
+        
+        <!-- Account -->
+        <div class="relative group">
+          <button class="flex items-center hover:text-pink-200 transition-colors">
+            <i class="pi pi-user mr-1"></i>
+            <span class="hidden sm:inline">Account</span>
+            <i class="pi pi-chevron-down text-xs ml-1"></i>
+          </button>
+          <div class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg overflow-hidden z-20 hidden group-hover:block">
+            <div class="py-1">
+              <ng-container *ngIf="!isUserLoggedIn">
+                <a routerLink="/auth/login" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                  <i class="pi pi-sign-in mr-2 text-pink-500"></i>
+                  <span>Sign In</span>
+                </a>
+                <a routerLink="/auth/register" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                  <i class="pi pi-user-plus mr-2 text-pink-500"></i>
+                  <span>Register</span>
+                </a>
+              </ng-container>
+              
+              <ng-container *ngIf="isUserLoggedIn">
+                <div class="px-4 py-3 border-b border-gray-200">
+                  <p class="text-sm font-medium text-gray-900">Sarah Johnson</p>
+                  <p class="text-xs text-gray-500">sarah.johnsonexample.com</p>
                 </div>
-                <div>
-                  <h4 class="font-semibold text-sm text-gray-700 mb-2">Your Lists</h4>
-                  <ul class="space-y-1">
-                    <li>
-                      <a href="#" class="text-sm text-gray-600 hover:text-blue-500 hover:underline transition">Wishlist</a>
-                    </li>
-                    <li>
-                      <a href="#" class="text-sm text-gray-600 hover:text-blue-500 hover:underline transition">Saved Items</a>
-                    </li>
-                    <li>
-                      <a href="#" class="text-sm text-gray-600 hover:text-blue-500 hover:underline transition"
-                        >Create a List</a
-                      >
-                    </li>
-                  </ul>
-                </div>
-              </div>
+                <a routerLink="/account" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                  <i class="pi pi-user mr-2 text-pink-500"></i>
+                  <span>My Account</span>
+                </a>
+                <a routerLink="/account/orders" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                  <i class="pi pi-shopping-bag mr-2 text-pink-500"></i>
+                  <span>My Orders</span>
+                </a>
+                <a routerLink="/wishlist" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                  <i class="pi pi-heart mr-2 text-pink-500"></i>
+                  <span>Wishlist</span>
+                </a>
+                <div class="border-t border-gray-200"></div>
+                <a (click)="signOut()" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer">
+                  <i class="pi pi-sign-out mr-2 text-pink-500"></i>
+                  <span>Sign Out</span>
+                </a>
+              </ng-container>
             </div>
           </div>
         </div>
-        
-        
-        <!-- Returns & Orders -->
-        <div class="hidden md:flex items-center text-xs mx-2 cursor-pointer hover:outline hover:outline-1 p-2">
-          <div>
-            <div class="text-gray-400">Returns</div>
-            <div class="font-bold">& Orders</div>
-          </div>
-        </div>
-        
-        <!-- Cart -->
-       <!-- Cart Button Wrapper -->
-  <div class="flex items-center text-xs mx-2 cursor-pointer hover:outline hover:outline-1 p-2 rounded-lg transition-all hover:shadow-md hover:scale-105">
-  <!-- Cart Icon with Badge -->
-   <div class="relative">
-    <i class="pi pi-shopping-cart text-2xl text-gray-800"></i>
-    <span class="absolute -top-2 -right-2 bg-pink-500 text-white rounded-full h-5 w-5 flex items-center justify-center text-xs shadow-md">
-      {{cartItems.length}}
-    </span>
+      </div>
+    </div>
   </div>
   
-  <!-- Cart Label -->
-  <div class="hidden md:block font-bold ml-2 text-gray-900">Cart</div>
-</div>
-
+  <!-- Main Header -->
+  <div class="py-4 px-4 shadow-sm">
+    <div class="container mx-auto flex justify-between items-center">
+      <!-- Logo -->
+      <div class="logo flex-shrink-0">
+        <a routerLink="/" class="flex items-center">
+          <span class="text-2xl font-bold text-pink-600">Boutique<span class="text-purple-600">Store</span></span>
+        </a>
+      </div>
+      
+      <!-- Navigation - Desktop -->
+      <nav class="hidden lg:flex items-center space-x-1">
+        <a routerLink="/" class="nav-link text-gray-800 hover:text-pink-600 font-medium px-3 py-2">Home</a>
+        
+        <!-- Shop Dropdown -->
+        <div class="relative group">
+          <a routerLink="/shop" class="nav-link text-gray-800 hover:text-pink-600 font-medium px-3 py-2 flex items-center cursor-pointer">
+            Shop
+            <i class="pi pi-chevron-down text-xs ml-1"></i>
+          </a>
+          
+          <!-- Mega Menu -->
+          <div class="mega-menu absolute left-0 mt-2 w-full bg-white shadow-xl rounded-b-lg z-20 hidden group-hover:block animate-fade-in" style="min-width: 800px;">
+            <div class="grid grid-cols-5 gap-6 p-6">
+              <div *ngFor="let category of categories" class="space-y-4">
+                <h3 class="text-lg font-bold text-gray-800 flex items-center">
+                  <i [class]="category.icon + ' mr-2 text-pink-500'"></i>
+                  {{category.name}}
+                </h3>
+                <ul class="space-y-2">
+                  <li *ngFor="let subcategory of category.subcategories">
+                    <a [routerLink]="subcategory.link" class="text-gray-600 hover:text-pink-600 transition-colors block py-1">
+                      {{subcategory.name}}
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            
+            <div class="bg-gray-50 p-6 flex justify-between items-center">
+              <div>
+                <h4 class="font-bold text-gray-800 mb-1">New Collection</h4>
+                <p class="text-gray-600">Discover our latest arrivals</p>
+              </div>
+              <a routerLink="/products/new-arrivals" class="bg-pink-600 hover:bg-pink-700 text-white px-4 py-2 rounded-md transition-colors">
+                Shop Now
+              </a>
+            </div>
+          </div>
+        </div>
+        
+        <a routerLink="/newarrivals" class="nav-link text-gray-800 hover:text-pink-600 font-medium px-3 py-2">New Arrivals</a>
+        <a routerLink="/products/bestsellers" class="nav-link text-gray-800 hover:text-pink-600 font-medium px-3 py-2">Bestsellers</a>
+        <a routerLink="/about" class="nav-link text-gray-800 hover:text-pink-600 font-medium px-3 py-2">About</a>
+        <a routerLink="/contact" class="nav-link text-gray-800 hover:text-pink-600 font-medium px-3 py-2">Contact</a>
+      </nav>
+      
+      <!-- Actions -->
+      <div class="flex items-center space-x-1 sm:space-x-2">
+        <!-- Search -->
+        <button 
+          class="p-2 rounded-full hover:bg-gray-100 transition-colors relative"
+          (click)="toggleSearch()"
+          [class.bg-gray-100]="isSearchOpen"
+          pTooltip="Search"
+          tooltipPosition="bottom"
+        >
+          <i class="pi pi-search text-gray-700"></i>
+        </button>
+        
+        <!-- Wishlist -->
+        <a routerLink="/wishlist" class="p-2 rounded-full hover:bg-gray-100 transition-colors relative hidden sm:flex"
+           pTooltip="Wishlist"
+           tooltipPosition="bottom">
+          <i class="pi pi-heart text-gray-700"></i>
+          <span *ngIf="wishlistCount > 0" class="absolute -top-1 -right-1 bg-pink-600 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
+            {{wishlistCount}}
+          </span>
+        </a>
+        
+        <!-- Cart -->
+        <div class="relative">
+          <button 
+            #cartBtn
+            class="p-2 rounded-full hover:bg-gray-100 transition-colors relative"
+            (click)="op.toggle($event)"
+            pTooltip="Cart"
+            tooltipPosition="bottom"
+          >
+            <i class="pi pi-shopping-cart text-gray-700"></i>
+            <span *ngIf="cartCount > 0" class="absolute -top-1 -right-1 bg-pink-600 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
+              {{cartCount}}
+            </span>
+          </button>
+          
+          <p-overlayPanel #op [showCloseIcon]="true" [style]="{width: '350px'}" styleClass="cart-panel">
+            <ng-template pTemplate>
+              <div class="cart-panel-content">
+                <h3 class="text-lg font-bold text-gray-800 mb-4">Shopping Cart ({{cartCount}})</h3>
+                
+                <div *ngIf="cartItems.length === 0" class="text-center py-6">
+                  <i class="pi pi-shopping-cart text-4xl text-gray-300 mb-3"></i>
+                  <p class="text-gray-500">Your cart is empty</p>
+                  <button 
+                    pButton 
+                    label="Continue Shopping" 
+                    class="p-button-outlined mt-3"
+                    routerLink="/products"
+                    (click)="op.hide()"
+                  ></button>
+                </div>
+                
+                <div *ngIf="cartItems.length > 0">
+                  <div class="max-h-80 overflow-y-auto">
+                    <div *ngFor="let item of cartItems; let i = index" class="flex items-start py-3 border-b border-gray-200 last:border-0">
+                      <img [src]="item.image" [alt]="item.name" class="w-16 h-16 object-cover rounded-md">
+                      
+                      <div class="ml-3 flex-1">
+                        <h4 class="text-sm font-medium text-gray-800">{{item.name}}</h4>
+                        <div class="flex items-center mt-1">
+                          <span class="text-sm text-pink-600 font-medium">{{selectedCurrency.symbol}}{{item.price}}</span>
+                          <span class="mx-2 text-gray-400">×</span>
+                          <div class="flex items-center">
+                            <button 
+                              class="w-5 h-5 flex items-center justify-center bg-gray-100 rounded-full text-gray-600 hover:bg-gray-200"
+                              (click)="updateCartItemQuantity(item, item.quantity - 1)"
+                            >
+                              <i class="pi pi-minus text-xs"></i>
+                            </button>
+                            <span class="mx-2 text-sm">{{item.quantity}}</span>
+                            <button 
+                              class="w-5 h-5 flex items-center justify-center bg-gray-100 rounded-full text-gray-600 hover:bg-gray-200"
+                              (click)="updateCartItemQuantity(item, item.quantity + 1)"
+                            >
+                              <i class="pi pi-plus text-xs"></i>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <button 
+                        class="text-gray-400 hover:text-red-500 transition-colors"
+                        (click)="removeFromCart(i)"
+                        pTooltip="Remove"
+                        tooltipPosition="left"
+                      >
+                        <i class="pi pi-times"></i>
+                      </button>
+                    </div>
+                  </div>
+                  
+                  <div class="py-3 border-t border-gray-200">
+                    <div class="flex justify-between items-center mb-4">
+                      <span class="text-gray-600">Subtotal:</span>
+                      <span class="text-lg font-bold text-gray-800">{{selectedCurrency.symbol}}{{getCartTotal().toFixed(2)}}</span>
+                    </div>
+                    
+                    <div class="flex space-x-2">
+                      <button 
+                        pButton 
+                        label="View Cart" 
+                        class="p-button-outlined flex-1"
+                        routerLink="/cart"
+                        (click)="op.hide()"
+                      ></button>
+                      <button 
+                        pButton 
+                        label="Checkout" 
+                        class="p-button-primary flex-1"
+                        routerLink="/checkout"
+                        (click)="op.hide()"
+                      ></button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </ng-template>
+          </p-overlayPanel>
+        </div>
+        
         <!-- Mobile Menu Toggle -->
-        <button class="md:hidden text-white ml-2" (click)="toggleMobileMenu()">
-          <i class="pi pi-bars text-xl"></i>
+        <button 
+          class="p-2 rounded-full hover:bg-gray-100 transition-colors lg:hidden"
+          (click)="toggleMenu()"
+          [class.bg-gray-100]="isMenuOpen"
+        >
+          <i class="pi" [ngClass]="isMenuOpen ? 'pi-times' : 'pi-bars'"></i>
         </button>
       </div>
     </div>
   </div>
   
-  <!-- Secondary Navigation Bar -->
-  <div class="bg-gray-800 text-white">
-    <div class="container mx-auto px-2">
-      <div class="flex items-center h-10">
-        <!-- All Menu -->
-        <div class="flex items-center cursor-pointer hover:bg-gray-700 px-2 h-full relative group">
-          <i class="pi pi-bars mr-1"></i>
-          <span class="text-sm font-medium">All</span>
-          
-          <!-- All Categories Dropdown -->
-          <div class="absolute z-10 top-full left-0 mt-0 w-64 bg-white shadow-lg hidden group-hover:block text-gray-800">
-            <div class="py-2">
-              <h4 class="font-bold text-sm px-4 py-2 bg-gray-100">Shop By Department</h4>
-              <ul>
-                <li><a href="#" class="block px-4 py-2 text-sm hover:bg-gray-100">Skincare</a></li>
-                <li><a href="#" class="block px-4 py-2 text-sm hover:bg-gray-100">Makeup</a></li>
-                <li><a href="#" class="block px-4 py-2 text-sm hover:bg-gray-100">Haircare</a></li>
-                <li><a href="#" class="block px-4 py-2 text-sm hover:bg-gray-100">Fragrance</a></li>
-                <li><a href="#" class="block px-4 py-2 text-sm hover:bg-gray-100">Bath & Body</a></li>
-                <li><a href="#" class="block px-4 py-2 text-sm hover:bg-gray-100">Tools & Accessories</a></li>
-                <li><a href="#" class="block px-4 py-2 text-sm hover:bg-gray-100">Men's Grooming</a></li>
-                <li><a href="#" class="block px-4 py-2 text-sm hover:bg-gray-100">Gifts & Sets</a></li>
-              </ul>
-              <h4 class="font-bold text-sm px-4 py-2 bg-gray-100 mt-1">Programs & Features</h4>
-              <ul>
-                <li><a href="#" class="block px-4 py-2 text-sm hover:bg-gray-100">Beauty Club Rewards</a></li>
-                <li><a href="#" class="block px-4 py-2 text-sm hover:bg-gray-100">Gift Cards</a></li>
-                <li><a href="#" class="block px-4 py-2 text-sm hover:bg-gray-100">Shop By Brand</a></li>
-              </ul>
-            </div>
+  <!-- Search Overlay -->
+  <div 
+    *ngIf="isSearchOpen" 
+    class="search-overlay absolute top-full left-0 right-0 bg-white shadow-md p-6 z-20"
+    [@fadeInDown]
+  >
+    <div class="container mx-auto">
+      <div class="relative">
+        <i class="pi pi-search absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+        <input 
+          type="text" 
+          id="searchInput"
+          pInputText 
+          [(ngModel)]="searchQuery"
+          placeholder="Search for products..." 
+          class="w-full p-3 pl-12 pr-12 rounded-lg"
+          (keyup.enter)="submitSearch()"
+        >
+        <button 
+          *ngIf="searchQuery"
+          class="absolute right-14 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+          (click)="searchQuery = ''"
+        >
+          <i class="pi pi-times"></i>
+        </button>
+        <button 
+          class="absolute right-4 top-1/2 transform -translate-y-1/2 text-pink-600 hover:text-pink-700"
+          (click)="submitSearch()"
+        >
+          <i class="pi pi-arrow-right"></i>
+        </button>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-6">
+        <!-- Recent Searches -->
+        <div *ngIf="recentSearches.length > 0">
+          <div class="flex justify-between items-center mb-3">
+            <h3 class="text-sm font-medium text-gray-700">Recent Searches</h3>
+            <button 
+              class="text-xs text-pink-600 hover:text-pink-700"
+              (click)="clearRecentSearches()"
+            >
+              Clear All
+            </button>
+          </div>
+          <div class="flex flex-wrap gap-2">
+            <a 
+              *ngFor="let search of recentSearches" 
+              (click)="useSearchSuggestion(search)"
+              class="text-sm bg-gray-100 text-gray-700 px-3 py-1 rounded-full hover:bg-gray-200 cursor-pointer flex items-center"
+            >
+              <i class="pi pi-history text-xs mr-1"></i>
+              <span>{{search}}</span>
+            </a>
           </div>
         </div>
         
-        <!-- Main Categories -->
-        <nav class="hidden md:flex items-center h-full">
-          <a href="#" class="text-sm px-3 h-full flex items-center hover:bg-gray-700">Today's Deals</a>
-          <a href="#" class="text-sm px-3 h-full flex items-center hover:bg-gray-700">New Arrivals</a>
-          <a href="#" class="text-sm px-3 h-full flex items-center hover:bg-gray-700">Bestsellers</a>
-          <a href="#" class="text-sm px-3 h-full flex items-center hover:bg-gray-700">Skincare</a>
-          <a href="#" class="text-sm px-3 h-full flex items-center hover:bg-gray-700">Makeup</a>
-          <a href="#" class="text-sm px-3 h-full flex items-center hover:bg-gray-700">Haircare</a>
-          <a href="#" class="text-sm px-3 h-full flex items-center hover:bg-gray-700">Fragrance</a>
-        </nav>
+        <!-- Popular Searches -->
+        <div>
+          <h3 class="text-sm font-medium text-gray-700 mb-3">Popular Searches</h3>
+          <div class="flex flex-wrap gap-2">
+            <a 
+              *ngFor="let search of popularSearches" 
+              (click)="useSearchSuggestion(search)"
+              class="text-sm bg-pink-100 text-pink-600 px-3 py-1 rounded-full hover:bg-pink-200 cursor-pointer"
+            >
+              {{search}}
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Mobile Menu -->
+  <div 
+    *ngIf="isMenuOpen" 
+    class="mobile-menu lg:hidden absolute top-full left-0 right-0 bg-white shadow-md z-20"
+    [@fadeInDown]
+  >
+    <nav class="container mx-auto py-4 px-4">
+      <ul class="space-y-1">
+        <li><a routerLink="/" class="block py-2 px-3 text-gray-800 hover:text-pink-600 hover:bg-gray-50 rounded-md">Home</a></li>
         
-        <!-- Special Offers -->
-        <div class="ml-auto">
-          <a href="#" class="text-sm font-medium px-3 h-full flex items-center hover:bg-gray-700">
-            <span class="text-pink-400">Special Offers</span>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-  
-  <!-- Mobile Menu (Conditional) -->
-  <div *ngIf="showMobileMenu" class="md:hidden bg-gray-800 text-white border-t border-gray-700">
-    <div class="container mx-auto px-2 py-3">
-      <div class="flex items-center mb-3">
-        <div class="mr-2">
-          <i class="pi pi-user text-xl"></i>
-        </div>
-        <div class="text-lg font-bold">Hello, Sign in</div>
-      </div>
-      
-      <div class="border-t border-gray-700 py-2">
-        <h3 class="font-bold mb-2">Shop By Department</h3>
-        <ul class="space-y-2">
-          <li><a href="#" class="block">Today's Deals</a></li>
-          <li><a href="#" class="block">New Arrivals</a></li>
-          <li><a href="#" class="block">Bestsellers</a></li>
-          <li><a href="#" class="block">Skincare</a></li>
-          <li><a href="#" class="block">Makeup</a></li>
-          <li><a href="#" class="block">Haircare</a></li>
-          <li><a href="#" class="block">Fragrance</a></li>
-        </ul>
-      </div>
-      
-      <div class="border-t border-gray-700 py-2">
-        <h3 class="font-bold mb-2">Help & Settings</h3>
-        <ul class="space-y-2">
-          <li><a href="#" class="block">Your Account</a></li>
-          <li><a href="#" class="block">Customer Service</a></li>
-          <li><a href="#" class="block">Sign Out</a></li>
-        </ul>
-      </div>
-    </div>
-  </div>
-  
-  <!-- Promo Bar -->
-  <div class="bg-gradient-to-r from-pink-500 to-purple-600 text-white py-2 px-4 text-center text-sm font-medium">
-    <p>20% OFF on first purchase with code: WELCOME20 | Free shipping on orders over $50</p>
+        <!-- Mobile Categories -->
+        <li *ngFor="let category of categories" class="border-b border-gray-100 last:border-0">
+          <div class="py-2 px-3 flex justify-between items-center text-gray-800 hover:text-pink-600 cursor-pointer">
+            <div class="flex items-center">
+              <i [class]="category.icon + ' mr-2 text-pink-500'"></i>
+              <span>{{category.name}}</span>
+            </div>
+            <i class="pi pi-chevron-right text-xs"></i>
+          </div>
+        </li>
+        
+        <li><a routerLink="/products/new-arrivals" class="block py-2 px-3 text-gray-800 hover:text-pink-600 hover:bg-gray-50 rounded-md">New Arrivals</a></li>
+        <li><a routerLink="/products/bestsellers" class="block py-2 px-3 text-gray-800 hover:text-pink-600 hover:bg-gray-50 rounded-md">Bestsellers</a></li>
+        <li><a routerLink="/about" class="block py-2 px-3 text-gray-800 hover:text-pink-600 hover:bg-gray-50 rounded-md">About</a></li>
+        <li><a routerLink="/contact" class="block py-2 px-3 text-gray-800 hover:text-pink-600 hover:bg-gray-50 rounded-md">Contact</a></li>
+      </ul>
+    </nav>
   </div>
 </header>
-

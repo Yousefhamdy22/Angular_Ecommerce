@@ -1,0 +1,1024 @@
+<div class="flex min-h-screen w-full flex-col bg-slate-50">
+    <main class="flex-1 p-6 md:p-8">
+      <div class="flex flex-col gap-8">
+        <!-- Header -->
+        <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+          <div>
+            <h1 class="text-3xl font-bold tracking-tight text-slate-900">
+              <span class="inline-block mr-2">🏷️</span> Category Management
+            </h1>
+            <p class="text-slate-500 mt-1">
+              Organize and manage your product categories
+            </p>
+          </div>
+          <div class="flex items-center gap-2">
+            <button pButton pRipple label="Export" icon="pi pi-download" class="p-button-outlined p-button-secondary" [loading]="loading" (click)="exportCategories()"></button>
+            <button pButton pRipple label="New Category" icon="pi pi-plus" class="p-button" (click)="openNew()"></button>
+          </div>
+        </div>
+  
+        <!-- Stats Cards -->
+        <div class="grid gap-4 md:grid-cols-4">
+          <div class="rounded-lg border bg-white text-card-foreground shadow-sm">
+            <div class="flex flex-row items-center justify-between p-6 pb-2">
+              <h3 class="text-sm font-medium">Total Categories</h3>
+              <i class="pi pi-tags text-slate-500" style="font-size: 1rem"></i>
+            </div>
+            <div class="p-6 pt-0">
+              <div class="text-2xl font-bold">{{ stats.totalCategories }}</div>
+              <p class="text-xs text-slate-500 mt-1">Across all departments</p>
+            </div>
+          </div>
+          <div class="rounded-lg border bg-white text-card-foreground shadow-sm">
+            <div class="flex flex-row items-center justify-between p-6 pb-2">
+              <h3 class="text-sm font-medium">Active Categories</h3>
+              <i class="pi pi-check-circle text-slate-500" style="font-size: 1rem"></i>
+            </div>
+            <div class="p-6 pt-0">
+              <div class="text-2xl font-bold">{{ stats.activeCategories }}</div>
+              <p class="text-xs text-slate-500 mt-1">{{ (stats.activeCategories / stats.totalCategories * 100).toFixed(0) }}% of total</p>
+            </div>
+          </div>
+          <div class="rounded-lg border bg-white text-card-foreground shadow-sm">
+            <div class="flex flex-row items-center justify-between p-6 pb-2">
+              <h3 class="text-sm font-medium">Featured Categories</h3>
+              <i class="pi pi-star text-slate-500" style="font-size: 1rem"></i>
+            </div>
+            <div class="p-6 pt-0">
+              <div class="text-2xl font-bold">{{ stats.featuredCategories }}</div>
+              <p class="text-xs text-slate-500 mt-1">Displayed on homepage</p>
+            </div>
+          </div>
+          <div class="rounded-lg border bg-white text-card-foreground shadow-sm">
+            <div class="flex flex-row items-center justify-between p-6 pb-2">
+              <h3 class="text-sm font-medium">Total Products</h3>
+              <i class="pi pi-box text-slate-500" style="font-size: 1rem"></i>
+            </div>
+            <div class="p-6 pt-0">
+              <div class="text-2xl font-bold">{{ stats.totalProducts }}</div>
+              <p class="text-xs text-slate-500 mt-1">Across all categories</p>
+            </div>
+          </div>
+        </div>
+  
+        <!-- Additional Stats -->
+        <div class="grid gap-4 md:grid-cols-3">
+          <div class="rounded-lg border bg-white text-card-foreground shadow-sm p-6">
+            <div class="flex items-center justify-between mb-4">
+              <h3 class="text-sm font-medium">Recently Added</h3>
+              <span class="text-xs text-slate-500">Last 30 days</span>
+            </div>
+            <div class="flex items-center gap-4">
+              <div class="h-12 w-12 rounded-full bg-emerald-100 flex items-center justify-center">
+                <i class="pi pi-plus text-emerald-600" style="font-size: 1.2rem"></i>
+              </div>
+              <div>
+                <div class="text-2xl font-bold">{{ stats.recentlyAdded }}</div>
+                <p class="text-xs text-slate-500">New categories</p>
+              </div>
+            </div>
+          </div>
+          <div class="rounded-lg border bg-white text-card-foreground shadow-sm p-6">
+            <div class="flex items-center justify-between mb-4">
+              <h3 class="text-sm font-medium">Top Category</h3>
+              <span class="text-xs text-slate-500">By product count</span>
+            </div>
+            <div class="flex items-center gap-4">
+              <div class="h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center">
+                <i class="pi pi-chart-bar text-blue-600" style="font-size: 1.2rem"></i>
+              </div>
+              <div>
+                <div class="text-lg font-bold">{{ stats.topCategory?.name }}</div>
+                <p class="text-xs text-slate-500">{{ stats.topCategory?.productCount }} products</p>
+              </div>
+            </div>
+          </div>
+          <div class="rounded-lg border bg-white text-card-foreground shadow-sm p-6">
+            <div class="flex items-center justify-between mb-4">
+              <h3 class="text-sm font-medium">Average Products</h3>
+              <span class="text-xs text-slate-500">Per category</span>
+            </div>
+            <div class="flex items-center gap-4">
+              <div class="h-12 w-12 rounded-full bg-purple-100 flex items-center justify-center">
+                <i class="pi pi-calculator text-purple-600" style="font-size: 1.2rem"></i>
+              </div>
+              <div>
+                <div class="text-2xl font-bold">{{ stats.averageProductsPerCategory.toFixed(1) }}</div>
+                <p class="text-xs text-slate-500">Products per category</p>
+              </div>
+            </div>
+          </div>
+        </div>
+  
+        <!-- Filters -->
+        <div class="flex flex-col gap-4 md:flex-row md:items-center">
+          <div class="flex items-center gap-2 flex-1">
+            <div class="relative flex-1 max-w-md">
+              <i class="pi pi-search absolute left-2.5 top-2.5 text-slate-500" style="font-size: 1rem"></i>
+              <input 
+                type="search" 
+                pInputText 
+                placeholder="Search categories..." 
+                class="flex h-10 w-full rounded-md border border-input bg-white px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 pl-8"
+                [(ngModel)]="searchQuery"
+              />
+            </div>
+            <p-dropdown 
+              [options]="statuses" 
+              [(ngModel)]="statusFilter" 
+              placeholder="All Statuses" 
+              [showClear]="true"
+              styleClass="w-[180px]"
+            ></p-dropdown>
+            <button pButton pRipple icon="pi pi-filter-slash" class="p-button-outlined p-button-secondary" (click)="clearFilters()" pTooltip="Clear all filters" tooltipPosition="top"></button>
+          </div>
+          <div class="flex items-center gap-2">
+            <p-selectButton [options]="[{label: 'Grid', icon: 'pi pi-th-large', value: 'Grid'}, {label: 'Table', icon: 'pi pi-list', value: 'Table'}]" [(ngModel)]="viewMode" optionLabel="label" optionValue="value"></p-selectButton>
+          </div>
+        </div>
+  
+        <!-- Bulk Actions -->
+        <div class="flex items-center gap-2" *ngIf="selectedCategories.length > 0">
+          <p-dropdown 
+            [options]="bulkActionOptions" 
+            [(ngModel)]="bulkAction" 
+            placeholder="Bulk Actions" 
+            styleClass="w-[200px]"
+          ></p-dropdown>
+          <button pButton pRipple label="Apply" icon="pi pi-check" class="p-button-sm" (click)="executeBulkAction()" [disabled]="!bulkAction"></button>
+          <span class="text-sm text-slate-500 ml-2">{{ selectedCategories.length }} categories selected</span>
+        </div>
+  
+
+        <!-- Category Table -->
+        <div class="card rounded-xl border border-slate-200 shadow-md bg-white overflow-hidden" *ngIf="viewMode === 'Table'">
+          <p-toast></p-toast>
+          
+          <!-- Enhanced Toolbar -->
+          <div class="bg-slate-50 border-b border-slate-200 p-4 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <button pButton pRipple 
+                      label="Delete Selected" 
+                      icon="pi pi-trash" 
+                      class="p-button-danger p-button-sm rounded-lg shadow-sm hover:shadow transition-all" 
+                      [disabled]="!selectedCategories || !selectedCategories.length"
+                      (click)="deleteSelectedCategories()">
+              </button>
+              <span *ngIf="selectedCategories && selectedCategories.length" class="text-sm font-medium text-slate-600 bg-slate-200 px-2 py-1 rounded-md">
+                {{ selectedCategories.length }} selected
+              </span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="text-sm text-slate-500">{{ getFilteredCategories().length }} categories</span>
+            </div>
+          </div>
+        
+          <!-- Enhanced Table -->
+          <p-table 
+            #dt 
+            [value]="getFilteredCategories()" 
+            [rows]="10" 
+            [paginator]="true" 
+            [globalFilterFields]="['name','description','status']" 
+            [tableStyle]="{'min-width': '75rem'}"
+            [(selection)]="selectedCategories" 
+            [rowHover]="true" 
+            dataKey="id"
+            [showCurrentPageReport]="true" 
+            [loading]="loading"
+            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} categories"
+            [rowsPerPageOptions]="[10,25,50]"
+            styleClass="p-datatable-sm"
+            [resizableColumns]="true"
+            columnResizeMode="expand"
+          >
+            <!-- Enhanced Header -->
+            <ng-template pTemplate="header">
+              <tr class="bg-slate-50 text-slate-700">
+                <th style="width: 3rem" class="border-b border-slate-200">
+                  <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                </th>
+                <th pSortableColumn="name" style="min-width:12rem" class="border-b border-slate-200 font-medium">
+                  <div class="flex items-center gap-1">
+                    <span>Name</span>
+                    <p-sortIcon field="name"></p-sortIcon>
+                  </div>
+                </th>
+                <th pSortableColumn="productCount" style="min-width:8rem" class="border-b border-slate-200 font-medium">
+                  <div class="flex items-center gap-1">
+                    <span>Products</span>
+                    <p-sortIcon field="productCount"></p-sortIcon>
+                  </div>
+                </th>
+                <th pSortableColumn="status" style="min-width:8rem" class="border-b border-slate-200 font-medium">
+                  <div class="flex items-center gap-1">
+                    <span>Status</span>
+                    <p-sortIcon field="status"></p-sortIcon>
+                  </div>
+                </th>
+                <th pSortableColumn="featured" style="min-width:8rem" class="border-b border-slate-200 font-medium">
+                  <div class="flex items-center gap-1">
+                    <span>Featured</span>
+                    <p-sortIcon field="featured"></p-sortIcon>
+                  </div>
+                </th>
+                <th pSortableColumn="level" style="min-width:8rem" class="border-b border-slate-200 font-medium">
+                  <div class="flex items-center gap-1">
+                    <span>Level</span>
+                    <p-sortIcon field="level"></p-sortIcon>
+                  </div>
+                </th>
+                <th pSortableColumn="createdAt" style="min-width:10rem" class="border-b border-slate-200 font-medium">
+                  <div class="flex items-center gap-1">
+                    <span>Created</span>
+                    <p-sortIcon field="createdAt"></p-sortIcon>
+                  </div>
+                </th>
+                <th style="min-width:8rem" class="border-b border-slate-200 font-medium">Actions</th>
+              </tr>
+            </ng-template>
+            
+            <!-- Enhanced Body -->
+            <ng-template pTemplate="body" let-category>
+              <tr class="border-b border-slate-100 hover:bg-slate-50 transition-colors">
+                <td>
+                  <p-tableCheckbox [value]="category"></p-tableCheckbox>
+                </td>
+                <td>
+                  <div class="flex items-center gap-3">
+                    <div class="h-10 w-10 rounded-lg flex items-center justify-center text-white shadow-sm" [style.background-color]="category.color">
+                      <i [class]="category.icon" style="font-size: 1.2rem"></i>
+                    </div>
+                    <div>
+                      <div class="font-medium text-slate-800">{{ category.name }}</div>
+                      <div class="text-xs text-slate-500">{{ category.slug }}</div>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="flex items-center gap-1">
+                    <span class="font-medium text-slate-800">{{ category.productCount }}</span>
+                    <span class="text-xs text-slate-500">items</span>
+                  </div>
+                </td>
+                <td>
+                  <div class="flex items-center gap-2">
+                    <p-tag 
+                      [value]="category.status" 
+                      [severity]="getSeverity(category.status)"
+                      [style]="{
+                        'border-radius': '4px',
+                        'font-size': '0.75rem',
+                        'font-weight': '500',
+                        'text-transform': 'capitalize',
+                        'padding': '0.25rem 0.5rem'
+                      }"
+                    ></p-tag>
+                    <button 
+                      pButton 
+                      pRipple 
+                      icon="pi pi-sync" 
+                      class="p-button-rounded p-button-text p-button-sm hover:bg-slate-200 transition-colors" 
+                      (click)="toggleStatus(category, $event)" 
+                      pTooltip="Toggle Status" 
+                      tooltipPosition="top"
+                    ></button>
+                  </div>
+                </td>
+                <td>
+                  <div class="flex items-center">
+                    <p-inputSwitch 
+                      [(ngModel)]="category.featured" 
+                      (onChange)="toggleFeatured(category, $event)"
+                      styleClass="custom-switch"
+                    ></p-inputSwitch>
+                  </div>
+                </td>
+                <td>
+                  <div class="flex items-center gap-1">
+                    <span class="text-slate-800">{{ getCategoryLevel(category) }}</span>
+                    <span *ngIf="category.parentId" class="text-xs text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded-full">({{ getParentCategoryName(category.parentId) }})</span>
+                  </div>
+                </td>
+                <td>
+                  <span class="text-slate-700">
+                    {{ category.createdAt && category.createdAt.toString() !== 'Invalid Date' ? (category.createdAt | date:'MMM d, y') : 'N/A' }}
+                  </span>
+                </td>
+                <td>
+                  <div class="flex items-center justify-end gap-1">
+                    <button 
+                      pButton 
+                      pRipple 
+                      icon="pi pi-eye" 
+                      class="p-button-rounded p-button-text p-button-sm text-slate-600 hover:bg-slate-100" 
+                      pTooltip="View Details" 
+                      tooltipPosition="top"
+                    ></button>
+                    <button 
+                      pButton 
+                      pRipple 
+                      icon="pi pi-pencil" 
+                      class="p-button-rounded p-button-text p-button-sm text-blue-600 hover:bg-blue-50" 
+                      (click)="editCategory(category)" 
+                      pTooltip="Edit Category" 
+                      tooltipPosition="top"
+                    ></button>
+                    <button 
+                      pButton 
+                      pRipple 
+                      icon="pi pi-trash" 
+                      class="p-button-rounded p-button-text p-button-sm text-red-600 hover:bg-red-50" 
+                      (click)="deleteCategory(category)" 
+                      pTooltip="Delete Category" 
+                      tooltipPosition="top"
+                    ></button>
+                  </div>
+                </td>
+              </tr>
+            </ng-template>
+            
+            <!-- Enhanced Summary -->
+            <ng-template pTemplate="summary">
+              <div class="flex items-center justify-between p-3 border-t border-slate-200 bg-slate-50 text-sm text-slate-600">
+                <div>
+                  <span class="font-medium">{{ categories ? categories.length : 0 }}</span> categories in total
+                </div>
+                <div *ngIf="selectedCategories.length > 0">
+                  <span class="font-medium">{{ selectedCategories.length }}</span> categories selected
+                </div>
+              </div>
+            </ng-template>
+            
+            <!-- Enhanced Empty State -->
+            <ng-template pTemplate="emptymessage">
+              <tr>
+                <td colspan="8">
+                  <div class="flex flex-col items-center justify-center py-8 text-center">
+                    <div class="h-16 w-16 rounded-full bg-slate-100 flex items-center justify-center mb-3">
+                      <i class="pi pi-folder-open text-slate-400" style="font-size: 1.5rem"></i>
+                    </div>
+                    <h3 class="text-lg font-medium text-slate-800 mb-1">No categories found</h3>
+                    <p class="text-sm text-slate-500 mb-4">Try adjusting your search or filter criteria</p>
+                    <button 
+                      pButton 
+                      pRipple 
+                      label="Add New Category" 
+                      icon="pi pi-plus" 
+                      class="p-button-sm p-button-outlined rounded-lg" 
+                      (click)="openNew()"
+                    ></button>
+                  </div>
+                </td>
+              </tr>
+            </ng-template>
+            
+            <!-- Enhanced Loading Template -->
+            <ng-template pTemplate="loadingbody">
+              <tr>
+                <td colspan="8">
+                  <div class="flex items-center justify-center p-6">
+                    <i class="pi pi-spin pi-spinner mr-2" style="font-size: 1.5rem"></i>
+                    <span class="font-medium">Loading categories..</span>
+                  </div>
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+          
+          <!-- Enhanced Paginator Styling -->
+          <div class="p-paginator-bottom-custom">
+            <!-- PrimeNG will render the paginator here -->
+          </div>
+        </div>
+
+
+        
+        <!-- Category Grid View  -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 mt-6" >
+          <!-- Category Card -->
+          <div *ngFor="let category of getFilteredCategories()" 
+               class="group rounded-xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition-all duration-200 overflow-hidden flex flex-col">
+            
+            <!-- Card Header with Category Color -->
+            <div class="p-5 border-b relative" 
+                 [style.background-color]="category.color + '10'"
+                 [style.border-bottom-color]="category.color + '30'">
+              
+              <!-- Status Badge - Absolute Positioned -->
+              <div class="absolute top-4 right-4">
+                <p-tag [value]="category.status" 
+                       [severity]="getSeverity(category.status)"
+                       [style]="{
+                         'border-radius': '6px',
+                         'font-size': '0.7rem',
+                         'font-weight': '600',
+                         'text-transform': 'uppercase',
+                         'letter-spacing': '0.5px',
+                         'padding': '0.15rem 0.5rem'
+                       }">
+                </p-tag>
+              </div>
+              
+              <!-- Category Icon and Name -->
+              <div class="flex items-start gap-4">
+                <div class="h-12 w-12 rounded-lg flex items-center justify-center text-white shadow-sm transform group-hover:scale-105 transition-transform duration-200" 
+                     [style.background-color]="category.color">
+                  <i [class]="category.icon" style="font-size: 1.4rem"></i>
+                </div>
+                <div class="flex-1 pt-1">
+                  <h3 class="text-lg font-semibold text-slate-800 line-clamp-1 group-hover:text-slate-900">{{ category.name }}</h3>
+                  <p class="text-xs text-slate-500 mt-0.5 flex items-center gap-1">
+                    <i class="pi pi-link text-slate-400" style="font-size: 0.7rem"></i>
+                    <span>{{ category.slug }}</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Card Content -->
+            <div class="p-5 flex-1 flex flex-col">
+              <!-- Description with proper height -->
+              <div class="min-h-[3rem] mb-4">
+                <p *ngIf="category.description" class="text-sm text-slate-600 line-clamp-2">{{ category.description }}</p>
+                <p *ngIf="!category.description" class="text-sm text-slate-400 italic">No description provided</p>
+              </div>
+              
+              <!-- Stats with improved icons -->
+              <div class="grid grid-cols-2 gap-3 mb-5">
+                <div class="bg-slate-50 rounded-lg p-3 flex items-center gap-2">
+                  <div class="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center">
+                    <i class="pi pi-box text-blue-600" style="font-size: 0.9rem"></i>
+                  </div>
+                  <div>
+                    <div class="text-lg font-semibold text-slate-800">{{ category.productCount }}</div>
+                    <div class="text-xs text-slate-500">Products</div>
+                  </div>
+                </div>
+                
+                <div class="bg-slate-50 rounded-lg p-3 flex items-center gap-2">
+                  <div class="h-8 w-8 rounded-full bg-emerald-100 flex items-center justify-center">
+                    <i class="pi pi-calendar text-emerald-600" style="font-size: 0.9rem"></i>
+                  </div>
+                  <div>
+                    <div class="text-sm font-medium text-slate-800">
+                      {{ category.createdAt && category.createdAt.toString() !== 'Invalid Date' ? (category.createdAt | date:'MMM d') : 'N/A' }}
+                    </div>
+                    <div class="text-xs text-slate-500">Created</div>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Parent Category Badge (if exists) -->
+              <div *ngIf="category.parentId" class="mb-4 flex items-center">
+                <span class="text-xs bg-slate-100 text-slate-700 px-2 py-1 rounded-full flex items-center gap-1">
+                  <i class="pi pi-sitemap text-slate-500" style="font-size: 0.7rem"></i>
+                  Parent: {{ getParentCategoryName(category.parentId) }}
+                </span>
+              </div>
+              
+              <!-- Actions Footer -->
+              <div class="mt-auto pt-4 border-t border-slate-100 flex items-center justify-between">
+                <!-- Featured Toggle with Label -->
+                <div class="flex items-center gap-2">
+                  <p-inputSwitch 
+                    [(ngModel)]="category.featured" 
+                    (onChange)="toggleFeatured(category, $event)"
+                    styleClass="custom-switch">
+                  </p-inputSwitch>
+                  <span class="text-xs font-medium" [class.text-slate-400]="!category.featured" [class.text-amber-600]="category.featured">
+                    {{ category.featured ? 'Featured' : 'Not Featured' }}
+                  </span>
+                </div>
+                
+                <!-- Action Buttons with Tooltips -->
+                <div class="flex items-center gap-1">
+                  <button pButton pRipple 
+                          icon="pi pi-eye" 
+                          class="p-button-rounded p-button-text p-button-sm text-slate-600 hover:bg-slate-100" 
+                          pTooltip="View Details" 
+                          tooltipPosition="top">
+                  </button>
+                  <button pButton pRipple 
+                          icon="pi pi-pencil" 
+                          class="p-button-rounded p-button-text p-button-sm text-blue-600 hover:bg-blue-50" 
+                          (click)="editCategory(category)" 
+                          pTooltip="Edit Category" 
+                          tooltipPosition="top">
+                  </button>
+                  <button pButton pRipple 
+                          icon="pi pi-trash" 
+                          class="p-button-rounded p-button-text p-button-sm text-red-600 hover:bg-red-50" 
+                          (click)="deleteCategory(category)" 
+                          pTooltip="Delete Category" 
+                          tooltipPosition="top">
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Empty State Card -->
+          <div *ngIf="filteredCategories.length === 0" class="col-span-full">
+            <div class="rounded-xl border border-dashed border-slate-300 bg-slate-50 p-8 flex flex-col items-center justify-center text-center">
+              <div class="h-16 w-16 rounded-full bg-slate-100 flex items-center justify-center mb-4">
+                <i class="pi pi-folder-open text-slate-400" style="font-size: 1.5rem"></i>
+              </div>
+              <h3 class="text-lg font-medium text-slate-800 mb-2">No categories found</h3>
+              <p class="text-sm text-slate-500 mb-6 max-w-md">Try adjusting your search or filter criteria, or create a new category to get started.</p>
+              <button pButton pRipple 
+                      label="Add New Category" 
+                      icon="pi pi-plus" 
+                      class="p-button p-button-primary rounded-lg shadow-sm" 
+                      (click)="openNew()">
+              </button>
+            </div>
+          </div>
+        </div>
+
+
+
+
+      </div>
+    </main>
+  
+    <!-- Category Dialog -->
+    <!-- New Category Button -->
+<button 
+pButton 
+pRipple 
+label="New Category" 
+icon="pi pi-plus" 
+class="p-button p-button-primary mb-4 shadow-md rounded-lg" 
+(click)="openNew()">
+</button>
+
+<!-- Category Dialog -->
+<p-dialog 
+[(visible)]="categoryDialog" 
+[style]="{width: '600px'}" 
+header="Category Details" 
+[modal]="true" 
+
+styleClass="custom-dialog" 
+contentStyleClass="custom-dialog-content">
+<!-- Dialog Content -->
+<!-- category-form.component.html -->
+
+
+<div class="p-4">
+  <h2 class="text-xl font-bold mb-4">Add New Category</h2>
+  
+  <!-- Preview Banner -->
+  <div class="mb-6 rounded-lg overflow-hidden border border-slate-200 shadow-sm">
+    <div class="p-4 flex items-center gap-4" [style.background-color]="categoryForm.get('color')?.value + '15'">
+      <div class="h-12 w-12 rounded-lg flex items-center justify-center text-white shadow-sm" 
+           [style.background-color]="categoryForm.get('color')?.value">
+        <i [class]="categoryForm.get('icon')?.value" style="font-size: 1.4rem"></i>
+      </div>
+      <div class="flex-1">
+        <h3 class="text-lg font-semibold text-slate-800">
+          {{ categoryForm.get('name')?.value || 'New Category' }}
+        </h3>
+        <p class="text-xs text-slate-500 flex items-center gap-1">
+          <i class="pi pi-link text-slate-400" style="font-size: 0.7rem"></i>
+          <span>{{ categoryForm.get('slug')?.value || 'category-slug' }}</span>
+        </p>
+      </div>
+      <p-tag 
+        *ngIf="categoryForm.get('status')?.value" 
+        [value]="categoryForm.get('status')?.value" 
+        [severity]="categoryForm.get('status')?.value === 'active' ? 'success' : 'danger'"
+        [style]="{
+          'border-radius': '4px',
+          'font-size': '0.7rem',
+          'font-weight': '600',
+          'text-transform': 'uppercase',
+          'letter-spacing': '0.5px'
+        }">
+      </p-tag>
+    </div>
+  </div>
+
+  <!-- Form Content -->
+  <form [formGroup]="categoryForm" (ngSubmit)="onSubmit()">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+      <!-- Basic Information Section -->
+      <div class="col-span-2 bg-slate-50 rounded-lg p-5 border border-slate-200">
+        <h4 class="text-sm font-semibold text-slate-700 mb-4 flex items-center gap-2">
+          <i class="pi pi-info-circle text-blue-500"></i>
+          Basic Information
+        </h4>
+        
+        <!-- Name -->
+        <div class="mb-4">
+          <label for="name" class="block mb-1.5 text-sm font-medium text-slate-700">
+            Category Name <span class="text-red-500">*</span>
+          </label>
+          <div class="relative">
+            <i class="pi pi-tag absolute left-3 top-2.5 text-slate-400" style="font-size: 0.9rem"></i>
+            <input 
+              id="name"
+              type="text" 
+              pInputText 
+              formControlName="name"
+              class="w-full pl-9 rounded-md border-slate-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+              (blur)="generateSlug()"
+            />
+          </div>
+          <small class="text-red-500 mt-1 block" *ngIf="submitted && f['name'].errors?.['required']">
+            Name is required
+          </small>
+        </div>
+
+        <!-- Slug -->
+        <div class="mb-4">
+          <label for="slug" class="block mb-1.5 text-sm font-medium text-slate-700">
+            URL Slug <span class="text-red-500">*</span>
+          </label>
+          <div class="relative">
+            <i class="pi pi-link absolute left-3 top-2.5 text-slate-400" style="font-size: 0.9rem"></i>
+            <input 
+              id="slug"
+              type="text" 
+              pInputText 
+              formControlName="slug"
+              class="w-full pl-9 rounded-md border-slate-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+            />
+          </div>
+          <small class="text-red-500 mt-1 block" *ngIf="submitted && f['slug'].errors?.['required']">
+            Slug is required
+          </small>
+          <small class="text-slate-500 mt-1 block">
+            Used in URLs: /categories/{{ categoryForm.get('slug')?.value || 'example-slug' }}
+          </small>
+        </div>
+
+        <!-- Description -->
+        <div class="mb-4">
+          <label for="description" class="block mb-1.5 text-sm font-medium text-slate-700">Description</label>
+          <div class="relative">
+            <textarea 
+              id="description"
+              pInputTextarea 
+              formControlName="description"
+              rows="3" 
+              class="w-full rounded-md border-slate-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+              placeholder="Describe this category...">
+            </textarea>
+          </div>
+          <small class="text-slate-500 mt-1 block">Brief description of what this category contains</small>
+        </div>
+
+        <!-- Image Upload -->
+        <div class="mb-2">
+          <label for="file" class="block mb-1.5 text-sm font-medium text-slate-700">Category Image</label>
+          <p-fileUpload 
+          id="file"
+          type="file"
+          mode="basic"
+          name="file"
+          accept="image/*"
+          chooseLabel="Upload Image"
+          (onSelect)="onFileChange($event)"
+          styleClass="w-full">
+        </p-fileUpload>
+        
+          <small class="text-slate-500 mt-1 block">Upload an image for this category (optional)</small>
+        </div>
+
+      </div>
+
+      <!-- Appearance Section -->
+      <div class="col-span-2 md:col-span-1 bg-slate-50 rounded-lg p-5 border border-slate-200">
+        <h4 class="text-sm font-semibold text-slate-700 mb-4 flex items-center gap-2">
+          <i class="pi pi-palette text-purple-500"></i>
+          Appearance
+        </h4>
+        
+        <!-- Icon -->
+        <div class="mb-4">
+          <label for="icon" class="block mb-1.5 text-sm font-medium text-slate-700">Icon</label>
+          <div class="p-inputgroup">
+            <span class="p-inputgroup-addon bg-white border-slate-300">
+              <i [class]="categoryForm.get('icon')?.value" [style.color]="categoryForm.get('color')?.value"></i>
+            </span>
+            <input 
+              id="icon"
+              type="text" 
+              pInputText 
+              formControlName="icon"
+              class="border-slate-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+              placeholder="pi pi-tag" 
+            />
+          </div>
+          <div class="flex flex-wrap gap-2 mt-3">
+            <button 
+              *ngFor="let icon of ['pi pi-tag', 'pi pi-shopping-cart', 'pi pi-box', 'pi pi-gift', 'pi pi-heart', 'pi pi-star']" 
+              pButton 
+              pRipple 
+              type="button" 
+              [icon]="icon" 
+              class="p-button-rounded p-button-text p-button-sm" 
+              [style.color]="categoryForm.get('color')?.value"
+              (click)="categoryForm.patchValue({ icon: icon })">
+            </button>
+          </div>
+        </div>
+
+        <!-- Color -->
+        <div class="mb-4">
+          <label for="color" class="block mb-1.5 text-sm font-medium text-slate-700">Color</label>
+          <div class="flex items-center gap-3">
+            <div class="h-10 w-10 rounded-lg shadow-sm border border-slate-300" 
+                 [style.background-color]="categoryForm.get('color')?.value"></div>
+            <p-colorPicker 
+              id="color"
+              formControlName="color"
+              [inline]="false"
+              [style]="{'width': '100%'}"
+              class="flex-1">
+            </p-colorPicker>
+          </div>
+          <div class="flex flex-wrap gap-2 mt-3">
+            <button 
+              *ngFor="let color of ['#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#EC4899']" 
+              pButton 
+              pRipple 
+              type="button" 
+              class="p-button-rounded p-button-text p-button-sm h-8 w-8 flex items-center justify-center" 
+              [style.background-color]="color"
+              (click)="categoryForm.patchValue({ color: color })">
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Settings Section -->
+      <div class="col-span-2 md:col-span-1 bg-slate-50 rounded-lg p-5 border border-slate-200">
+        <h4 class="text-sm font-semibold text-slate-700 mb-4 flex items-center gap-2">
+          <i class="pi pi-cog text-slate-500"></i>
+          Settings
+        </h4>
+        
+        <!-- Status -->
+        <div class="mb-4">
+          <label for="status" class="block mb-1.5 text-sm font-medium text-slate-700">Status</label>
+          <p-dropdown 
+            id="status"
+            formControlName="status"
+            [options]="statuses" 
+            optionLabel="label" 
+            optionValue="value" 
+            placeholder="Select a Status"
+            styleClass="w-full shadow-sm"
+            [style]="{'width': '100%', 'border-radius': '0.375rem'}">
+            <ng-template pTemplate="selectedItem">
+              <div class="flex items-center gap-2" *ngIf="categoryForm.get('status')?.value">
+                <i class="pi" 
+                   [ngClass]="{'pi-check-circle text-green-500': categoryForm.get('status')?.value === 'active', 
+                              'pi-times-circle text-red-500': categoryForm.get('status')?.value === 'inactive'}"></i>
+                <span>{{ categoryForm.get('status')?.value === 'active' ? 'Active' : 'Inactive' }}</span>
+              </div>
+            </ng-template>
+            <ng-template let-option pTemplate="item">
+              <div class="flex items-center gap-2">
+                <i class="pi" 
+                   [ngClass]="{'pi-check-circle text-green-500': option.value === 'active', 
+                              'pi-times-circle text-red-500': option.value === 'inactive'}"></i>
+                <span>{{ option.label }}</span>
+              </div>
+            </ng-template>
+          </p-dropdown>
+          <small class="text-red-500 mt-1 block" *ngIf="submitted && f['status'].errors?.['required']">
+            Status is required
+          </small>
+        </div>
+
+        <!-- Parent Category -->
+        <div class="mb-4">
+          <label for="parent" class="block mb-1.5 text-sm font-medium text-slate-700">Parent Category</label>
+          <p-dropdown 
+            id="parent"
+            formControlName="parentId"
+            [options]="parentCategories" 
+            optionLabel="label" 
+            optionValue="value" 
+            placeholder="Select a Parent"
+            styleClass="w-full shadow-sm"
+            [style]="{'width': '100%', 'border-radius': '0.375rem'}">
+          </p-dropdown>
+          <small class="text-slate-500 mt-1 block">Leave empty for a top-level category</small>
+        </div>
+
+        <!-- Featured Toggle -->
+        <div class="mb-4">
+          <div class="flex items-center justify-between p-3 bg-white rounded-lg border border-slate-200 shadow-sm">
+            <div>
+              <label for="featured" class="font-medium text-slate-700">Featured Category</label>
+              <p class="text-xs text-slate-500 mt-0.5">Display prominently on homepage</p>
+            </div>
+            <p-inputSwitch 
+              formControlName="featured"
+              inputId="featured"
+              styleClass="custom-switch">
+            </p-inputSwitch>
+          </div>
+        </div>
+      </div>
+
+      <!-- Advanced Options Toggle -->
+      <div class="col-span-2">
+        <button 
+          pButton 
+          pRipple 
+          type="button" 
+          [label]="showAdvancedOptions ? 'Hide Advanced Options' : 'Show Advanced Options'" 
+          [icon]="showAdvancedOptions ? 'pi pi-chevron-up' : 'pi pi-chevron-down'" 
+          class="p-button-text p-button-secondary w-full rounded-lg hover:bg-slate-100" 
+          (click)="toggleAdvancedOptions()">
+        </button>
+      </div>
+
+      <!-- Advanced Options Section -->
+      <div *ngIf="showAdvancedOptions" class="col-span-2 bg-slate-50 rounded-lg p-5 border border-slate-200">
+        <h4 class="text-sm font-semibold text-slate-700 mb-4 flex items-center gap-2">
+          <i class="pi pi-sliders-h text-amber-500"></i>
+          Advanced Options
+        </h4>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <!-- Sort Order -->
+          <div class="mb-4">
+            <label for="sortOrder" class="block mb-1.5 text-sm font-medium text-slate-700">Sort Order</label>
+            <p-inputNumber 
+              id="sortOrder"
+              formControlName="sortOrder"
+              [showButtons]="true" 
+              incrementButtonIcon="pi pi-plus" 
+              decrementButtonIcon="pi pi-minus"
+              styleClass="w-full shadow-sm"
+              [style]="{'width': '100%'}">
+            </p-inputNumber>
+            <small class="text-slate-500 mt-1 block">Lower numbers appear first</small>
+          </div>
+
+          <!-- Product Count -->
+          <div class="mb-4">
+            <label for="productCount" class="block mb-1.5 text-sm font-medium text-slate-700">Product Count</label>
+            <p-inputNumber 
+              id="productCount"
+              formControlName="productCount"
+              [showButtons]="true" 
+              incrementButtonIcon="pi pi-plus" 
+              decrementButtonIcon="pi pi-minus"
+              styleClass="w-full shadow-sm"
+              [style]="{'width': '100%'}">
+            </p-inputNumber>
+            <small class="text-slate-500 mt-1 block">Number of products in this category</small>
+          </div>
+
+          <!-- SEO Section -->
+          <div class="col-span-2">
+            <h5 class="text-sm font-medium text-slate-700 mb-3 pb-2 border-b border-slate-200">
+              SEO Settings
+            </h5>
+            
+            <!-- SEO Title -->
+            <div class="mb-4">
+              <label for="seoTitle" class="block mb-1.5 text-sm font-medium text-slate-700">SEO Title</label>
+              <div class="relative">
+                <i class="pi pi-search absolute left-3 top-2.5 text-slate-400" style="font-size: 0.9rem"></i>
+                <input 
+                  id="seoTitle"
+                  type="text" 
+                  pInputText 
+                  formControlName="seoTitle"
+                  class="w-full pl-9 rounded-md border-slate-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                  placeholder="Optimized title for search engines"
+                />
+              </div>
+              <small class="text-slate-500 mt-1 block">Defaults to category name if left empty</small>
+            </div>
+
+            <!-- SEO Description -->
+            <div class="mb-4">
+              <label for="seoDescription" class="block mb-1.5 text-sm font-medium text-slate-700">SEO Description</label>
+              <textarea 
+                id="seoDescription"
+                pInputTextarea 
+                formControlName="seoDescription"
+                rows="2" 
+                class="w-full rounded-md border-slate-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                placeholder="Brief description for search results">
+              </textarea>
+              <div class="flex items-center justify-between mt-1">
+                <small class="text-slate-500">Recommended: 150-160 characters</small>
+                <small [class.text-green-600]="!categoryForm.get('seoDescription')?.value || categoryForm.get('seoDescription')?.value.length <= 160" 
+                       [class.text-amber-600]="categoryForm.get('seoDescription')?.value && categoryForm.get('seoDescription')?.value.length > 160 && categoryForm.get('seoDescription')?.value.length <= 180"
+                       [class.text-red-600]="categoryForm.get('seoDescription')?.value && categoryForm.get('seoDescription')?.value.length > 180">
+                  {{ categoryForm.get('seoDescription')?.value ? categoryForm.get('seoDescription')?.value.length : 0 }}/160
+                </small>
+              </div>
+            </div>
+
+            <!-- SEO Keywords -->
+            <div class="mb-2">
+              <label for="seoKeywords" class="block mb-1.5 text-sm font-medium text-slate-700">SEO Keywords</label>
+              <div class="relative">
+                <i class="pi pi-hashtag absolute left-3 top-2.5 text-slate-400" style="font-size: 0.9rem"></i>
+                <input 
+                  id="seoKeywords"
+                  type="text" 
+                  pInputText 
+                  formControlName="seoKeywords"
+                  class="w-full pl-9 rounded-md border-slate-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                  placeholder="product, category, keyword"
+                />
+              </div>
+              <small class="text-slate-500 mt-1 block">Separate keywords with commas</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Form Actions -->
+      <div class="col-span-2 flex justify-end gap-3 mt-4">
+        <button 
+          pButton 
+          pRipple 
+          type="button" 
+          label="Cancel" 
+          class="p-button-outlined p-button-secondary"
+          (click)="resetForm()">
+        </button>
+        <button 
+          pButton 
+          pRipple 
+          type="submit" 
+           
+          class="p-button-primary"
+          [disabled]="loading">
+          <i class="pi pi-spinner pi-spin mr-2" *ngIf="loading"></i>
+          Save Category
+        </button>
+      </div>
+    </div>
+  </form>
+</div>
+
+<!-- Footer Buttons -->
+
+<ng-template pTemplate="footer">
+  <div class="flex items-center justify-between w-full">
+    <button 
+      pButton 
+      pRipple 
+      label="Cancel" 
+      icon="pi pi-times" 
+      class="p-button-text p-button-danger rounded-lg hover:bg-red-50" 
+      (click)="hideDialog()">
+    </button>
+    
+    <div class="flex items-center gap-2">
+      <button 
+        pButton 
+        pRipple 
+        label="Save as Draft" 
+        icon="pi pi-save" 
+        class="p-button-outlined rounded-lg" 
+        (click)="category.status = 'inactive'; saveCategory()">
+      </button>
+      <button 
+        pButton 
+        pRipple 
+        label="Save & Publish" 
+        icon="pi pi-check" 
+        class="p-button-success rounded-lg shadow-sm" 
+        (click)="category.status = 'active'; saveCategory()">
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<!-- Footer Buttons -->
+<ng-template pTemplate="footer">
+  <button pButton pRipple 
+          label="Cancel" 
+          icon="pi pi-times" 
+          class="p-button-text p-button-danger rounded-md" 
+          (click)="hideDialog()"></button>
+
+  <button pButton pRipple 
+          label="Save" 
+          icon="pi pi-check" 
+          class="p-button-success rounded-md" 
+          (click)="saveCategory()"></button>
+</ng-template>
+
+
+</p-dialog>
+    <p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
+  </div>
+  
+  

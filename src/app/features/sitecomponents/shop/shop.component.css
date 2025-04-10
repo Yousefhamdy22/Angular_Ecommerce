@@ -1,0 +1,137 @@
+/* Custom styling for the shop page */
+
+/* Filter accordion styling */
+:host ::ng-deep .filter-accordion .p-accordion-header-link {
+  padding: 0.75rem 0;
+  font-weight: 600;
+  color: #1a5ecb;
+  border: none;
+  background: transparent;
+}
+
+:host ::ng-deep .filter-accordion .p-accordion-content {
+  padding: 0.5rem 0 1rem 0;
+  border: none;
+}
+
+:host ::ng-deep .filter-accordion .p-accordion-header:not(.p-disabled).p-highlight .p-accordion-header-link {
+  background: transparent;
+  border-color: transparent;
+  color: #db2777;
+}
+
+:host
+  ::ng-deep
+  .filter-accordion
+  .p-accordion-header:not(.p-highlight):not(.p-disabled):hover
+  .p-accordion-header-link {
+  background: transparent;
+  color: #db2777;
+}
+
+/* Rating stars */
+:host ::ng-deep .p-rating .p-rating-item.p-rating-item-active .p-rating-icon {
+  color: #f59e0b;
+}
+
+/* Checkbox styling */
+:host ::ng-deep .p-checkbox .p-checkbox-box.p-highlight {
+  border-color: #db2777;
+  background: #db2777;
+}
+
+/* Slider styling */
+:host ::ng-deep .p-slider .p-slider-range {
+  background: #db2777;
+}
+
+:host ::ng-deep .p-slider .p-slider-handle {
+  border-color: #db2777;
+}
+
+/* Dropdown styling */
+:host ::ng-deep .p-dropdown:not(.p-disabled).p-focus {
+  border-color: #db2777;
+  box-shadow: 0 0 0 1px rgba(219, 39, 119, 0.2);
+}
+
+/* Paginator styling */
+:host ::ng-deep .p-paginator .p-paginator-pages .p-paginator-page.p-highlight {
+  background: #fce7f3;
+  color: #db2777;
+}
+
+/* Button styling */
+:host ::ng-deep .p-button.p-button-primary {
+  background: #db2777;
+  border-color: #db2777;
+}
+
+:host ::ng-deep .p-button.p-button-primary:hover {
+  background: #be185d;
+  border-color: #be185d;
+}
+
+/* Chip styling */
+:host ::ng-deep .p-chip {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+}
+
+/* Dialog styling */
+:host ::ng-deep .product-quick-view .p-dialog-header {
+  padding: 1rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+:host ::ng-deep .product-quick-view .p-dialog-content {
+  padding: 0;
+}
+
+/* Input styling */
+:host ::ng-deep .p-inputtext:enabled:focus {
+  border-color: #db2777;
+  box-shadow: 0 0 0 1px rgba(219, 39, 119, 0.2);
+}
+
+/* Animation classes */
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.animate-fade-in.delay-100 {
+  animation-delay: 0.1s;
+}
+
+.animate-fade-in.delay-200 {
+  animation-delay: 0.2s;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Product card hover effects */
+.product-card .quick-actions {
+  transform: translateY(10px);
+  transition: all 0.3s ease;
+}
+
+.product-card:hover .quick-actions {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .product-details h3 {
+    font-size: 0.875rem;
+  }
+}

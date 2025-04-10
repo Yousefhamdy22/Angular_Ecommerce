@@ -11,13 +11,16 @@ import { DropdownModule } from 'primeng/dropdown';
 import { ProductsModule } from './features/products/products.module';
 
 import { HttpClientModule } from '@angular/common/http';
-import { HomeModule } from "./features/home/home.module";
+
 import { AuthModule } from './features/auth/auth.module';
 import { RouterOutlet } from '@angular/router';
 import { AppRoutingModule } from '../app-routing.module';
 import { DashboardModule } from './Dashboard/dashboard.module';
 import { FeatureModule } from './features/feature.module';
-import { HomeComponent } from './features/home/home.component';
+
+import { RatingModule } from 'primeng/rating';
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [AppComponent 
@@ -30,16 +33,19 @@ import { HomeComponent } from './features/home/home.component';
     ProductsModule,
     DashboardModule,
     AuthModule,
-    FeatureModule,
-   // PrimeNG Modules
-    FormsModule,
+   FeatureModule ,  // PrimeNG Modules
+    
     BrowserModule,
     BrowserAnimationsModule,
     FormsModule,
     DropdownModule,
     HttpClientModule,
+    RatingModule,
+    CommonModule,
+     
+    ReactiveFormsModule,
    // Angular Router
-    RouterOutlet,
+    
     AppRoutingModule
 ],
   providers: [],

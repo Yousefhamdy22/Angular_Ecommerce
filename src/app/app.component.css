@@ -1,0 +1,80 @@
+/* app.component.css */
+/* @import "primeng/resources/themes/lara-light-blue/theme.css";
+@import "primeng/resources/primeng.css";
+@import "primeicons/primeicons.css"; */
+
+/* Custom styles to enhance the PrimeNG components */
+:host ::ng-deep {
+  /* Menu styling */
+  .p-menubar {
+    padding: 0.5rem 1rem;
+    border: none;
+  }
+  
+  .p-menubar .p-menubar-root-list > .p-menuitem > .p-menuitem-link {
+    padding: 1rem 1.5rem;
+    font-weight: 500;
+  }
+  
+  .p-menubar .p-menubar-root-list > .p-menuitem > .p-menuitem-link:hover {
+    background-color: rgba(59, 130, 246, 0.1);
+  }
+  
+  /* Button styling */
+  .p-button {
+    border-radius: 0.375rem;
+  }
+  
+  .p-button-lg {
+    padding: 0.75rem 1.5rem;
+    font-size: 1.125rem;
+  }
+  
+  /* Card styling */
+  .p-card {
+    border-radius: 0.5rem;
+    transition: box-shadow 0.2s;
+  }
+  
+  .p-card:hover {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  }
+  
+  /* Carousel styling */
+  .p-carousel .p-carousel-indicators .p-carousel-indicator button {
+    width: 1rem;
+    height: 1rem;
+    border-radius: 50%;
+  }
+  
+  .p-carousel .p-carousel-indicators .p-carousel-indicator.p-highlight button {
+    background-color: #3B82F6;
+  }
+  
+  /* Input styling */
+  .p-inputtext {
+    border-radius: 0.375rem;
+  }
+  
+  /* Badge styling */
+  .p-badge {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+
+
+/* Additional custom styles */
+.rounded-full {
+  border-radius: 9999px;
+}
+
+.transition-shadow {
+  transition-property: box-shadow;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+.hover\:shadow-md:hover {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}}

@@ -1,51 +1,72 @@
-:host ::ng-deep .p-dropdown {
-    background-color: #1f2937;
-    border-color: #374151;
-    color: #f3f4f6;
-    min-width: 12rem;
+
+
+/* Footer Animations */
+footer {
+  position: relative;
+  overflow: hidden;
+}
+
+footer::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(to right, #db2777, #9333ea);
+}
+
+/* Link Hover Effects */
+footer a {
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+footer a:not(.social-link):hover {
+  padding-left: 5px;
+}
+
+/* Social Media Icons Hover */
+footer .social-link {
+  transition: all 0.3s ease;
+}
+
+footer .social-link:hover {
+  transform: translateY(-3px);
+}
+
+/* Input Field Customization */
+:host ::ng-deep .p-inputtext:focus {
+  border-color: #db2777 !important;
+  box-shadow: 0 0 0 1px #db2777 !important;
+}
+
+:host ::ng-deep .p-inputtext::placeholder {
+  color: #9ca3af;
+}
+
+/* Button Animation */
+:host ::ng-deep .p-button {
+  transition: all 0.3s ease;
+}
+
+:host ::ng-deep .p-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* Payment Method Images */
+footer img {
+  transition: all 0.3s ease;
+}
+
+footer img:hover {
+  transform: scale(1.1);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  footer a:not(.social-link):hover {
+    padding-left: 0;
   }
-  
-  :host ::ng-deep .p-dropdown:hover {
-    border-color: #ec4899;
-  }
-  
-  :host ::ng-deep .p-dropdown .p-dropdown-label {
-    padding: 0.5rem 0.75rem;
-    font-size: 0.875rem;
-  }
-  
-  :host ::ng-deep .p-dropdown-panel {
-    background-color: #1f2937;
-    border: 1px solid #374151;
-  }
-  
-  :host ::ng-deep .p-dropdown-panel .p-dropdown-items .p-dropdown-item {
-    color: #f3f4f6;
-  }
-  
-  :host ::ng-deep .p-dropdown-panel .p-dropdown-items .p-dropdown-item:hover {
-    background-color: #374151;
-    color: #ec4899;
-  }
-  
-  :host ::ng-deep .p-button.p-button-light {
-    background-color: #f3f4f6;
-    color: #111827;
-    border: none;
-  }
-  
-  :host ::ng-deep .p-button.p-button-light:hover {
-    background-color: #e5e7eb;
-  }
-  
-  :host ::ng-deep .p-inputtext {
-    padding: 0.5rem 1rem;
-    border-color: #f3f4f6;
-  }
-  
-  :host ::ng-deep .p-inputtext:focus {
-    border-color: #ec4899;
-    box-shadow: none;
-  }
-  
-  
+}

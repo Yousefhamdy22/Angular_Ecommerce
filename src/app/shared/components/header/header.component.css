@@ -1,39 +1,113 @@
-:host ::ng-deep .p-inputtext {
-  padding: 0.5rem 1rem;
-  border-color: #f3f4f6;
+/* @import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities"; */
+
+/* Header Styles */
+.fixed-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  animation: slideDown 0.3s ease-out;
+  z-index: 1000;
 }
 
-:host ::ng-deep .p-inputtext:focus {
-  border-color: #ec4899;
-  box-shadow: none;
-}
-
-/* Dropdown hover effects */
-.group:hover .group-hover\:block {
-  display: block;
-}
-
-/* Gradient promo bar animation */
-.bg-gradient-to-r {
-  background-size: 200% 100%;
-  animation: gradient-shift 8s ease infinite;
-}
-
-@keyframes gradient-shift {
-  0% {
-    background-position: 0% 50%;
+@keyframes slideDown {
+  from {
+    transform: translateY(-100%);
   }
-  50% {
-    background-position: 100% 50%;
+  to {
+    transform: translateY(0);
+  }
+}
+
+.nav-link {
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.nav-link::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background-color: #db2777; /* bg-pink-600 */
+  transition: all 0.3s ease;
+  transform: translateX(-50%);
+}
+
+.nav-link:hover::after {
+  width: 80%;
+}
+
+/* Mega Menu Animation */
+.mega-menu {
+  transform-origin: top center;
+  transition: all 0.3s ease-out;
+}
+
+/* Cart Panel Customization */
+:host ::ng-deep .p-overlaypanel.cart-panel .p-overlaypanel-content {
+  padding: 0;
+}
+
+:host ::ng-deep .p-overlaypanel.cart-panel .p-overlaypanel-close {
+  top: 0.5rem;
+  right: 0.5rem;
+  background: transparent;
+  color: #6b7280; /* text-gray-500 */
+}
+
+:host ::ng-deep .p-overlaypanel.cart-panel .p-overlaypanel-close:hover {
+  background: #f3f4f6; /* bg-gray-100 */
+  color: #db2777; /* text-pink-600 */
+}
+
+.cart-panel-content {
+  padding: 1rem;
+}
+
+/* Search Overlay Animation */
+.search-overlay {
+  transform-origin: top center;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* Mobile Menu Animation */
+.mobile-menu {
+  transform-origin: top center;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* Button Hover Effects */
+button:hover {
+  transform: translateY(-1px);
+  transition: transform 0.2s ease;
+}
+
+/* Badge Animation */
+.badge {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(219, 39, 119, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 6px rgba(219, 39, 119, 0);
   }
   100% {
-    background-position: 0% 50%;
+    box-shadow: 0 0 0 0 rgba(219, 39, 119, 0);
   }
 }
 
-/* Amazon-style hover outline */
-.hover\:outline:hover {
-  outline: 1px solid #ffffff;
-  border-radius: 2px;
+/* Responsive Adjustments */
+@media (max-width: 1024px) {
+  .nav-link::after {
+    bottom: 0;
+  }
 }
-

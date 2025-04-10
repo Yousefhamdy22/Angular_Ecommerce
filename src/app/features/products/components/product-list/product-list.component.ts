@@ -1,7 +1,6 @@
 import { Component , OnInit} from '@angular/core';
-import { ProductService } from '../../services/product.service';
-import { Product } from './product.model';
-
+import { Product } from '../../../../Dashboard/products/product.model';
+import { ProductService } from '../../../../Dashboard/products/product.service';
 @Component({
   selector: 'app-product-list',
   standalone:false,
@@ -27,7 +26,7 @@ export class ProductListComponent implements OnInit {
   
   loadProducts(): void {
     this.loading = true;
-    this.productService.getProducts().subscribe({
+    this.productService.getAllProductsNoPagination().subscribe({
       next: (data) => {
         this.products = data;
         this.applySorting();

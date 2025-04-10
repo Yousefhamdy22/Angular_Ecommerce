@@ -4,6 +4,7 @@ import { Validators, FormGroup, FormBuilder } from '@angular/forms';
 
 import { Router } from '@angular/router';
 import { ProductService } from '../product.service';
+import { CategoryService } from '../../catrgory/category.service';
 
 @Component({
   selector: 'app-product-add',
@@ -12,16 +13,18 @@ import { ProductService } from '../product.service';
   styleUrl: './product-add.component.css'
 })
 export class ProductAddComponent implements OnInit {
+
   productForm: FormGroup;
   isLoading = false;
   imagePreview: string | ArrayBuffer | null = null;
   selectedFile: File | null = null;
   formSubmitted = false;
-  categories: any[] = []; // You should populate this from your service
+  categories: any[] = [];
 
   constructor(
     private fb: FormBuilder,
     private productService: ProductService,
+    private categoryService: CategoryService,
     private router: Router
   ) {
     this.productForm = this.fb.group({
@@ -29,33 +32,25 @@ export class ProductAddComponent implements OnInit {
       description: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(500)]],
       price: ['', [Validators.required, Validators.min(0.01), Validators.max(10000)]],
       stock: ['', [Validators.required, Validators.min(0), Validators.max(10000)]],
-      sku: ['', [Validators.required, Validators.pattern(/^[A-Za-z0-9-]+$/)]],
-      category: ['', [Validators.required]], // Added category field
+      category: ['', [Validators.required]],
       isFeatured: [false],
       isActive: [true],
-      weight: ['', [Validators.min(0)]],
-      dimensions: this.fb.group({
-        length: ['', [Validators.min(0)]],
-        width: ['', [Validators.min(0)]],
-        height: ['', [Validators.min(0)]]
-      })
     });
   }
 
   ngOnInit(): void {
-    // Load categories when component initializes
     this.loadCategories();
   }
 
   loadCategories(): void {
-    this.productService.getCategories().subscribe({
-      next: (categories) => {
-        this.categories = categories;
+   this.categoryService.getAllCategories().subscribe({
+      next: (data) => {
+        this.categories = data; 
       },
       error: (err) => {
-        console.error('Failed to load categories', err);
+        console.error('Error loading categories', err);
       }
-    });
+    }); 
   }
 
   onFileSelected(event: any): void {
@@ -82,26 +77,31 @@ export class ProductAddComponent implements OnInit {
 
   onSubmit(): void {
     this.formSubmitted = true;
-    
+
     if (this.productForm.invalid) {
       this.productForm.markAllAsTouched();
       return;
     }
 
     this.isLoading = true;
+
+    const formValue = this.productForm.value;
     const formData = new FormData();
-    
-    Object.keys(this.productForm.value).forEach(key => {
-      const value = this.productForm.value[key];
-      if (key === 'dimensions') {
-        formData.append(key, JSON.stringify(value));
-      } else {
-        formData.append(key, value);
-      }
-    });
+
+    // 🔁 Map frontend names ➡ backend expected keys
+    formData.append('Name', formValue.name);
+    formData.append('Description', formValue.description);
+    formData.append('price', formValue.price.toString());
+    formData.append('quantity', formValue.stock.toString());
+    formData.append('CategoryId', formValue.category.toString());
+    formData.append('solditems', '0'); // Set default or from form if needed
+
+    // ⬆️ Optional fields (like IsActive / IsFeatured), if backend expects them
+    formData.append('IsActive', formValue.isActive ? 'true' : 'false');
+    formData.append('IsFeatured', formValue.isFeatured ? 'true' : 'false');
 
     if (this.selectedFile) {
-      formData.append('image', this.selectedFile);
+      formData.append('File', this.selectedFile); // ✅ Backend expects 'File'
     }
 
     this.productService.createProduct(formData).subscribe({
@@ -122,11 +122,6 @@ export class ProductAddComponent implements OnInit {
     return this.productForm.controls;
   }
 
-  get dimensionControls() {
-    return (this.productForm.get('dimensions') as FormGroup).controls;
-  }
-
-  // Helper to check if field has error
   hasError(controlName: string, errorName: string): boolean {
     const control = this.productForm.get(controlName);
     return control ? control.hasError(errorName) && (control.dirty || control.touched || this.formSubmitted) : false;
